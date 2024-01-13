@@ -87,8 +87,8 @@ export async function loginAction({
       }
       return { error: "User Doesn't Exist", type: null };
     }
-  } catch (error) {
-    return { error, type: null };
+  } catch (error: any) {
+    return { error: error.message, type: null };
   }
 }
 
