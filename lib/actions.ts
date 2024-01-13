@@ -67,23 +67,28 @@ export async function loginAction({
         "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    if (data.message) {
-      return { error: data.message, type: "null" };
-    }
-    if (data.client) {
-      cookies().set("token", data.token);
-      cookies().set("client", JSON.stringify(data.client));
-      return { error: "null", type: "client" };
-    } else if (data.admin) {
-      cookies().set("token", data.token);
-      cookies().set("admin", JSON.stringify(data.admin));
-      return { error: "null", type: "admin" };
+    if (res.status !== 200) {
+      console.log("login failed");
+      console.log(res);
+      return { error: "Login Failed", type: null };
     } else {
-      return { error: "User Doesn't Exist", type: "null" };
+      const data = await res.json();
+      if (data.message) {
+        return { error: data.message, type: null };
+      }
+      if (data.client) {
+        cookies().set("token", data.token);
+        cookies().set("client", JSON.stringify(data.client));
+        return { error: null, type: "client" };
+      } else if (data.admin) {
+        cookies().set("token", data.token);
+        cookies().set("admin", JSON.stringify(data.admin));
+        return { error: null, type: "admin" };
+      }
+      return { error: "User Doesn't Exist", type: null };
     }
   } catch (error) {
-    return { error, type: "null" };
+    return { error, type: null };
   }
 }
 
