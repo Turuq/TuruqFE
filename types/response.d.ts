@@ -3,7 +3,7 @@ import { ProductType as RegularProductType } from "./actions";
 
 export type LoginResponseType = {
   error: any;
-  type: "client" | "admin" | null;
+  type: "client" | "admin" | "null";
 };
 
 export type NewOrderResponseType = {

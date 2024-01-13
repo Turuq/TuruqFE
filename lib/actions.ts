@@ -69,21 +69,21 @@ export async function loginAction({
     });
     const data = await res.json();
     if (data.message) {
-      return { error: data.message, type: null };
+      return { error: data.message, type: "null" };
     }
     if (data.client) {
       cookies().set("token", data.token);
       cookies().set("client", JSON.stringify(data.client));
-      return { error: null, type: "client" };
+      return { error: "null", type: "client" };
     } else if (data.admin) {
       cookies().set("token", data.token);
       cookies().set("admin", JSON.stringify(data.admin));
-      return { error: null, type: "admin" };
+      return { error: "null", type: "admin" };
     } else {
-      return { error: "User Doesn't Exist", type: null };
+      return { error: "User Doesn't Exist", type: "null" };
     }
   } catch (error) {
-    return { error, type: null };
+    return { error, type: "null" };
   }
 }
 
