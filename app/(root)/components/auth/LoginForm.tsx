@@ -12,11 +12,12 @@ import { Input } from "@/components/ui/input";
 import { loginAction, registerAction } from "@/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import Cookies from "js-cookie";
+
 import * as z from "zod";
 import { loginFormSchema } from "@/validations/loginFormSchema";
 import { Loader2 } from "lucide-react";
@@ -40,41 +41,17 @@ export default function LoginForm({
   const [formError, setFormError] = useState({ error: false, message: "" });
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     setLoading(true);
-    const { email, password } = values;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}auth/login`, {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.status === 200) {
-      const data = await res.json();
-      if (data.message) {
-        setFormError({ error: true, message: data.message });
-        return;
-      }
-      if (data.client) {
-        Cookies.set("token", data.token);
-        Cookies.set("client", JSON.stringify(data.client));
-        router.push("/client");
-      } else if (data.admin) {
-        Cookies.set("token", data.token);
-        Cookies.set("admin", JSON.stringify(data.admin));
-        router.push("/admin");
-      }
+    const { error, type } = await loginAction({ ...values });
+    if (type === "client") {
+      router.push("/client");
+    } else if (type === "admin") {
+      router.push("/admin");
     }
-    // const { error, type } = await loginAction({ ...values });
-    // if (type === "client") {
-    //   router.push("/client");
-    // } else if (type === "admin") {
-    //   router.push("/admin");
-    // }
     setLoading(false);
-    // if (error || !type) {
-    //   setFormError({ error: true, message: error ?? "" });
-    //   return;
-    // }
+    if (error || !type) {
+      setFormError({ error: true, message: error ?? "" });
+      return;
+    }
   }
   return (
     <DialogContent className="flex flex-col gap-10 items-start w-full lg:max-w-xl">
