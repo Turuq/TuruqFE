@@ -6,16 +6,16 @@ import {
   adminInventoryColumns,
 } from "../../components/tables/inventory/Columns";
 import { AdminInventoryTable } from "../../components/tables/data-tables/AdminInventoryTable";
+import axios from "axios";
 
 export default async function page() {
-  const res = await fetch(`${process.env.API_URL}product`, {
-    next: { revalidate: 300 },
+  const res = await axios.get(`${process.env.API_URL}product`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `${cookies().get("token")?.value}`,
     },
   });
-  const data = (await res.json()) as AdminInventoryResponseType;
+  const data = (await res.data) as AdminInventoryResponseType;
   const tableData: InventoryColumns[] = data.response.map((item, index) => {
     return {
       index: index + 1,
