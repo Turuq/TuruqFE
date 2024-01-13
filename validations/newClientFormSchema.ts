@@ -1,0 +1,16 @@
+import * as z from "zod";
+
+export const newClientFormSchema = z.object({
+  name: z.string().min(2, { message: "Name has to be at least 2 characters" }),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(8, { message: "Password has to be at least 8 characters" }),
+  phone: z
+    .string()
+    .min(11, { message: "Phone Number can't be less than 11 digits" })
+    .max(11, { message: "Phone Number can't be more than 11 digits" }),
+  businessName: z.string(),
+  businessLocation: z.string(),
+  service: z.string(),
+});
