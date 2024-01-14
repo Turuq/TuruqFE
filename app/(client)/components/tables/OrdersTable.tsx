@@ -410,7 +410,9 @@ export default function OrdersTable({ orders }: { orders: OrderType[] }) {
                 {order.products.length}
               </TableCell>
               <TableCell className="capitalize">
-                {order.customer.first_name} {order.customer.last_name}
+                {order.customer.name
+                  ? order.customer.name
+                  : `${order.customer.first_name} ${order.customer.last_name}`}
               </TableCell>
               <TableCell>{order.customer.address}</TableCell>
               <TableCell className="text-center">

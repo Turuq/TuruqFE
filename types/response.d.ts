@@ -73,6 +73,7 @@ export type OrderType = {
 
 type CustomerType = {
   _id: string;
+  name?: string;
   first_name: string;
   last_name: string;
   phone: string;
