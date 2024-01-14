@@ -669,7 +669,10 @@ export function AdminOrderTable({
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">subtotal</p>
                 <p className="text-sm">
-                  {selectedOrder?.total - selectedOrder?.shippingFees} EGP
+                  {selectedOrder?.total - selectedOrder?.shippingFees < 0
+                    ? 0
+                    : selectedOrder.total - selectedOrder.shippingFees}{" "}
+                  EGP
                 </p>
               </div>
               <div className="flex items-center gap-5">

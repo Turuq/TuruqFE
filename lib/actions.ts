@@ -532,7 +532,7 @@ export async function assignCourierAction({
     let promises: any[] = [];
     orders.forEach((order) => {
       promises.push(
-        fetch(`${process.env.DEV_API_URL}order/${route}/${order}`, {
+        fetch(`${process.env.API_URL}order/${route}/${order}`, {
           method: "PATCH",
           body: JSON.stringify({ courier }),
           headers: {
