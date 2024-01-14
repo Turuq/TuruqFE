@@ -225,10 +225,11 @@ export function NewOrderDialog({ children }: INewOrderProps) {
                   {/* Add Button */}
                   <div className="col-span-1 flex items-start justify-end h-auto">
                     <button
-                      className="bg-transparent size-5 flex items-center justify-center rounded-full"
+                      className="w-auto text-xs text-white bg-accent/80 hover:bg-accent h-7 px-3 rounded-xl flex items-center justify-center"
                       onClick={(e) => handleProductAdd(e)}
                     >
-                      <PlusCircleIcon className="size-5 text-accent" />
+                      <PlusCircleIcon className="size-5 text-inherit mr-2" />
+                      <span>Add Product</span>
                     </button>
                   </div>
                 </div>

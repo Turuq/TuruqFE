@@ -659,12 +659,15 @@ export async function deleteOrderAction({
         : variant === "shopify"
         ? "shopifyDelete"
         : "zammitDelete";
-    const res = await fetch(`${process.env.API_URL}${variantReq}/${orderId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `${cookies().get("token")?.value}`,
-      },
-    });
+    const res = await fetch(
+      `${process.env.API_URL}order/${variantReq}/${orderId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      }
+    );
     if (res.status === 200) {
       revalidatePath(pathname ?? "/admin/orders");
     }

@@ -110,6 +110,7 @@ export function AdminOrderTable({
   const [availableGovernorate, setAvailableGovernorate] = useState<string[]>(
     []
   );
+  const [openDelete, setOpenDelete] = useState(false);
 
   const [availableStatuses, _] = useState([
     { label: "Delivered", value: "delivered" },
@@ -227,6 +228,16 @@ export function AdminOrderTable({
         });
       }
     }
+  }
+
+  async function handleOrderDelete() {
+    await deleteOrderAction({
+      orderId: selectedOrder?._id.toString() ?? "",
+      variant,
+      pathname,
+    });
+    setOpenDelete(false);
+    setOpen(false);
   }
 
   return (
@@ -489,7 +500,7 @@ export function AdminOrderTable({
               <DialogDescription>
                 <div className="grid grid-cols-2 gap-5 items-center">
                   <div className="col-span-2 flex items-center justify-end gap-5">
-                    <AlertDialog>
+                    <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
                       <AlertDialogTrigger asChild>
                         <Button
                           disabled={
@@ -510,7 +521,7 @@ export function AdminOrderTable({
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>
-                            Are your sure you want to return this product?
+                            Are your sure you want to delete this order?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             By clicking continue, this order will be deleted and
@@ -521,13 +532,7 @@ export function AdminOrderTable({
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
                             className="bg-red-500 text-white"
-                            onClick={() =>
-                              deleteOrderAction({
-                                orderId: selectedOrder?._id.toString() ?? "",
-                                variant,
-                                pathname,
-                              })
-                            }
+                            onClick={handleOrderDelete}
                           >
                             Continue
                           </AlertDialogAction>
@@ -668,12 +673,7 @@ export function AdminOrderTable({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">subtotal</p>
-                <p className="text-sm">
-                  {selectedOrder?.total - selectedOrder?.shippingFees < 0
-                    ? 0
-                    : selectedOrder.total - selectedOrder.shippingFees}{" "}
-                  EGP
-                </p>
+                <p className="text-sm">{selectedOrder?.total} EGP</p>
               </div>
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">shipping</p>
@@ -681,7 +681,9 @@ export function AdminOrderTable({
               </div>
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">total</p>
-                <p className="text-sm">{selectedOrder?.total} EGP</p>
+                <p className="text-sm">
+                  {selectedOrder?.total + selectedOrder?.shippingFees} EGP
+                </p>
               </div>
             </div>
           </DialogContent>

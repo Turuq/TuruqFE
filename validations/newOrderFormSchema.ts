@@ -11,5 +11,5 @@ export const newOrderFormSchema = z.object({
     .max(11, { message: "Client phone cannot be longer than 11 digits" }),
   governorate: z.string().min(1, { message: "Governorate cannot be empty" }),
   address: z.string().min(1, { message: "Address cannot be empty" }),
-  notes: z.string(),
+  notes: z.string().min(0).optional(),
 });
