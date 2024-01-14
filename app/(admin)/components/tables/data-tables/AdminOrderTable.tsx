@@ -106,7 +106,7 @@ export function AdminOrderTable({
     useState<ProductDetailsType | null>();
   const [filterGovernorate, setFilterGovernorate] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-
+  const [fetchingProduct, setFetchingProduct] = useState<boolean>(false);
   const [availableGovernorate, setAvailableGovernorate] = useState<string[]>(
     []
   );
@@ -120,6 +120,7 @@ export function AdminOrderTable({
     { label: "Unreachable", value: "unreachable" },
     { label: "Out For Delivery", value: "outForDelivery" },
     { label: "Cancelled", value: "cancelled" },
+    { label: "Out Of Stock", value: "outOfStock" },
   ]);
 
   const table = useReactTable({
@@ -155,7 +156,9 @@ export function AdminOrderTable({
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     id: string
   ) {
+    setFetchingProduct(true);
     const res = await getProductByIdAction({ productId: id });
+    setFetchingProduct(false);
     if (res.data) {
       setSelectedProduct(res.data);
     }
@@ -645,11 +648,11 @@ export function AdminOrderTable({
                       key={product.UID}
                       className={`cursor-pointer ${
                         product.returned && "bg-red-500/10"
-                      }`}
+                      } ${fetchingProduct && "animate-pulse bg-accent/10"}`}
                       onClick={(e) => showProductDetails(e, product.UID)}
                     >
                       <TableCell className="text-center text-xs font-medium">
-                        {product.UID}
+                        {product.UID ?? product.id}
                       </TableCell>
                       <TableCell className="text-center text-xs">
                         {product.quantity}
@@ -662,7 +665,17 @@ export function AdminOrderTable({
                 </TableBody>
               </Table>
             )}
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-5">
+                <p className="font-bold text-sm capitalize">subtotal</p>
+                <p className="text-sm">
+                  {selectedOrder?.total - selectedOrder?.shippingFees} EGP
+                </p>
+              </div>
+              <div className="flex items-center gap-5">
+                <p className="font-bold text-sm capitalize">shipping</p>
+                <p className="text-sm">{selectedOrder?.shippingFees} EGP</p>
+              </div>
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">total</p>
                 <p className="text-sm">{selectedOrder?.total} EGP</p>

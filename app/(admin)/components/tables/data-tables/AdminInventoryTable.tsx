@@ -289,7 +289,7 @@ export function AdminInventoryTable({
               </div>
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-12 gap-5">
+          <div className="hidden lg:grid grid-cols-12 gap-5">
             <div className="col-span-6">
               <InformationCard
                 title="Delivered"
@@ -342,6 +342,64 @@ export function AdminInventoryTable({
               />
             </div>
             <div className="col-span-3">
+              <InformationCard
+                title="Postponed"
+                value={selectedProduct?.postponed ?? 0}
+                className="bg-gray-200 text-red-500 h-auto"
+              />
+            </div>
+          </div>
+          <div className="lg:hidden grid grid-cols-12 gap-5">
+            <div className="col-span-6">
+              <InformationCard
+                title="Delivered"
+                value={selectedProduct?.delivered ?? 0}
+                className="bg-gray-200"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Cancelled"
+                value={selectedProduct?.cancelled ?? 0}
+                className="bg-gray-200 text-red-500"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Collected"
+                value={selectedProduct?.collected ?? 0}
+                className="bg-gray-200"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Returned"
+                value={selectedProduct?.returned ?? 0}
+                className="bg-gray-200"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Out For Delivery"
+                value={selectedProduct?.outForDelivery ?? 0}
+                className="bg-gray-200"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Pending"
+                value={selectedProduct?.pending ?? 0}
+                className="bg-gray-200"
+              />
+            </div>
+            <div className="col-span-6">
+              <InformationCard
+                title="Unreachable"
+                value={selectedProduct?.unreachable ?? 0}
+                className="bg-gray-200 text-red-500 h-auto"
+              />
+            </div>
+            <div className="col-span-6">
               <InformationCard
                 title="Postponed"
                 value={selectedProduct?.postponed ?? 0}

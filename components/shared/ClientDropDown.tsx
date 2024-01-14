@@ -16,13 +16,16 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import LogoutButton from "./LogoutButton";
 import { ChartBarIcon } from "@heroicons/react/16/solid";
+import { AdminType } from "@/types/response";
 
 export default function ClientDropDown({
   client,
+  admin,
   type,
   variant = "home",
 }: {
-  client: ClientType | null;
+  client?: ClientType | null;
+  admin?: AdminType | null;
   type: "client" | "admin";
   variant?: "dashboard" | "home";
 }) {
@@ -38,7 +41,11 @@ export default function ClientDropDown({
                   : "bg-white text-accent"
               }`}
             >
-              {client?.companyName.substring(0, 1)}
+              {client
+                ? client?.companyName.substring(0, 1)
+                : admin
+                ? admin?.name?.substring(0, 1)
+                : ""}
             </AvatarFallback>
           </Avatar>
 
@@ -48,14 +55,14 @@ export default function ClientDropDown({
                 variant === "home" ? "text-white" : "text-accent"
               } capitalize`}
             >
-              {client?.name}
+              {client ? client?.name : admin ? admin?.name : ""}
             </h1>
             <h3
               className={`text-xs ${
                 variant === "home" ? "text-white" : "text-accent"
               } font-bold uppercase`}
             >
-              {client?.companyName}
+              {client ? client?.companyName : "Welcome Admin!"}
             </h3>
           </div>
         </div>
@@ -67,7 +74,10 @@ export default function ClientDropDown({
             "bg-white text-accent hover:bg-accent hover:text-white mb-1"
           } rounded-md`}
         >
-          <Link href={"/client"} className={`flex items-center `}>
+          <Link
+            href={client ? "/client" : admin ? "/admin" : "/"}
+            className={`flex items-center `}
+          >
             <LayoutDashboardIcon className="mr-2 size-4 text-inherit" />
             Dashboard
           </Link>
@@ -78,7 +88,10 @@ export default function ClientDropDown({
             "bg-white text-accent hover:bg-accent hover:text-white mb-1"
           } rounded-md`}
         >
-          <Link href={"/client/orders"} className={`flex items-center `}>
+          <Link
+            href={client ? "/client/orders" : admin ? "/admin/orders" : "/"}
+            className={`flex items-center `}
+          >
             <BoxesIcon className="mr-2 size-4 text-inherit" />
             Orders
           </Link>
@@ -89,7 +102,12 @@ export default function ClientDropDown({
             "bg-white text-accent hover:bg-accent hover:text-white mb-1"
           } rounded-md`}
         >
-          <Link href={"/client/inventory"} className={`flex items-center `}>
+          <Link
+            href={
+              client ? "/client/inventory" : admin ? "/admin/inventory" : "/"
+            }
+            className={`flex items-center `}
+          >
             <WarehouseIcon className="mr-2 size-4 text-inherit" />
             Inventory
           </Link>
@@ -100,7 +118,10 @@ export default function ClientDropDown({
             "bg-white text-accent hover:bg-accent hover:text-white mb-1"
           } rounded-md`}
         >
-          <Link href={"/client/finances"} className={`flex items-center `}>
+          <Link
+            href={client ? "/client/finances" : admin ? "/admin/finances" : "/"}
+            className={`flex items-center `}
+          >
             <DatabaseIcon className="mr-2 size-4 text-inherit" />
             Finances
           </Link>
@@ -111,7 +132,12 @@ export default function ClientDropDown({
             "bg-white text-accent hover:bg-accent hover:text-white mb-1"
           } rounded-md`}
         >
-          <Link href={"/client/analytics"} className={`flex items-center `}>
+          <Link
+            href={
+              client ? "/client/analytics" : admin ? "/admin/analytics" : "/"
+            }
+            className={`flex items-center `}
+          >
             <ChartBarIcon className="mr-2 size-4 text-inherit" />
             Analytics
           </Link>

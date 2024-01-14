@@ -67,6 +67,7 @@ export default async function page() {
     return {
       index: index + 1,
       numberItems: item.products.length,
+      companyName: item.client.companyName,
       name: item.customer.name,
       address: item.customer.address,
       governorate: item.customer.governorate,
@@ -82,6 +83,7 @@ export default async function page() {
       return {
         index: index + 1,
         numberItems: item.products.length,
+        companyName: item.client.companyName,
         name: `${item.customer.first_name} ${item.customer.last_name}`,
         address: item.customer.address,
         governorate: item.customer.governorate,
@@ -98,6 +100,7 @@ export default async function page() {
       return {
         index: index + 1,
         numberItems: item.products.length,
+        companyName: item.client.companyName,
         name: item.customer.name,
         address: item.customer.address,
         governorate: item.customer.governorate,

@@ -116,7 +116,7 @@ export default function LoginForm({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter Your Email"
+                    placeholder="Enter Your Password"
                     type="password"
                     className="text-accent placeholder:text-accent/50"
                     {...field}

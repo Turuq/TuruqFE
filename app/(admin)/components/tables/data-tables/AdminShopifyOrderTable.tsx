@@ -58,6 +58,7 @@ import {
 import Link from "next/link";
 import {
   deleteOrderAction,
+  getGovernorateFeesAction,
   getProductByIdAction,
   returnProductAction,
 } from "@/lib/actions";
@@ -76,6 +77,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import EditShopifyOrderDialog from "../../forms/EditShopifyOrderDialog";
+import { GovernorateType } from "@/types/governorate";
 
 interface AdminOrderTableProps {
   columns: ColumnDef<OrderColumns>[];
@@ -109,6 +111,10 @@ export function AdminShopifyOrderTable({
   const [availableGovernorate, setAvailableGovernorate] = useState<string[]>(
     []
   );
+  const [governorateTuruq, setGovernorateTuruq] = useState<GovernorateType[]>(
+    []
+  );
+  const [orderGov, setOrderGov] = useState<number>(0);
 
   const [availableStatuses, _] = useState([
     { label: "Delivered", value: "delivered" },
@@ -119,6 +125,7 @@ export function AdminShopifyOrderTable({
     { label: "Unreachable", value: "unreachable" },
     { label: "Out For Delivery", value: "outForDelivery" },
     { label: "Cancelled", value: "cancelled" },
+    { label: "Out Of Stock", value: "outOfStock" },
   ]);
 
   const table = useReactTable({
@@ -138,9 +145,21 @@ export function AdminShopifyOrderTable({
     },
   });
 
+  useEffect(() => {
+    getGovernorateFeesAction()
+      .then((res) => {
+        setGovernorateTuruq(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   function handleOpenDialog(index: number) {
     setOpen(true);
     setSelectedOrder(orders[index]);
+    const foundGov = governorateTuruq.find((gov) => {
+      return gov.name === orders[index].customer.governorate;
+    });
+    setOrderGov(foundGov?.fee ?? 0);
   }
 
   function handleTableFilter(
@@ -226,7 +245,7 @@ export function AdminShopifyOrderTable({
   return (
     <div className="rounded-md border">
       {/* <pre>
-        <code>{JSON.stringify(columnFilters, null, 2)}</code>
+        <code>{JSON.stringify(governorateTuruq, null, 2)}</code>
       </pre> */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center w-full justify-between p-2">
@@ -641,10 +660,22 @@ export function AdminShopifyOrderTable({
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xs font-bold w-auto text-center">
-                      Product ID
+                      Shopify ID
+                    </TableHead>
+                    <TableHead className="text-xs font-bold w-auto text-center">
+                      Name
+                    </TableHead>
+                    <TableHead className="text-xs font-bold w-auto text-center">
+                      Variant
+                    </TableHead>
+                    <TableHead className="text-xs font-bold w-auto text-center">
+                      Variant ID
                     </TableHead>
                     <TableHead className="text-xs font-bold w-auto text-center">
                       Quantity
+                    </TableHead>
+                    <TableHead className="text-xs font-bold w-auto text-center">
+                      Discount
                     </TableHead>
                     <TableHead className="text-xs font-bold w-auto text-right">
                       Price
@@ -653,16 +684,24 @@ export function AdminShopifyOrderTable({
                 </TableHeader>
                 <TableBody>
                   {selectedOrder?.products.map((product) => (
-                    <TableRow
-                      key={product.id}
-                      className="cursor-pointer"
-                      onClick={(e) => showProductDetails(e, product.id)}
-                    >
+                    <TableRow key={product.id} className="">
                       <TableCell className="text-center text-xs font-medium">
                         {product.id}
                       </TableCell>
+                      <TableCell className="text-center text-xs font-medium">
+                        {product.name}
+                      </TableCell>
+                      <TableCell className="text-center text-xs font-medium">
+                        {product.variant}
+                      </TableCell>
+                      <TableCell className="text-center text-xs font-medium">
+                        {product.variant_id}
+                      </TableCell>
                       <TableCell className="text-center text-xs">
                         {product.quantity}
+                      </TableCell>
+                      <TableCell className="text-center text-xs">
+                        {product.discount}
                       </TableCell>
                       <TableCell className="text-right text-xs">
                         {product.price} EGP
@@ -672,7 +711,19 @@ export function AdminShopifyOrderTable({
                 </TableBody>
               </Table>
             )}
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-5">
+                <p className="font-bold text-sm capitalize">subtotal</p>
+                {selectedOrder && (
+                  <p className="text-sm">
+                    {selectedOrder?.total - orderGov} EGP
+                  </p>
+                )}
+              </div>
+              <div className="flex items-center gap-5">
+                <p className="font-bold text-sm capitalize">shipping</p>
+                <p className="text-sm">{orderGov} EGP</p>
+              </div>
               <div className="flex items-center gap-5">
                 <p className="font-bold text-sm capitalize">total</p>
                 <p className="text-sm">{selectedOrder?.total} EGP</p>

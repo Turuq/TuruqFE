@@ -225,7 +225,6 @@ export async function submitContactFormAction({
   message: string;
 }): Promise<{ error: string | null; data: string | null }> {
   try {
-    console.log({ firstName, lastName, email, phone, message });
     const res = await fetch(`${process.env.API_URL}auth/contactUs`, {
       method: "POST",
       body: JSON.stringify({ firstName, lastName, email, phone, message }),
@@ -380,7 +379,6 @@ export async function addNewClientAction({
       return { error: null, message: "Client Added Successfully" };
     } else {
       const data = await res.json();
-      console.log(data);
       return { error: data.message, message: null };
     }
   } catch (error: any) {
@@ -429,7 +427,6 @@ export async function editClientAction({
       return { error: null, message: "Client Edited Successfully" };
     } else {
       const data = await res.json();
-      console.log(data);
       return { error: data.message, message: null };
     }
   } catch (error: any) {
@@ -457,7 +454,6 @@ export async function deleteClientAction({
       return { error: null, message: "Client Deleted Successfully" };
     } else {
       const data = await res.json();
-      console.log(data);
       return { error: data.message, message: null };
     }
   } catch (error: any) {
@@ -489,6 +485,7 @@ export async function updateOrderStatusAction({
           method: "PATCH",
           body: JSON.stringify({ status }),
           headers: {
+            "Content-Type": "application/json",
             Authorization: `${cookies().get("token")?.value}`,
           },
         })
@@ -504,6 +501,7 @@ export async function updateOrderStatusAction({
         error++;
       }
     });
+    revalidatePath("/admin/orders");
     return { error, success: count, message: "" };
   } catch (error) {
     console.log(error);
@@ -534,10 +532,11 @@ export async function assignCourierAction({
     let promises: any[] = [];
     orders.forEach((order) => {
       promises.push(
-        fetch(`${process.env.API_URL}order/${route}/${order}`, {
+        fetch(`${process.env.DEV_API_URL}order/${route}/${order}`, {
           method: "PATCH",
           body: JSON.stringify({ courier }),
           headers: {
+            "Content-Type": "application/json",
             Authorization: `${cookies().get("token")?.value}`,
           },
         })
@@ -553,6 +552,7 @@ export async function assignCourierAction({
         error++;
       }
     });
+    revalidatePath("/admin/orders");
     return { error, success: count, message: "" };
   } catch (error) {
     console.log(error);
@@ -769,7 +769,6 @@ export async function editOrderAction({
   orderId: string;
 }): Promise<{ error: string | null; message: string | null }> {
   try {
-    console.log(body);
     const res = await fetch(
       `${process.env.API_URL}order/${variant}/${orderId}`,
       {

@@ -60,12 +60,25 @@ export default function AdminClientFinancesSection({
     setUpdating(false);
   }
   return (
-    <div className="grid grid-cols-12 gap-5">
-      <div className="col-span-12 flex lg:flex-row flex-col lg:items-center justify-between gap-5">
-        <h1 className="text-2xl lg:text-4xl font-bold text-accent/50 uppercase">
-          Finances
-        </h1>
-        <div className="flex items-center gap-1">
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-12 flex lg:flex-row flex-col lg:items-center justify-between gap-3">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl lg:text-4xl font-bold text-accent/50 uppercase">
+            Finances
+          </h1>
+          <Button
+            variant={"ghost"}
+            className="lg:hidden flex w-auto h-10 rounded-xl"
+            onClick={() => setShowEdit((oldValue) => !oldValue)}
+          >
+            {!showEdit ? (
+              <PencilIcon className="size-4 text-accent" />
+            ) : (
+              <XIcon className="size-4 text-accent" />
+            )}
+          </Button>
+        </div>
+        <div className="flex items-center justify-end gap-1">
           {showEdit && (
             <Button
               variant={"outline"}
@@ -83,7 +96,7 @@ export default function AdminClientFinancesSection({
           )}
           <Button
             variant={"ghost"}
-            className="w-auto h-10 rounded-xl"
+            className="hidden lg:flex w-auto h-10 rounded-xl"
             onClick={() => setShowEdit((oldValue) => !oldValue)}
           >
             {!showEdit ? (

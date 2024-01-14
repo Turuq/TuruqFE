@@ -21,7 +21,7 @@ export default function AdminOrdersSection({
         {variant === "dashboard" && (
           <Link
             href={"/admin/orders"}
-            className="bg-white p-2 rounded-xl w-auto text-sm text-accent"
+            className="bg-white self-end p-2 rounded-xl w-auto text-sm text-accent"
           >
             <div className="flex items-center">
               <PackageOpenIcon className="size-4 lg:size-5 text-inherit mr-2" />

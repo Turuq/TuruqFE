@@ -184,6 +184,7 @@ export type AdminOrderType = {
 type AdminProductType = {
   returned: boolean;
   _id: string;
+  id?: string;
 } & RegularProductType;
 
 export type CourierResponseType = {
@@ -218,7 +219,8 @@ export type OrderStatusType =
   | "postponed"
   | "collected"
   | "unreachable"
-  | "returned";
+  | "returned"
+  | "outOfStock";
 
 export type ProductDetailsType = {
   _id: string;

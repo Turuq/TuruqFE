@@ -43,6 +43,7 @@ export type InventoryColumns = {
 export type OrderColumns = {
   index: number;
   numberItems: number;
+  companyName: string;
   name: string;
   address: string;
   governorate: string;
@@ -246,6 +247,22 @@ export const adminOrderColumns: ColumnDef<OrderColumns>[] = [
       return (
         <div className="flex items-center justify-between">
           <h3 className="text-inherit"># Of Items</h3>
+          <button
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-xs"
+          >
+            <ArrowUpDown className="size-3" />
+          </button>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "companyName",
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center justify-between">
+          <h3 className="text-inherit">Company Name</h3>
           <button
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-xs"
