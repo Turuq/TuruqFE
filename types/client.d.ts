@@ -22,6 +22,7 @@ export type OrderStatisticsType = {
   cancelled: number;
   returned: number;
   collected: number;
+  outOfStock: number;
 };
 
 export type InventoryStatisticsType = {

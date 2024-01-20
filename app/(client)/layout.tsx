@@ -9,20 +9,21 @@ import NavbarLoader from "./components/loaders/NavbarLoader";
 import SidebarLoader from "./components/loaders/SidebarLoader";
 
 import dynamic from "next/dynamic";
+import { NotificationType } from "@/types/response";
 
 const ClientLeftSideBar = dynamic(
   () => import("./components/navigation/ClientLeftSidebar"),
   {
     ssr: false,
     loading: () => <SidebarLoader />,
-  }
+  },
 );
 const ClientNavbar = dynamic(
   () => import("./components/navigation/ClientNavbar"),
   {
     ssr: false,
     loading: () => <NavbarLoader />,
-  }
+  },
 );
 
 const montserrat = Montserrat({
@@ -55,11 +56,21 @@ export default async function RootLayout({
     },
   });
   const data = await res.json();
+
+  const notificationRes = await fetch(
+    `${process.env.API_URL}notification/${clientId}`,
+    {
+      headers: {
+        Authorization: `${cookieStore.get("token")?.value}`,
+      },
+    },
+  );
+  const notificationData = (await notificationRes.json()) as NotificationType[];
   return (
     <html lang="en">
       <body className={`${montserrat.className} bg-gray-200 h-auto`}>
         <div className="p-5 lg:p-10">
-          <ClientNavbar data={data.client} />
+          <ClientNavbar data={data.client} notifications={notificationData} />
         </div>
         <main className="p-5 lg:p-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">

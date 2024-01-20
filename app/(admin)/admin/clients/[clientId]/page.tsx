@@ -1,5 +1,4 @@
 import AdminClientFinancesSection from "@/app/(admin)/components/sections/AdminClientFinanceSection";
-import ClientFinancesSection from "@/app/(client)/components/sections/ClientFinancesSection";
 import ClientInventorySection from "@/app/(client)/components/sections/ClientInventorySection";
 import ClientOrdersSection from "@/app/(client)/components/sections/ClientOrdersSection";
 import { cookies } from "next/headers";
@@ -17,11 +16,14 @@ export default async function Page({
         "Content-Type": "application/json",
         Authorization: `${cookies().get("token")?.value}`,
       },
-    }
+    },
   );
   const data = await res.json();
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
+      {/*<pre>*/}
+      {/*  <code>{JSON.stringify(data.orders, null, 2)}</code>*/}
+      {/*</pre>*/}
       <div className="col-span-1 lg:col-span-12 flex flex-col gap-10">
         {/* Orders */}
         <ClientOrdersSection

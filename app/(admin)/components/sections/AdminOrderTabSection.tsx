@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import AdminOrdersTable from "../tables/AdminOrderTable";
 import AdminOrdersSection from "./AdminOrdersSection";
 import { OrderStatisticsType } from "@/types/client";
 import {
@@ -22,7 +21,7 @@ import {
 import { useState } from "react";
 import { MoreHorizontalIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { updateOrderStatusAction, assignCourierAction } from "@/lib/actions";
+import { assignCourierAction, updateOrderStatusAction } from "@/lib/actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,7 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { OrderColumns, adminOrderColumns } from "../tables/inventory/Columns";
+import { adminOrderColumns, OrderColumns } from "../tables/inventory/Columns";
 import { AdminOrderTable } from "../tables/data-tables/AdminOrderTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
 
@@ -59,7 +58,7 @@ export default function AdminOrderTabSection({
   const [assigning, setAssigning] = useState(false);
   const [fileReady, setFileReady] = useState(false);
   const [file, setFile] = useState<{ blob: Blob; fileName: string } | null>(
-    null
+    null,
   );
   const [markedOrders, setMarkedOrders] = useState<string[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<
@@ -86,7 +85,7 @@ export default function AdminOrderTabSection({
               "Content-Type": "application/json",
             },
             body: JSON.stringify(filteredColumns),
-          }
+          },
         );
         if (res.status === 200) {
           const blob = await res.blob();
@@ -119,7 +118,7 @@ export default function AdminOrderTabSection({
     } else if (date) {
       try {
         const res = await fetch(
-          `/api/file?variant=${excelVariant}&date=${date.toISOString()}`
+          `/api/file?variant=${excelVariant}&date=${date.toISOString()}`,
         );
         if (res.status === 200) {
           const blob = await res.blob();
@@ -307,7 +306,7 @@ export default function AdminOrderTabSection({
                 <SelectItem value="returned" className="capitalize">
                   Returned
                 </SelectItem>
-                <SelectItem value="OutOfStock" className="capitalize">
+                <SelectItem value="outOfStock" className="capitalize">
                   Out Of Stock
                 </SelectItem>
               </SelectContent>

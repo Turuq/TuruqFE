@@ -9,6 +9,7 @@ import AdminOrdersSection from "../components/sections/AdminOrdersSection";
 import AdminInventorySection from "../components/sections/AdminInventorySection";
 import AdminFinanceSection from "../components/sections/AdminFinanceSection";
 import { ClientType } from "@/types/client";
+import AdminFinancePage from "@/app/(admin)/admin/finances/page";
 
 export default async function Page() {
   const res = await fetch(`${process.env.API_URL}admin/home`, {
@@ -65,6 +66,9 @@ export default async function Page() {
           <AdminInventorySection inventory={data.inventory} />
         </div>
       )}
+      <div className="col-span-12">
+        <AdminFinancePage />
+      </div>
       {/* {data.finance && clientData && (
         <div className="col-span-12">
           <AdminFinanceSection finances={data.finance} clients={clientData} />

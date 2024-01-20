@@ -18,7 +18,6 @@ export default function Page() {
       <HeroSection />
       <ServicesSection />
       <AboutSection />
-      {/* //TODO: Link to email */}
       <ContactSection />
     </div>
   );

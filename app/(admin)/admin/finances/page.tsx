@@ -6,7 +6,7 @@ import {
 import { cookies } from "next/headers";
 import AdminFinanceSection from "../../components/sections/AdminFinanceSection";
 
-export default async function page() {
+export default async function AdminFinancePage() {
   const resGov = await fetch(`${process.env.API_URL}admin/getFees`, {
     headers: {
       "Content-Type": "application/json",

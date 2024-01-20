@@ -44,7 +44,8 @@ type ShopifyOrderType = {
     | "collected"
     | "postponed"
     | "outForDelivery"
-    | "unreachable";
+    | "unreachable"
+    | "outOfStock";
   createdAt: string;
   updatedAt: string;
   courier?: CourierType;
@@ -175,7 +176,8 @@ export type AdminOrderType = {
     | "collected"
     | "postponed"
     | "outForDelivery"
-    | "unreachable";
+    | "unreachable"
+    | "outOfStock";
   notes: string;
   courier: CourierType;
   createdAt: string;
@@ -233,4 +235,13 @@ export type ProductDetailsType = {
   UID: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type NotificationType = {
+  _id: string;
+  message: string;
+  type: "outOfStock";
+  clientId: string;
+  orderId: OrderType;
+  createdAt: string;
 };

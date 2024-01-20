@@ -9,14 +9,14 @@ import {
 } from "@/components/custom/auth-dialog";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
-  SortingState,
   getCoreRowModel,
-  useReactTable,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  ColumnFiltersState,
-  getFilteredRowModel,
+  SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
 import {
   AlertDialog,
@@ -51,13 +51,11 @@ import {
   ChevronLeftCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  PencilIcon,
   Trash2Icon,
   Undo2,
 } from "lucide-react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -73,7 +71,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { DialogTrigger } from "@/components/ui/dialog";
 import { EditOrderDialog } from "../../forms/EditOrderDialog";
 
 interface AdminOrderTableProps {
@@ -108,7 +105,7 @@ export function AdminOrderTable({
   const [filterStatus, setFilterStatus] = useState("all");
   const [fetchingProduct, setFetchingProduct] = useState<boolean>(false);
   const [availableGovernorate, setAvailableGovernorate] = useState<string[]>(
-    []
+    [],
   );
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -148,14 +145,14 @@ export function AdminOrderTable({
 
   function handleTableFilter(
     e: React.ChangeEvent<HTMLInputElement>,
-    column: string
+    column: string,
   ) {
     table.getColumn(column)?.setFilterValue(e.target.value);
   }
 
   async function showProductDetails(
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    id: string
+    id: string,
   ) {
     setFetchingProduct(true);
     const res = await getProductByIdAction({ productId: id });
@@ -176,7 +173,7 @@ export function AdminOrderTable({
   }, [orders]);
 
   function handleGovSelect(gov: string) {
-    if (gov === filterGovernorate) {
+    if (gov === filterGovernorate || gov === "all") {
       setFilterGovernorate("all");
       table.getColumn("governorate")?.setFilterValue("");
     } else {
@@ -186,7 +183,7 @@ export function AdminOrderTable({
   }
 
   function handleStatusSelect(status: string) {
-    if (status === filterStatus) {
+    if (status === filterStatus || status === "all") {
       setFilterStatus("all");
       table.getColumn("status")?.setFilterValue("");
     } else {
@@ -199,7 +196,7 @@ export function AdminOrderTable({
     const selectedIds = table
       .getFilteredSelectedRowModel()
       .rows.map((selected) =>
-        orders[selected.index]._id.toString()
+        orders[selected.index]._id.toString(),
       ) as string[];
     changeMarkedOrders(selectedIds);
   }, [rowSelection, changeMarkedOrders, orders, table]);
@@ -300,6 +297,56 @@ export function AdminOrderTable({
       </div>
       <Table className="overflow-x-scroll bg-white rounded-t-xl">
         <TableCaption className="capitalize">
+          <div className="flex items-center justify-end mb-5">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-xs text-accent/50">
+                Rows per page:{" "}
+                <span className="bg-white p-1 rounded-md">{limit}</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(10);
+                    table.setPageSize(10);
+                  }}
+                >
+                  10
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(15);
+                    table.setPageSize(15);
+                  }}
+                >
+                  15
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(20);
+                    table.setPageSize(20);
+                  }}
+                >
+                  20
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(25);
+                    table.setPageSize(25);
+                  }}
+                >
+                  25
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(30);
+                    table.setPageSize(30);
+                  }}
+                >
+                  30
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <div className="flex items-center justify-between gap-5">
             <div className="text-accent/50 text-xs">
               page {currentPage + " out of " + table.getPageCount()}
@@ -393,6 +440,18 @@ export function AdminOrderTable({
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <ScrollArea className="h-[400px] rounded-md border p-4">
+                                  <DropdownMenuItem
+                                    onClick={() => handleGovSelect("all")}
+                                    className={`capitalize ${
+                                      filterGovernorate === "all" &&
+                                      "bg-accent/10"
+                                    }`}
+                                  >
+                                    {filterGovernorate === "all" && (
+                                      <CheckIcon className="size-3 mr-2 text-accent" />
+                                    )}{" "}
+                                    All
+                                  </DropdownMenuItem>
                                   {availableGovernorate.map((gov) => (
                                     <DropdownMenuItem
                                       key={gov}
@@ -425,7 +484,18 @@ export function AdminOrderTable({
                                   Filter by Status
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <ScrollArea className="h-[400px] rounded-md border p-4">
+                                <ScrollArea className="h-[350px] rounded-md border p-4">
+                                  <DropdownMenuItem
+                                    onClick={() => handleStatusSelect("all")}
+                                    className={`capitalize ${
+                                      filterStatus === "all" && "bg-accent/10"
+                                    }`}
+                                  >
+                                    {filterStatus === "all" && (
+                                      <CheckIcon className="size-3 mr-2 text-accent" />
+                                    )}{" "}
+                                    All
+                                  </DropdownMenuItem>
                                   {availableStatuses.map((status) => (
                                     <DropdownMenuItem
                                       key={status.value}
@@ -453,7 +523,7 @@ export function AdminOrderTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </div>
                   </TableHead>
@@ -606,7 +676,7 @@ export function AdminOrderTable({
                           <AlertDialogAction
                             onClick={() =>
                               handleReturnProduct(
-                                selectedProduct._id.toString()
+                                selectedProduct._id.toString(),
                               )
                             }
                           >

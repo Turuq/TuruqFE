@@ -28,9 +28,11 @@ export default function AdminClientFinancesSection({
   function handleStorageChange(e: ChangeEvent<HTMLInputElement>) {
     setStorageValue(parseInt(e.target.value));
   }
+
   function handlePackagingChange(e: ChangeEvent<HTMLInputElement>) {
     setPackagingValue(parseInt(e.target.value));
   }
+
   function handlePrepaidChange(e: ChangeEvent<HTMLInputElement>) {
     setPrepaidValue(parseInt(e.target.value));
   }
@@ -59,6 +61,7 @@ export default function AdminClientFinancesSection({
     setShowEdit(false);
     setUpdating(false);
   }
+
   return (
     <div className="grid grid-cols-12 gap-3">
       <div className="col-span-12 flex lg:flex-row flex-col lg:items-center justify-between gap-3">
@@ -177,7 +180,7 @@ export default function AdminClientFinancesSection({
       {/* Shipping */}
       <div className="col-span-12 lg:col-span-3">
         <InformationCard
-          title="Shipping"
+          title="Delivered Orders Shipping"
           value={data.shipping}
           variant="finance"
         />

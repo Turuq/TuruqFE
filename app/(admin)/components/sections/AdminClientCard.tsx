@@ -64,7 +64,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 export default function AdminClientCard({
@@ -117,6 +116,7 @@ export default function AdminClientCard({
       return;
     }
   }
+
   function handleEditClient(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
     setDialogOpen(true);
@@ -128,6 +128,7 @@ export default function AdminClientCard({
     setDialogAlertOpen(true);
     setDropDownOpen(false);
   }
+
   async function handleClientDelete() {
     const { error, message } = await deleteClientAction({
       clientId: client._id.toString(),
@@ -147,6 +148,7 @@ export default function AdminClientCard({
       return;
     }
   }
+
   return (
     <div
       className={`bg-white rounded-xl ${
@@ -174,15 +176,13 @@ export default function AdminClientCard({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>
-                  <div
+                  <Link
+                    href={`/admin/clients/${client._id.toString()}`}
                     className="flex items-center justify-between gap-2 text-accent"
-                    onClick={() =>
-                      router.push(`/admin/clients/${client._id.toString()}`)
-                    }
                   >
                     <UserRoundSearchIcon className="size-4 text-inherit" />
                     <h3>View Client</h3>
-                  </div>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <div

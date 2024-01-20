@@ -30,9 +30,7 @@ export default function RootLayout({
         <div className="p-5 lg:p-10">
           <Navbar />
         </div>
-        <main className={`${montserrat.className} p-5 lg:p-10`}>
-          {children}
-        </main>
+        <main className={`${montserrat.className} `}>{children}</main>
         <Toaster />
         <Footer />
       </body>

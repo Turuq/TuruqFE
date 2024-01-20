@@ -1,4 +1,6 @@
-import { OrderType } from "@/types/response";
+import { AdminOrderType, OrderType, ShopifyOrderType } from "@/types/response";
+import { ClientType } from "@/types/client";
+import moment from "moment";
 
 export function groupOrdersByPast12Months(data: OrderType[]): number[] {
   const currentMonth = new Date().getMonth();
@@ -8,7 +10,7 @@ export function groupOrdersByPast12Months(data: OrderType[]): number[] {
     const orderMonth: number = new Date(order.createdAt).getMonth();
     const orderYear: number = new Date(order.createdAt).getFullYear();
     const monthIndex = monthYear.findIndex(
-      (month) => month.month === orderMonth && month.year === orderYear
+      (month) => month.month === orderMonth && month.year === orderYear,
     );
     if (monthIndex !== -1) {
       months[monthIndex] += 1;
@@ -19,7 +21,7 @@ export function groupOrdersByPast12Months(data: OrderType[]): number[] {
 
 export function groupOrdersByStatusPast12Months(
   data: OrderType[],
-  status: string
+  status: string,
 ): number[] {
   const currentMonth = new Date().getMonth();
   const months = new Array(12).fill(0);
@@ -28,7 +30,7 @@ export function groupOrdersByStatusPast12Months(
     const orderMonth: number = new Date(order.createdAt).getMonth();
     const orderYear: number = new Date(order.createdAt).getFullYear();
     const monthIndex = monthYear.findIndex(
-      (month) => month.month === orderMonth && month.year === orderYear
+      (month) => month.month === orderMonth && month.year === orderYear,
     );
     if (monthIndex !== -1 && order.status === status) {
       months[monthIndex] += 1;
@@ -45,7 +47,7 @@ export function groupOrderFinancesPast12Month(data: OrderType[]): number[] {
     const orderMonth: number = new Date(order.createdAt).getMonth();
     const orderYear: number = new Date(order.createdAt).getFullYear();
     const monthIndex = monthYear.findIndex(
-      (month) => month.month === orderMonth && month.year === orderYear
+      (month) => month.month === orderMonth && month.year === orderYear,
     );
     if (
       monthIndex !== -1 &&
@@ -118,4 +120,103 @@ export function revenuePerMonth(data: OrderType[]) {
     sum += m;
   });
   console.log(sum);
+}
+
+export function getNewMonthlyClients(clients: ClientType[]): ClientType[] {
+  return clients.filter((client) => {
+    return moment(client.createdAt).isSame(new Date(), "month");
+  });
+}
+
+export function getNewYearlyClients(clients: ClientType[]): ClientType[] {
+  return clients.filter((client) => {
+    return moment(client.createdAt).isSame(new Date(), "year");
+  });
+}
+
+export function getNewWeeklyClients(clients: ClientType[]): ClientType[] {
+  return clients.filter((client) => {
+    return moment(client.createdAt).isSame(new Date(), "week");
+  });
+}
+
+export function groupNewClientsByMonth(clients: ClientType[]): number[] {
+  const currentMonth = new Date().getMonth();
+  const months = new Array(12).fill(0);
+  const monthYear = getPast12MonthsAndYear();
+  clients.forEach((client) => {
+    const clientMonth: number = new Date(client.createdAt).getMonth();
+    const clientYear: number = new Date(client.createdAt).getFullYear();
+    const monthIndex = monthYear.findIndex(
+      (month) => month.month === clientMonth && month.year === clientYear,
+    );
+    if (monthIndex !== -1) {
+      months[monthIndex] += 1;
+    }
+  });
+  return months.slice(currentMonth).concat(months.slice(0, currentMonth));
+}
+
+export function groupNewClientsByWeek(clients: ClientType[]): number[] {
+  const days: number[] = Array(7).fill(0);
+  clients.forEach((client) => {
+    const clientDay = new Date(client.createdAt).getDay();
+    days[clientDay] += 1;
+  });
+  return days;
+}
+
+export function groupNewClientsByYear(clients: ClientType[]): number[] {
+  const years: number[] = Array(5).fill(0);
+  clients.forEach((client) => {
+    const clientYear = moment(client.createdAt).year();
+    if (clientYear === moment().subtract(4, "year").year()) {
+      years[0] += 1;
+    } else if (clientYear === moment().subtract(3, "year").year()) {
+      years[1] += 1;
+    } else if (clientYear === moment().subtract(2, "year").year()) {
+      years[2] += 1;
+    } else if (clientYear === moment().subtract(1, "year").year()) {
+      years[3] += 1;
+    } else if (clientYear === moment().year()) {
+      years[4] += 1;
+    }
+  });
+  return years;
+}
+
+export function getTop5Clients(
+  orders: (AdminOrderType | ShopifyOrderType)[],
+  filter: "week" | "month" | "year",
+): { client: string; order: number }[] {
+  //   sum the number of orders belonging to each client
+  let group: { [key: string]: number } = {};
+  orders.forEach((order) => {
+    if (
+      (order.status === "delivered" || order.status === "collected") &&
+      moment(order.createdAt).isSame(new Date(), filter)
+    ) {
+      if (Object.keys(group).includes(order.client.companyName)) {
+        group[order.client.companyName] += 1;
+      } else {
+        group = { ...group, [order.client.companyName]: 1 };
+      }
+    }
+  });
+  let sortable: any[] = [];
+  for (const groupKey in group) {
+    sortable.push([groupKey, group[groupKey]]);
+  }
+  sortable.sort(function (a, b) {
+    return b[1] - a[1];
+  });
+  let top5: { client: string; order: number }[] = [];
+  for (let i = 0; i < 5; i++) {
+    const item = sortable[i];
+    top5.push({
+      client: item[0],
+      order: item[1],
+    });
+  }
+  return top5;
 }

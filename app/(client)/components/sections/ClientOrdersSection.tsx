@@ -60,35 +60,43 @@ export default function ClientOrdersSection({
         <InformationCard title="Delivered Orders" value={data.delivered} />
       </div>
       {/* Cancelled Orders */}
-      <div className="col-span-12 lg:col-span-4">
+      <div className="col-span-12 lg:col-span-2">
         <InformationCard
           title="Cancelled Orders"
           value={data.cancelled}
           className="text-red-500"
         />
       </div>
+      {/* Out Of Stock Orders */}
+      <div className="col-span-12 lg:col-span-2">
+        <InformationCard
+          title="Out OF Stock Orders"
+          value={data.outOfStock}
+          className="text-red-500"
+        />
+      </div>
       <div className="col-span-12 grid grid-cols-12 gap-5">
         {/* Collected Orders */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard title="Collected Orders" value={data.collected} />
         </div>
         {/* Returned Orders */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard title="Returned Orders" value={data.returned} />
         </div>
         {/* Out For Delivery */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard
             title="Out For Delivery"
             value={data.outForDelivery}
           />
         </div>
         {/* Pending Orders */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard title="Pending Orders" value={data.pending} />
         </div>
         {/* Unreachable Orders */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard
             title="Unreachable Orders"
             value={data.unreachable}
@@ -96,7 +104,7 @@ export default function ClientOrdersSection({
           />
         </div>
         {/* Postponed Orders */}
-        <div className="col-span-6 lg:col-span-2">
+        <div className="col-span-12 lg:col-span-2">
           <InformationCard
             title="Postponed Orders"
             value={data.postponed}

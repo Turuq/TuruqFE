@@ -1,12 +1,11 @@
 import { cookies } from "next/headers";
 import ClientAnalytics from "../../components/ClientAnalytics";
 import { ClientType } from "@/types/client";
-import { InventoryResponseType, OrderResponse } from "@/types/response";
 import {
-  getPast12Months,
-  groupOrdersByPast12Months,
-  revenuePerMonth,
-} from "@/utils/analytics-functions";
+  InventoryResponseType,
+  OrderResponse,
+  OrderType,
+} from "@/types/response";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -34,7 +33,7 @@ export default async function Page() {
         "Content-Type": "application/json",
         Authorization: `${cookieStore.get("token")?.value}`,
       },
-    }
+    },
   );
   let inventoryData: InventoryResponseType | null = null;
   if (inventoryRes) {
@@ -55,7 +54,7 @@ export default async function Page() {
         "Content-Type": "application/json",
         Authorization: `${cookieStore.get("token")?.value}`,
       },
-    }
+    },
   );
   let orderData: OrderResponse | null = null;
   if (orderRes.status === 200) {
@@ -66,11 +65,62 @@ export default async function Page() {
       client: orderJson.client,
     };
   }
+  // Client Shopify Orders
+  const shopifyRes = await fetch(
+    `${process.env.API_URL}order/clientShopifyOrders/${clientId}`,
+    {
+      next: { revalidate: 300 },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${cookieStore.get("token")?.value}`,
+      },
+    },
+  );
+  let shopifyData: OrderResponse | null = null;
+  if (shopifyRes.status === 200) {
+    const orderJson = await shopifyRes.json();
+    shopifyData = {
+      orders: orderJson.response,
+      orderStatistics: orderJson.orders,
+      client: orderJson.client,
+    };
+  }
+  // Client Zammit Orders
+  const zammitRes = await fetch(
+    `${process.env.API_URL}order/clientZammitOrders/${clientId}`,
+    {
+      next: { revalidate: 300 },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${cookieStore.get("token")?.value}`,
+      },
+    },
+  );
+  let zammitData: OrderResponse | null = null;
+  if (zammitRes.status === 200) {
+    const orderJson = await zammitRes.json();
+    zammitData = {
+      orders: orderJson.response,
+      orderStatistics: orderJson.orders,
+      client: orderJson.client,
+    };
+  }
+  let clientOrderData: OrderType[] = [];
+  if (orderData?.orders) {
+    clientOrderData = [...orderData?.orders];
+  }
+  if (shopifyData?.orders) {
+    clientOrderData = [...clientOrderData, ...shopifyData?.orders];
+  }
+  if (zammitData?.orders) {
+    clientOrderData = [...clientOrderData, ...zammitData?.orders];
+  }
+
   return (
     <div>
       <ClientAnalytics
         orderStatistics={data.orders}
-        orderData={orderData?.orders ?? []}
+        orderData={clientOrderData ?? []}
         inventory={inventoryData}
         finances={data.finance}
       />

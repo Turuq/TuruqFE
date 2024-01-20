@@ -1,24 +1,24 @@
 "use server";
 
-import { NewOrderParams } from "@/types/actions";
-import { ClientType, FinanceStatisticsType } from "@/types/client";
-import { GovernorateType } from "@/types/governorate";
-import {
-  LoginResponseType,
-  NewOrderResponseType,
-  ProductDetailsType,
-  ProductType,
-} from "@/types/response";
-import { format } from "date-fns";
-import moment from "moment";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import {NewOrderParams} from "@/types/actions";
+import {ClientType, FinanceStatisticsType} from "@/types/client";
+import {GovernorateType} from "@/types/governorate";
+import {LoginResponseType, NewOrderResponseType, ProductDetailsType,} from "@/types/response";
+
+import {revalidatePath} from "next/cache";
+import {cookies} from "next/headers";
 
 /**
- * getToken(): is a function that checks if the token is stored in the browser's cookies,
- * if it exists the value of the token is returned,
- * otherwise we return null.
+ * getTokenAction(): is a function that returns the token of the client if it exists.
  * @returns Promise<string | null>
+ * @example
+ * const token = await getTokenAction();
+ * if (token) {
+ * // do something
+ * }
+ * else {
+ * // do something else
+ * }
  */
 export async function getTokenAction(): Promise<string | null> {
   const cookieStore = cookies();
@@ -28,7 +28,14 @@ export async function getTokenAction(): Promise<string | null> {
 
 /**
  * getGovernorateFees(): is a function that returns the fees for each governorate, if a valid token exists for the client requesting it.
- * @returns Promise<any[]>
+ * @returns Promise<GovernorateType[]>
+ *     GovernorateType: {
+ *     _id: string;
+ *     name: string;
+ *     fee: number;
+ *     }[]
+ * @example
+ * const fees = await getGovernorateFeesAction();
  */
 export async function getGovernorateFeesAction(): Promise<GovernorateType[]> {
   const token = await getTokenAction();
@@ -45,10 +52,24 @@ export async function getGovernorateFeesAction(): Promise<GovernorateType[]> {
 }
 
 /**
- *  loginAction(): is a function that takes the email and password of the user and sends a request to the server to login,
- * @param email
- * @param password
+ *  loginAction(): is a function that takes in an email and password and logs in the user if the credentials are correct.
+ * @param {object} email password
  * @returns Promise<LoginResponseType>
+ *     LoginResponseType: {
+ *     error: string | null;
+ *     type: "client" | "admin" | null;
+ *     }
+ * @example
+ * const { error, type } = await loginAction({ email, password });
+ * if (error || type === null) {
+ * // do something
+ * }
+ * if (type === "client") {
+ *     // do something
+ * }
+ * if (type === "admin") {
+ *     // do something
+ * }
  */
 export async function loginAction({
   email,
@@ -68,8 +89,6 @@ export async function loginAction({
       },
     });
     if (res.status !== 200) {
-      console.log("login failed");
-      console.log(res);
       return { error: "Login Failed", type: null };
     } else {
       const data = await res.json();
@@ -77,12 +96,20 @@ export async function loginAction({
         return { error: data.message, type: null };
       }
       if (data.client) {
-        cookies().set("token", data.token);
-        cookies().set("client", JSON.stringify(data.client));
+        cookies().set("token", data.token, {
+          maxAge: 3600,
+        });
+        cookies().set("client", JSON.stringify(data.client), {
+          maxAge: 3600,
+        });
         return { error: null, type: "client" };
       } else if (data.admin) {
-        cookies().set("token", data.token);
-        cookies().set("admin", JSON.stringify(data.admin));
+        cookies().set("token", data.token, {
+          maxAge: 3600,
+        });
+        cookies().set("admin", JSON.stringify(data.admin), {
+          maxAge: 3600,
+        });
         return { error: null, type: "admin" };
       }
       return { error: "User Doesn't Exist", type: null };
@@ -128,12 +155,20 @@ export async function registerAction({
       return { error: data.message, type: null };
     }
     if (data.client) {
-      cookies().set("token", data.token);
-      cookies().set("client", JSON.stringify(data.client));
+      cookies().set("token", data.token, {
+        maxAge: 3600,
+      });
+      cookies().set("client", JSON.stringify(data.client), {
+        maxAge: 3600,
+      });
       return { error: null, type: "client" };
     } else if (data.admin) {
-      cookies().set("token", data.token);
-      cookies().set("admin", JSON.stringify(data.admin));
+      cookies().set("token", data.token, {
+        maxAge: 3600,
+      });
+      cookies().set("admin", JSON.stringify(data.admin), {
+        maxAge: 3600,
+      });
       return { error: null, type: "admin" };
     } else {
       return { error: "User Doesn't Exist", type: null };
@@ -476,8 +511,8 @@ export async function updateOrderStatusAction({
       variant === "orders"
         ? "update"
         : variant === "shopify"
-        ? "shopifyUpdate"
-        : "zammitUpdate";
+          ? "shopifyUpdate"
+          : "zammitUpdate";
     let promises: any[] = [];
     orders.forEach((order) => {
       promises.push(
@@ -488,7 +523,7 @@ export async function updateOrderStatusAction({
             "Content-Type": "application/json",
             Authorization: `${cookies().get("token")?.value}`,
           },
-        })
+        }),
       );
     });
     const res = (await Promise.all(promises)) as Response[];
@@ -527,8 +562,8 @@ export async function assignCourierAction({
       variant === "orders"
         ? "update"
         : variant === "shopify"
-        ? "shopifyUpdate"
-        : "zammitUpdate";
+          ? "shopifyUpdate"
+          : "zammitUpdate";
     let promises: any[] = [];
     orders.forEach((order) => {
       promises.push(
@@ -539,7 +574,7 @@ export async function assignCourierAction({
             "Content-Type": "application/json",
             Authorization: `${cookies().get("token")?.value}`,
           },
-        })
+        }),
       );
     });
     const res = (await Promise.all(promises)) as Response[];
@@ -564,28 +599,6 @@ export async function assignCourierAction({
   }
 }
 
-export async function uploadAdminInventoryExcelAction({
-  file,
-}: {
-  file: FormData;
-}): Promise<{ error: any; data: any }> {
-  try {
-    const res = await fetch(`${process.env.API_URL}product/add`, {
-      method: "POST",
-      body: file,
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `${cookies().get("token")?.value}`,
-      },
-    });
-    const data = await res.json();
-    return { error: null, data };
-  } catch (error: any) {
-    console.log(error);
-    return { error: error.message, data: null };
-  }
-}
-
 export async function getProductByIdAction({
   productId,
 }: {
@@ -599,7 +612,7 @@ export async function getProductByIdAction({
         headers: {
           Authorization: `${cookies().get("token")?.value}`,
         },
-      }
+      },
     );
     if (res.status === 200) {
       const data = await res.json();
@@ -633,7 +646,7 @@ export async function returnProductAction({
         headers: {
           Authorization: `${cookies().get("token")?.value}`,
         },
-      }
+      },
     );
     if (res.status === 200) {
       revalidatePath(pathname ?? "/admin/orders");
@@ -657,8 +670,8 @@ export async function deleteOrderAction({
       variant === "orders"
         ? "delete"
         : variant === "shopify"
-        ? "shopifyDelete"
-        : "zammitDelete";
+          ? "shopifyDelete"
+          : "zammitDelete";
     const res = await fetch(
       `${process.env.API_URL}order/${variantReq}/${orderId}`,
       {
@@ -666,7 +679,7 @@ export async function deleteOrderAction({
         headers: {
           Authorization: `${cookies().get("token")?.value}`,
         },
-      }
+      },
     );
     if (res.status === 200) {
       revalidatePath(pathname ?? "/admin/orders");
@@ -693,7 +706,7 @@ export async function updateClientFinancesAction({
           "Content-Type": "application/json",
           Authorization: `${cookies().get("token")?.value}`,
         },
-      }
+      },
     );
     if (res.status === 200) {
       revalidatePath(`/admin/clients/${clientId}`);
@@ -746,7 +759,7 @@ export async function getAdminFinancesAction({
           adminFinance.prepaid += data.finance.prepaid;
           adminFinance.packaging += data.finance.packaging;
           adminFinance.balance += data.finance.balance;
-        })
+        }),
     );
   });
 
@@ -781,7 +794,7 @@ export async function editOrderAction({
           "Content-Type": "application/json",
           Authorization: `${cookies().get("token")?.value}`,
         },
-      }
+      },
     );
     if (res.status !== 200) {
       return { error: "Failed to update order", message: null };
@@ -789,5 +802,30 @@ export async function editOrderAction({
     return { error: null, message: "Order updated successfully" };
   } catch (error: any) {
     return { error: error.message, message: null };
+  }
+}
+
+export async function deleteNotificationAction({
+  notificationId,
+  pathname,
+}: {
+  notificationId: string;
+  pathname: string | undefined;
+}) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}notification/delete/${notificationId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    if (res.status === 200) {
+      revalidatePath(pathname ?? "/client");
+    }
+  } catch (e) {
+    console.log(e);
   }
 }

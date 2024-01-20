@@ -2,11 +2,12 @@ import { cookies } from "next/headers";
 import AdminInventorySection from "../../components/sections/AdminInventorySection";
 import { AdminInventoryResponseType } from "@/types/response";
 import {
-  InventoryColumns,
   adminInventoryColumns,
+  InventoryColumns,
 } from "../../components/tables/inventory/Columns";
 import { AdminInventoryTable } from "../../components/tables/data-tables/AdminInventoryTable";
 import axios from "axios";
+import moment from "moment";
 
 export default async function page() {
   const res = await axios.get(`${process.env.API_URL}product`, {
@@ -32,6 +33,10 @@ export default async function page() {
   return (
     <div className="flex flex-col gap-5">
       <AdminInventorySection inventory={data.products} variant="inventory" />
+      <p className="text-xs text-accent font-semibold italic">
+        last updated:{" "}
+        {moment(data.lastUpdated).format("ddd DD, MMM YYYY | hh:mm A")}
+      </p>
       <AdminInventoryTable
         columns={adminInventoryColumns}
         data={tableData}

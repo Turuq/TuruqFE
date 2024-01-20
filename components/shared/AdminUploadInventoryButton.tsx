@@ -1,6 +1,6 @@
 "use client";
 
-import { FileUpIcon, Loader2 } from "lucide-react";
+import { ArrowUpFromLineIcon, FileUpIcon, Loader2 } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/custom/auth-dialog";
-import { uploadInventoryExcelAction } from "@/lib/actions";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 export default function AdminUploadInventoryButton({
@@ -20,6 +19,7 @@ export default function AdminUploadInventoryButton({
   variant: "default" | "icon";
 }) {
   const [loading, setLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File>();
   const [open, setOpen] = useState(false);
   const [formError, setFormError] = useState({ error: false, message: "" });
@@ -35,19 +35,22 @@ export default function AdminUploadInventoryButton({
       setLoading(true);
       setFormError({ error: false, message: "" });
       const formData = new FormData();
-      formData.append("file", file);
-      const { error, data } = await uploadInventoryExcelAction({
-        file: formData,
+      formData.append("file", file, file.name);
+      const res = await fetch("/api/file/upload", {
+        method: "POST",
+        body: formData,
       });
-      if (error) {
-        setFormError({ error: true, message: error.message });
+      if (res.status !== 200) {
+        setFormError({ error: true, message: "Something went wrong." });
         setLoading(false);
         return;
       }
       setLoading(false);
+      setFile(undefined);
       setOpen(false);
     }
   }
+
   return (
     <div className="">
       <Dialog open={open} onOpenChange={setOpen}>
@@ -79,31 +82,51 @@ export default function AdminUploadInventoryButton({
                   <AlertDescription>{formError.message}</AlertDescription>
                 </Alert>
               )}
+              {loading && (
+                <Alert className="bg-accent text-white border-accent">
+                  <AlertTitle className="capitalize flex items-center gap-1">
+                    <ArrowUpFromLineIcon className="size-4 inherit animate-bounce" />
+                    <span>Inventory Upload In Progress</span>
+                  </AlertTitle>
+                  <AlertDescription>
+                    {
+                      "Just a moment! We're working hard to update your inventory. This might take a couple of minutes."
+                    }
+                  </AlertDescription>
+                </Alert>
+              )}
             </DialogDescription>
             <div
               {...getRootProps()}
-              className="w-full border border-dashed border-accent p-5 bg-gray-200"
+              className="w-full flex items-center justify-center h-40 border border-dashed border-accent p-5 bg-gray-200"
             >
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p>Drop the files here ...</p>
               ) : (
-                <p>
-                  {"Drag 'n' drop some files here,"}{" "}
-                  <span className="text-accent underline cursor-pointer">
-                    or click to select files
-                  </span>
+                <div className="flex flex-col gap-1 items-center justify-center w-full h-full">
+                  <ArrowUpFromLineIcon className="size-5 text-accent" />
+                  <p className="cursor-default">{"Drag and Drop Here"}</p>
+                  <p className="cursor-default">or</p>
+                  <p className="text-accent font-semibold cursor-pointer hover:underline">
+                    Browse Files
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className={"flex items-center justify-between gap-5"}>
+              <p className="text-xs text-accent font-semibold italic">
+                {"Accepted File Types: .xlsx only"}
+              </p>
+              {file && (
+                <p className="text-xs text-accent font-semibold">
+                  {file.name} - {file.size} bytes
                 </p>
               )}
             </div>
-            {file && (
-              <p>
-                {file.name} - {file.size} bytes
-              </p>
-            )}
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end mt-5">
               <button
-                className="rounded-xl bg-accent p-2 text-white disabled:bg-gray-500"
+                className="rounded-xl bg-accent flex items-center justify-center p-2 text-white disabled:bg-gray-500 w-40 mt-5"
                 disabled={loading || !file}
                 onClick={(e) => handleFileUpload(e)}
               >

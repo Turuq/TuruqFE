@@ -33,7 +33,7 @@ export default function ClientDropDown({
     <DropdownMenu>
       <DropdownMenuTrigger className="flex gap-2 cursor-pointer outline-none">
         <div className="flex gap-2 items-center">
-          <Avatar className="size-7">
+          <Avatar className="size-10">
             <AvatarFallback
               className={`${
                 variant === "home"
@@ -44,8 +44,8 @@ export default function ClientDropDown({
               {client
                 ? client?.companyName.substring(0, 1)
                 : admin
-                ? admin?.name?.substring(0, 1)
-                : ""}
+                  ? admin?.name?.substring(0, 1)
+                  : ""}
             </AvatarFallback>
           </Avatar>
 

@@ -6,18 +6,17 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/custom/auth-dialog";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
-  SortingState,
   getCoreRowModel,
-  useReactTable,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  ColumnFiltersState,
-  getFilteredRowModel,
+  SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -31,8 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { ShopifyOrderType, ProductDetailsType } from "@/types/response";
-import InformationCard from "@/app/(client)/components/cards/InformationCard";
+import { ProductDetailsType, ShopifyOrderType } from "@/types/response";
 import { OrderColumns } from "../inventory/Columns";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,13 +40,11 @@ import {
   ChevronLeftCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  PencilIcon,
   Trash2Icon,
   Undo2,
 } from "lucide-react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -76,7 +72,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import EditShopifyOrderDialog from "../../forms/EditShopifyOrderDialog";
 import { GovernorateType } from "@/types/governorate";
 
 interface AdminOrderTableProps {
@@ -109,10 +104,10 @@ export function AdminShopifyOrderTable({
   const [filterStatus, setFilterStatus] = useState("all");
 
   const [availableGovernorate, setAvailableGovernorate] = useState<string[]>(
-    []
+    [],
   );
   const [governorateTuruq, setGovernorateTuruq] = useState<GovernorateType[]>(
-    []
+    [],
   );
   const [orderGov, setOrderGov] = useState<number>(0);
 
@@ -164,14 +159,14 @@ export function AdminShopifyOrderTable({
 
   function handleTableFilter(
     e: React.ChangeEvent<HTMLInputElement>,
-    column: string
+    column: string,
   ) {
     table.getColumn(column)?.setFilterValue(e.target.value);
   }
 
   async function showProductDetails(
     e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    id: string
+    id: string,
   ) {
     const res = await getProductByIdAction({ productId: id });
     if (res.data) {
@@ -190,7 +185,7 @@ export function AdminShopifyOrderTable({
   }, [orders]);
 
   function handleGovSelect(gov: string) {
-    if (gov === filterGovernorate) {
+    if (gov === filterGovernorate || gov === "all") {
       setFilterGovernorate("all");
       table.getColumn("governorate")?.setFilterValue("");
     } else {
@@ -200,7 +195,7 @@ export function AdminShopifyOrderTable({
   }
 
   function handleStatusSelect(status: string) {
-    if (status === filterStatus) {
+    if (status === filterStatus || status === "all") {
       setFilterStatus("all");
       table.getColumn("status")?.setFilterValue("");
     } else {
@@ -213,7 +208,7 @@ export function AdminShopifyOrderTable({
     const selectedIds = table
       .getFilteredSelectedRowModel()
       .rows.map((selected) =>
-        orders[selected.index]._id.toString()
+        orders[selected.index]._id.toString(),
       ) as string[];
     changeMarkedOrders(selectedIds);
   }, [rowSelection, changeMarkedOrders, orders, table]);
@@ -305,6 +300,56 @@ export function AdminShopifyOrderTable({
       </div>
       <Table className="overflow-x-scroll bg-white rounded-t-xl">
         <TableCaption className="capitalize">
+          <div className="flex items-center justify-end mb-5">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-xs text-accent/50">
+                Rows per page:{" "}
+                <span className="bg-white p-1 rounded-md">{limit}</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(10);
+                    table.setPageSize(10);
+                  }}
+                >
+                  10
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(15);
+                    table.setPageSize(15);
+                  }}
+                >
+                  15
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(20);
+                    table.setPageSize(20);
+                  }}
+                >
+                  20
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(25);
+                    table.setPageSize(25);
+                  }}
+                >
+                  25
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(30);
+                    table.setPageSize(30);
+                  }}
+                >
+                  30
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <div className="flex items-center justify-between gap-5">
             <div className="text-accent/50 text-xs">
               page {currentPage + " out of " + table.getPageCount()}
@@ -398,6 +443,18 @@ export function AdminShopifyOrderTable({
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <ScrollArea className="h-[400px] rounded-md border p-4">
+                                  <DropdownMenuItem
+                                    onClick={() => handleGovSelect("all")}
+                                    className={`capitalize ${
+                                      filterGovernorate === "all" &&
+                                      "bg-accent/10"
+                                    }`}
+                                  >
+                                    {filterGovernorate === "all" && (
+                                      <CheckIcon className="size-3 mr-2 text-accent" />
+                                    )}{" "}
+                                    All
+                                  </DropdownMenuItem>
                                   {availableGovernorate.map((gov) => (
                                     <DropdownMenuItem
                                       key={gov}
@@ -430,7 +487,18 @@ export function AdminShopifyOrderTable({
                                   Filter by Status
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <ScrollArea className="h-[400px] rounded-md border p-4">
+                                <ScrollArea className="h-[350px] rounded-md border p-4">
+                                  <DropdownMenuItem
+                                    onClick={() => handleStatusSelect("all")}
+                                    className={`capitalize ${
+                                      filterStatus === "all" && "bg-accent/10"
+                                    }`}
+                                  >
+                                    {filterStatus === "all" && (
+                                      <CheckIcon className="size-3 mr-2 text-accent" />
+                                    )}{" "}
+                                    All
+                                  </DropdownMenuItem>
                                   {availableStatuses.map((status) => (
                                     <DropdownMenuItem
                                       key={status.value}
@@ -458,7 +526,7 @@ export function AdminShopifyOrderTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </div>
                   </TableHead>
@@ -629,7 +697,7 @@ export function AdminShopifyOrderTable({
                           <AlertDialogAction
                             onClick={() =>
                               handleReturnProduct(
-                                selectedProduct._id.toString()
+                                selectedProduct._id.toString(),
                               )
                             }
                           >

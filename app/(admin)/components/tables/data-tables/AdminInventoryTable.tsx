@@ -9,14 +9,14 @@ import {
 } from "@/components/custom/auth-dialog";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
-  SortingState,
   getCoreRowModel,
-  useReactTable,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  ColumnFiltersState,
-  getFilteredRowModel,
+  SortingState,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -42,7 +42,6 @@ import {
 } from "lucide-react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
@@ -88,7 +87,7 @@ export function AdminInventoryTable({
 
   function handleTableFilter(
     e: React.ChangeEvent<HTMLInputElement>,
-    column: string
+    column: string,
   ) {
     table.getColumn(column)?.setFilterValue(e.target.value);
   }
@@ -153,6 +152,56 @@ export function AdminInventoryTable({
       </div>
       <Table className="overflow-x-scroll bg-white rounded-t-xl">
         <TableCaption className="capitalize">
+          <div className="flex items-center justify-end mb-5">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-xs text-accent/50">
+                Rows per page:{" "}
+                <span className="bg-white p-1 rounded-md">{limit}</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(10);
+                    table.setPageSize(10);
+                  }}
+                >
+                  10
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(15);
+                    table.setPageSize(15);
+                  }}
+                >
+                  15
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(20);
+                    table.setPageSize(20);
+                  }}
+                >
+                  20
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(25);
+                    table.setPageSize(25);
+                  }}
+                >
+                  25
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setLimit(30);
+                    table.setPageSize(30);
+                  }}
+                >
+                  30
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <div className="flex items-center justify-between gap-5">
             <div className="text-accent/50 text-xs">
               page {currentPage + " out of " + table.getPageCount()}
@@ -217,7 +266,7 @@ export function AdminInventoryTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                       <Input
                         placeholder="Filter"

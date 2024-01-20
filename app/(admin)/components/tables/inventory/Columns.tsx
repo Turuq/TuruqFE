@@ -5,28 +5,6 @@ import { ArrowUpDown } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MoreHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { deleteOrderAction } from "@/lib/actions";
 
 export type InventoryColumns = {
   index: number;
@@ -366,7 +344,7 @@ export const adminOrderColumns: ColumnDef<OrderColumns>[] = [
     },
     cell: ({ row }) => {
       const formatted = moment(row.getValue("received")).format(
-        "DD MMM YYYY - hh:mm A"
+        "DD MMM YYYY - hh:mm A",
       );
 
       return <div className="text-center">{formatted}</div>;
@@ -396,18 +374,22 @@ export const adminOrderColumns: ColumnDef<OrderColumns>[] = [
               row.getValue("status") === "collected"
                 ? "text-green-700"
                 : row.getValue("status") === "pending"
-                ? "text-amber-400"
-                : row.getValue("status") === "cancelled" ||
-                  row.getValue("status") === "postponed" ||
-                  row.getValue("status") === "unreachable" ||
-                  row.getValue("status") === "returned"
-                ? "text-red-500"
-                : "text-accent"
+                  ? "text-amber-400"
+                  : row.getValue("status") === "cancelled" ||
+                      row.getValue("status") === "postponed" ||
+                      row.getValue("status") === "unreachable" ||
+                      row.getValue("status") === "returned" ||
+                      row.getValue("status") === "outOfStock"
+                    ? "text-red-500"
+                    : "text-accent"
             }`}
           >
-            {row.getValue("status") !== "outForDelivery"
+            {row.getValue("status") !== "outForDelivery" &&
+            row.getValue("status") !== "outOfStock"
               ? row.getUniqueValues("status")
-              : "out for delivery"}
+              : row.getValue("status") === "outForDelivery"
+                ? "out for delivery"
+                : "out of stock"}
           </h3>
         </div>
       );

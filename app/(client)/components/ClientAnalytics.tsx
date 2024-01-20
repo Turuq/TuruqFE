@@ -4,20 +4,16 @@ import {
   PackagePlusIcon,
 } from "lucide-react";
 import LineChart from "@/components/charts/LineChart";
-import { faker } from "@faker-js/faker";
 import UploadInventoryButton from "@/components/shared/UploadInventoryButton";
 import { FinanceStatisticsType, OrderStatisticsType } from "@/types/client";
-import {
-  InventoryResponseType,
-  OrderResponse,
-  OrderType,
-} from "@/types/response";
+import { InventoryResponseType, OrderType } from "@/types/response";
 import {
   getPast12Months,
   groupOrderFinancesPast12Month,
   groupOrdersByPast12Months,
   groupOrdersByStatusPast12Months,
 } from "@/utils/analytics-functions";
+
 const labels = getPast12Months();
 
 const orderOptions = {
@@ -178,7 +174,7 @@ export default function ClientAnalytics({
               <div className="flex items-center justify-between gap-3">
                 <h3 className="text-inherit font-bold text-2xl lg:text-4xl flex flex-col items-center justify-center text-center">
                   {Math.round(
-                    (orderStatistics.delivered / orderStatistics.total) * 100
+                    (orderStatistics.delivered / orderStatistics.total) * 100,
                   )}
                   <span className="font-thin text-2xl">%</span>
                 </h3>
@@ -197,7 +193,7 @@ export default function ClientAnalytics({
               <div className="flex items-center justify-between gap-3 w-full">
                 <h3 className="text-inherit font-bold text-2xl lg:text-4xl flex flex-col items-center justify-center text-center">
                   {Math.round(
-                    (orderStatistics.cancelled / orderStatistics.total) * 100
+                    (orderStatistics.cancelled / orderStatistics.total) * 100,
                   )}
                   <span className="font-thin text-2xl">%</span>
                 </h3>
@@ -220,7 +216,7 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.collected / orderStatistics.total) * 100
+                  (orderStatistics.collected / orderStatistics.total) * 100,
                 )}
                 % of Total Orders
               </p>
@@ -234,7 +230,8 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.outForDelivery / orderStatistics.total) * 100
+                  (orderStatistics.outForDelivery / orderStatistics.total) *
+                    100,
                 )}
                 % of Total Orders
               </p>
@@ -248,7 +245,7 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.pending / orderStatistics.total) * 100
+                  (orderStatistics.pending / orderStatistics.total) * 100,
                 )}
                 % of Total Orders
               </p>
@@ -262,7 +259,7 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.returned / orderStatistics.total) * 100
+                  (orderStatistics.returned / orderStatistics.total) * 100,
                 )}
                 % of Total Orders
               </p>
@@ -276,7 +273,7 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.unreachable / orderStatistics.total) * 100
+                  (orderStatistics.unreachable / orderStatistics.total) * 100,
                 )}
                 % of Total Orders
               </p>
@@ -290,7 +287,7 @@ export default function ClientAnalytics({
               </h3>
               <p className="text-sm capitalize text-accent/50">
                 {Math.round(
-                  (orderStatistics.postponed / orderStatistics.total) * 100
+                  (orderStatistics.postponed / orderStatistics.total) * 100,
                 )}
                 % of Total Orders
               </p>
@@ -324,7 +321,7 @@ export default function ClientAnalytics({
                   {Math.round(
                     (inventory.products.totalInStock /
                       inventory.clientInventory.length) *
-                      100
+                      100,
                   )}
                   % of Total Stock
                 </p>
@@ -340,7 +337,7 @@ export default function ClientAnalytics({
                   {Math.round(
                     (inventory.products.totalOutOfStock /
                       inventory.clientInventory.length) *
-                      100
+                      100,
                   )}
                   % of Total Stock
                 </p>

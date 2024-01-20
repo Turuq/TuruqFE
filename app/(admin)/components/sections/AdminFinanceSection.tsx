@@ -45,7 +45,7 @@ export default function AdminFinanceSection({
             `${process.env.NEXT_PUBLIC_API_URL}client/home/${clients[c]._id}`,
             {
               headers: { Authorization: Cookies.get("token") },
-            }
+            },
           )
           .then((res) => {
             adminFinance.collected += res.data.finance.collected;
@@ -56,7 +56,7 @@ export default function AdminFinanceSection({
           })
           .catch((e) => {
             console.log(e);
-          })
+          }),
       );
     }
     Promise.all(promises)
@@ -83,7 +83,7 @@ export default function AdminFinanceSection({
       shopifyOrders.forEach((order) => {
         if (order.status === "delivered") {
           const orderGov = govFees.find(
-            (gov) => gov.name === order.customer.governorate
+            (gov) => gov.name === order.customer.governorate,
           );
           govTotal += orderGov?.fee ?? 0;
         }
@@ -94,7 +94,7 @@ export default function AdminFinanceSection({
       zammitOrders.forEach((order) => {
         if (order.status === "delivered") {
           const orderGov = govFees.find(
-            (gov) => gov.name === order.customer.governorate
+            (gov) => gov.name === order.customer.governorate,
           );
           govTotal += orderGov?.fee ?? 0;
         }
@@ -178,7 +178,7 @@ export default function AdminFinanceSection({
         }`}
       >
         <InformationCard
-          title="Shipping"
+          title="Delivered Orders Shipping"
           value={shippingFees}
           variant="finance"
         />
