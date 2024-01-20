@@ -1,11 +1,5 @@
 import { cookies } from "next/headers";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export async function POST(request: Request) {
   const formData = await request.formData();
   const uploadForm = new FormData();
