@@ -1,108 +1,153 @@
 "use client";
 
 import InformationCard from "@/app/(client)/components/cards/InformationCard";
-import axios from "axios";
-import { ClientType, FinanceStatisticsType } from "@/types/client";
+import { FinanceStatisticsType } from "@/types/client";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { GovernorateType } from "@/types/governorate";
-import { AdminOrderType, ShopifyOrderType } from "@/types/response";
+import { Button } from "@/components/ui/button";
+import { ListRestartIcon } from "lucide-react";
+import { socket } from "@/lib/socket.io";
+import moment from "moment";
+
+type StatusType = {
+  message: string;
+  type: "update" | "fetch" | "error" | "success";
+  timestamp: number;
+};
 
 export default function AdminFinanceSection({
   finances,
-  clients,
-  orders,
-  shopifyOrders,
-  zammitOrders,
-  govFees,
+  // clients,
+  // orders,
+  // shopifyOrders,
+  // zammitOrders,
+  // govFees,
 }: {
   finances: FinanceStatisticsType;
-  clients: Pick<ClientType, "_id">[];
-  govFees: GovernorateType[];
-  orders: AdminOrderType[];
-  shopifyOrders: ShopifyOrderType[];
-  zammitOrders: AdminOrderType[];
+  // clients: Pick<ClientType, "_id">[];
+  // govFees: GovernorateType[];
+  // orders: AdminOrderType[];
+  // shopifyOrders: ShopifyOrderType[];
+  // zammitOrders: AdminOrderType[];
 }) {
   const [finance, setFinance] = useState(finances);
   const [loading, setLoading] = useState(false);
-  const [shippingFees, setShippingFees] = useState(0);
+  const [showUpdateFinances, setShowUpdateFinances] = useState<boolean>(false);
+  const [status, setStatus] = useState<StatusType[]>([]);
+  // const [shippingFees, setShippingFees] = useState(0);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   let promises = [];
+  //   let adminFinance = {
+  //     collected: 0,
+  //     storage: 0,
+  //     prepaid: 0,
+  //     packaging: 0,
+  //     balance: 0,
+  //     shipping: 0,
+  //   };
+  //   for (let c in clients) {
+  //     promises.push(
+  //       axios
+  //         .get(
+  //           `${process.env.NEXT_PUBLIC_API_URL}client/home/${clients[c]._id}`,
+  //           {
+  //             headers: { Authorization: Cookies.get("token") },
+  //           },
+  //         )
+  //         .then((res) => {
+  //           adminFinance.collected += res.data.finance.collected;
+  //           adminFinance.storage += res.data.finance.storage;
+  //           adminFinance.prepaid += res.data.finance.prepaid;
+  //           adminFinance.packaging += res.data.finance.packaging;
+  //           adminFinance.balance += res.data.finance.balance;
+  //         })
+  //         .catch((e) => {
+  //           console.log(e);
+  //         }),
+  //     );
+  //   }
+  //   Promise.all(promises)
+  //     .then(() => {
+  //       setLoading(false);
+  //       setFinance(adminFinance);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // }, [clients]);
+  //
+  // useEffect(() => {
+  //   let govTotal = 0;
+  //   if (orders) {
+  //     orders.forEach((order) => {
+  //       if (order.status === "delivered") {
+  //         govTotal += order.shippingFees;
+  //       }
+  //     });
+  //   }
+  //
+  //   if (shopifyOrders) {
+  //     shopifyOrders.forEach((order) => {
+  //       if (order.status === "delivered") {
+  //         const orderGov = govFees.find(
+  //           (gov) => gov.name === order.customer.governorate,
+  //         );
+  //         govTotal += orderGov?.fee ?? 0;
+  //       }
+  //     });
+  //   }
+  //
+  //   if (zammitOrders) {
+  //     zammitOrders.forEach((order) => {
+  //       if (order.status === "delivered") {
+  //         const orderGov = govFees.find(
+  //           (gov) => gov.name === order.customer.governorate,
+  //         );
+  //         govTotal += orderGov?.fee ?? 0;
+  //       }
+  //     });
+  //   }
+  //
+  //   setShippingFees(govTotal);
+  // }, [orders, shopifyOrders, zammitOrders, govFees]);
 
   useEffect(() => {
-    setLoading(true);
-    let promises = [];
-    let adminFinance = {
-      collected: 0,
-      storage: 0,
-      prepaid: 0,
-      packaging: 0,
-      balance: 0,
-      shipping: 0,
+    socket.on("connect", () => {
+      setShowUpdateFinances(true);
+    });
+    socket.on("disconnect", () => {
+      setShowUpdateFinances(false);
+      setStatus([]);
+    });
+    socket.on("status update", (statusRes: StatusType[]) => {
+      setStatus(statusRes);
+    });
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect", () => {
+        setStatus([]);
+        setShowUpdateFinances(false);
+      });
+      socket.off("status update", () => {
+        setStatus([]);
+        setShowUpdateFinances(false);
+      });
     };
-    for (let c in clients) {
-      promises.push(
-        axios
-          .get(
-            `${process.env.NEXT_PUBLIC_API_URL}client/home/${clients[c]._id}`,
-            {
-              headers: { Authorization: Cookies.get("token") },
-            },
-          )
-          .then((res) => {
-            adminFinance.collected += res.data.finance.collected;
-            adminFinance.storage += res.data.finance.storage;
-            adminFinance.prepaid += res.data.finance.prepaid;
-            adminFinance.packaging += res.data.finance.packaging;
-            adminFinance.balance += res.data.finance.balance;
-          })
-          .catch((e) => {
-            console.log(e);
-          }),
-      );
-    }
-    Promise.all(promises)
-      .then(() => {
-        setLoading(false);
-        setFinance(adminFinance);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, [clients]);
+  }, []);
 
-  useEffect(() => {
-    let govTotal = 0;
-    if (orders) {
-      orders.forEach((order) => {
-        if (order.status === "delivered") {
-          govTotal += order.shippingFees;
-        }
-      });
-    }
-
-    if (shopifyOrders) {
-      shopifyOrders.forEach((order) => {
-        if (order.status === "delivered") {
-          const orderGov = govFees.find(
-            (gov) => gov.name === order.customer.governorate,
-          );
-          govTotal += orderGov?.fee ?? 0;
-        }
-      });
-    }
-
-    if (zammitOrders) {
-      zammitOrders.forEach((order) => {
-        if (order.status === "delivered") {
-          const orderGov = govFees.find(
-            (gov) => gov.name === order.customer.governorate,
-          );
-          govTotal += orderGov?.fee ?? 0;
-        }
-      });
-    }
-
-    setShippingFees(govTotal);
-  }, [orders, shopifyOrders, zammitOrders, govFees]);
+  async function handleUpdateFinances() {
+    socket.connect();
+    const newStatus: StatusType[] = [
+      {
+        message: "Fetching Clients",
+        type: "fetch",
+        timestamp: Date.now(),
+      },
+    ];
+    socket.emit("update finances", newStatus);
+    setStatus(newStatus);
+  }
 
   return (
     <div className="grid grid-cols-12 gap-5">
@@ -110,6 +155,15 @@ export default function AdminFinanceSection({
         <h1 className="text-2xl lg:text-4xl font-bold text-accent/50 uppercase">
           Finances
         </h1>
+        <Button
+          className={
+            "bg-accent hover:bg-accent/80 rounded-xl flex items-center justify-center"
+          }
+          onClick={handleUpdateFinances}
+        >
+          <ListRestartIcon className={"size-5 mr-2 text-inherit"} />
+          <span>Update Finances</span>
+        </Button>
       </div>
       {/* Account Balance */}
       <div
@@ -179,10 +233,29 @@ export default function AdminFinanceSection({
       >
         <InformationCard
           title="Delivered Orders Shipping"
-          value={shippingFees}
+          value={finance.shipping}
           variant="finance"
         />
       </div>
+      {showUpdateFinances && (
+        <div
+          className={
+            "col-span-12 flex flex-col gap-2 bg-white h-svh p-0 lg:p-5 lg:rounded-xl overflow-y-scroll"
+          }
+        >
+          {status.map((status) => (
+            <div
+              key={status.timestamp}
+              className={`border-l-8 flex items-center gap-5 p-2 lg:p-5 ${status.type === "error" ? "bg-red-700/10 border-red-700" : status.type === "success" ? "bg-green-700/10 border-green-700" : status.type === "fetch" ? "bg-primary-900/10 border-primary-900" : "bg-amber-500/10 border-amber-500"}`}
+            >
+              <span className={"text-xs font-semibold italic"}>
+                {moment(status.timestamp).format("hh:mm:ss")}
+              </span>
+              <span className={"text-sm font-semibold"}>{status.message}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

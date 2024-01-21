@@ -2,7 +2,6 @@ import { Metadata } from "next";
 
 import { cookies } from "next/headers";
 import {
-  AdminOrderType,
   AdminOrdersResponseType,
   AdminShopifyOrdersResponseType,
   CourierResponseType,
@@ -92,7 +91,7 @@ export default async function page() {
         status: item.status,
         courier: item.courier?.name ?? "Not Assigned",
       };
-    }
+    },
   );
 
   const zammitTableData: OrderColumns[] = dataZammit.response.map(
@@ -109,7 +108,7 @@ export default async function page() {
         status: item.status,
         courier: item.courier?.name ?? "Not Assigned",
       };
-    }
+    },
   );
   return (
     <div className="flex flex-col gap-5">

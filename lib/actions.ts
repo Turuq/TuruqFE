@@ -3,7 +3,7 @@
 import {NewOrderParams} from "@/types/actions";
 import {ClientType, FinanceStatisticsType} from "@/types/client";
 import {GovernorateType} from "@/types/governorate";
-import {LoginResponseType, NewOrderResponseType, ProductDetailsType,} from "@/types/response";
+import {LoginResponseType, NewOrderResponseType, ProductDetailsType, ProductSummaryType,} from "@/types/response";
 
 import {revalidatePath} from "next/cache";
 import {cookies} from "next/headers";
@@ -827,5 +827,51 @@ export async function deleteNotificationAction({
     }
   } catch (e) {
     console.log(e);
+  }
+}
+
+export async function fetchAllClientsAction(): Promise<{
+  error: string | null;
+  clients: ClientType[] | null;
+}> {
+  try {
+    const clientRes = await fetch(`${process.env.API_URL}client`, {
+      method: "GET",
+      next: { revalidate: 300 },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${cookies().get("token")?.value}`,
+      },
+    });
+    const clientData = (await clientRes.json()) as ClientType[];
+    return { error: null, clients: clientData };
+  } catch (e: any) {
+    console.log(e);
+    return { error: e.message, clients: null };
+  }
+}
+
+export async function getClientInventoryAction(): Promise<{
+  error: string | null;
+  products: ProductSummaryType[] | null;
+}> {
+  try {
+    const client: ClientType = JSON.parse(
+      cookies().get("client")?.value ?? "",
+    ) as ClientType;
+    const res = await fetch(
+      `${process.env.API_URL}product/clientProductsSummary/${client._id}`,
+      {
+        next: { revalidate: 300 },
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    const data = (await res.json()) as { products: ProductSummaryType[] };
+    return { error: null, products: data.products };
+  } catch (e: any) {
+    console.log(e.message);
+    return { error: e.message, products: null };
   }
 }

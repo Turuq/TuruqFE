@@ -7,7 +7,6 @@ import { cookies } from "next/headers";
 import { AdminDashboardResponseType } from "@/types/response";
 import AdminOrdersSection from "../components/sections/AdminOrdersSection";
 import AdminInventorySection from "../components/sections/AdminInventorySection";
-import AdminFinanceSection from "../components/sections/AdminFinanceSection";
 import { ClientType } from "@/types/client";
 import AdminFinancePage from "@/app/(admin)/admin/finances/page";
 

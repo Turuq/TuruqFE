@@ -245,3 +245,12 @@ export type NotificationType = {
   orderId: OrderType;
   createdAt: string;
 };
+
+export type ProductSummaryType = {
+  _id: string;
+  itemDescription: string;
+  quantity: number;
+  UID: string;
+  color: string;
+  size: string;
+};

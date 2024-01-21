@@ -11,17 +11,15 @@ export default async function Page() {
   }
   client = JSON.parse(cookieValue) as ClientType;
   const clientId = client?._id;
-  // TODO: Need an API endpoint for fetching the details of each individual tab
-  const res = await fetch(`${process.env.API_URL}client/home/${clientId}`, {
-    next: { revalidate: 300 },
+  const financeRes = await fetch(`${process.env.API_URL}finance/${clientId}`, {
     headers: {
       Authorization: `${cookieStore.get("token")?.value}`,
     },
   });
-  const data = await res.json();
+  const financeData = await financeRes.json();
   return (
     <div>
-      <ClientFinancesSection data={data.finance} />
+      <ClientFinancesSection data={financeData.finance} />
       <div></div>
     </div>
   );

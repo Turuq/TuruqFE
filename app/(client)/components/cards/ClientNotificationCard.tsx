@@ -59,7 +59,7 @@ export default function ClientNotificationCard({
             You Have No New Notifications!
           </h3>
         )}
-        {notifications.map((notification) => (
+        {notifications?.map((notification) => (
           <div
             key={notification._id}
             className="w-full border-b border-accent/10 pb-5 flex items-start justify-between gap-5 p-2"

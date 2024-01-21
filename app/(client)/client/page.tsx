@@ -2,7 +2,6 @@ import { ClientType } from "@/types/client";
 import ClientDashboard from "../components/ClientDashboard";
 
 import { cookies } from "next/headers";
-import { Suspense } from "react";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -21,9 +20,20 @@ export default async function Page() {
   });
   const data = await res.json();
 
+  const financeRes = await fetch(`${process.env.API_URL}finance/${clientId}`, {
+    headers: {
+      Authorization: `${cookieStore.get("token")?.value}`,
+    },
+  });
+  const financeData = await financeRes.json();
+
+  const clientData = { ...data, ...financeData };
   return (
     <div className="">
-      <ClientDashboard data={data} />
+      {/*<pre>*/}
+      {/*  <code>{JSON.stringify(clientData, null, 2)}</code>*/}
+      {/*</pre>*/}
+      <ClientDashboard data={clientData} />
     </div>
   );
 }

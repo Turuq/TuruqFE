@@ -11,7 +11,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,11 +32,17 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { newOrderFormSchema } from "@/validations/newOrderFormSchema";
 import { useEffect, useState } from "react";
-import { addNewOrderAction, getGovernorateFeesAction } from "@/lib/actions";
+import {
+  addNewOrderAction,
+  getClientInventoryAction,
+  getGovernorateFeesAction,
+} from "@/lib/actions";
 import { GovernorateType } from "@/types/governorate";
 import { Loader2, Trash2Icon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ProductSummaryType } from "@/types/response";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface INewOrderProps {
   children: JSX.Element;
@@ -59,6 +64,9 @@ export function NewOrderDialog({ children }: INewOrderProps) {
   const [subTotal, setSubTotal] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [fees, setFees] = useState<number>(0);
+  const [availableProducts, setAvailableProducts] = useState<
+    ProductSummaryType[]
+  >([]);
   const form = useForm<z.infer<typeof newOrderFormSchema>>({
     resolver: zodResolver(newOrderFormSchema),
     defaultValues: {
@@ -73,9 +81,23 @@ export function NewOrderDialog({ children }: INewOrderProps) {
     },
   });
 
+  useEffect(() => {
+    getClientInventoryAction()
+      .then(({ error, products }) => {
+        if (products) {
+          setAvailableProducts(products);
+        }
+      })
+      .catch((err) => console.log(err));
+
+    return () => {
+      setAvailableProducts([]);
+    };
+  }, []);
+
   // Add a new product to the list
   function handleProductAdd(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     e.preventDefault();
     if (form.getValues()) {
@@ -117,6 +139,11 @@ export function NewOrderDialog({ children }: INewOrderProps) {
     if (selectedGov) {
       setFees(selectedGov.fee);
     }
+  }
+
+  function handleProductChange(value: string) {
+    const prod = availableProducts.find((p) => p.UID === value);
+    form.setValue("UID", value);
   }
 
   useEffect(() => {
@@ -188,6 +215,7 @@ export function NewOrderDialog({ children }: INewOrderProps) {
     setOpen(false);
     setProducts([]);
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className="cursor-pointer">
@@ -243,12 +271,40 @@ export function NewOrderDialog({ children }: INewOrderProps) {
                         Product ID
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className="text-accent placeholder:text-accent/50"
-                          placeholder="Enter Product ID"
-                          type="text"
-                          {...field}
-                        />
+                        <Select onValueChange={handleProductChange}>
+                          <FormControl>
+                            <SelectTrigger className="text-accent">
+                              <SelectValue
+                                className="text-accent"
+                                placeholder="Select a Product"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent
+                            align="end"
+                            position="item-aligned"
+                            className={"mt-5"}
+                          >
+                            <ScrollArea className="h-[400px] w-[350px] rounded-xl">
+                              {availableProducts.map((prod) => (
+                                <SelectItem
+                                  className={`${prod.quantity === 0 ? "text-red-500 font-semibold" : "text-accent"}`}
+                                  key={prod._id.toString()}
+                                  value={prod.UID}
+                                >
+                                  {prod.itemDescription}{" "}
+                                  <span
+                                    className={
+                                      "uppercase font-semibold text-xs"
+                                    }
+                                  >
+                                    ({prod.size}) - {prod.color}
+                                  </span>
+                                </SelectItem>
+                              ))}
+                            </ScrollArea>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage className="text-red-700" />
                     </FormItem>
@@ -525,6 +581,9 @@ export function NewOrderDialog({ children }: INewOrderProps) {
                   )}
                 </button>
               </div>
+              {/*<pre>*/}
+              {/*  <code>{JSON.stringify(availableProducts, null, 2)}</code>*/}
+              {/*</pre>*/}
             </div>
           </form>
         </Form>
