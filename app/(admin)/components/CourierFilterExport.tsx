@@ -35,8 +35,8 @@ export default function CourierFilterExport({
         selectedStatus === "delivered/collected"
           ? "delivered,collected"
           : selectedStatus === "other"
-          ? "pending,unreachable,cancelled,postponed,returned"
-          : selectedStatus;
+            ? "pending,unreachable,cancelled,postponed,returned"
+            : selectedStatus;
       let query = "";
       if (status) {
         query += `&status=${status}`;
@@ -73,21 +73,22 @@ export default function CourierFilterExport({
         <h1 className="text-lg lg:text-xl font-bold text-accent/50 uppercase">
           recent deliveries
         </h1>
-        <div className="lg:hidden flex items-center justify-end">
+        <div className="flex items-center justify-end">
           <Button
             variant={"ghost"}
-            disabled={(!selectedStatus && !selectedBrand) || exporting}
+            disabled={(!selectedStatus && !selectedBrand && !date) || exporting}
             onClick={handleOrdersExport}
           >
             {exporting ? (
-              <Loader2 className="text-white size-5 animate-spin" />
+              <Loader2 className="text-white size-5 animate-spin mr-2" />
             ) : (
-              <FileDownIcon className="size-5 text-accent" />
+              <FileDownIcon className="size-5 text-accent mr-2" />
             )}
+            Export
           </Button>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+      <div className="flex flex-col-reverse gap-3">
         <div className="flex lg:flex-row flex-col items-center gap-3 w-full">
           <DatePicker date={date} setDate={setDate} variant="courier" />
           <Select
@@ -124,15 +125,20 @@ export default function CourierFilterExport({
             </SelectContent>
           </Select>
         </div>
-        <div className="hidden lg:flex items-center justify-end">
-          <Button
-            variant={"ghost"}
-            disabled={!selectedStatus && !selectedBrand && !date}
-            onClick={handleOrdersExport}
-          >
-            <FileDownIcon className="size-5 text-accent" />
-          </Button>
-        </div>
+        {/*<div className="hidden lg:flex items-center justify-end">*/}
+        {/*  <Button*/}
+        {/*    variant={"ghost"}*/}
+        {/*    disabled={!selectedStatus && !selectedBrand && !date}*/}
+        {/*    onClick={handleOrdersExport}*/}
+        {/*  >*/}
+        {/*    {exporting ? (*/}
+        {/*      <Loader2 className="text-white size-5 animate-spin" />*/}
+        {/*    ) : (*/}
+        {/*      <FileDownIcon className="size-5 text-accent" />*/}
+        {/*    )}*/}
+        {/*    Export*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
       </div>
     </div>
   );

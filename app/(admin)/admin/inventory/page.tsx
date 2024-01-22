@@ -33,8 +33,8 @@ export default async function page() {
   return (
     <div className="flex flex-col gap-5">
       <AdminInventorySection inventory={data.products} variant="inventory" />
-      <p className="text-xs text-accent font-semibold italic">
-        last updated:{" "}
+      <p className="text-base lg:text-lg text-accent font-semibold italic">
+        Last Updated:{" "}
         {moment(data.lastUpdated).format("ddd DD, MMM YYYY | hh:mm A")}
       </p>
       <AdminInventoryTable

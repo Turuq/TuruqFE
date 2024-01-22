@@ -44,10 +44,18 @@ export default function AdminOrdersSection({
         <InformationCard title="Delivered Orders" value={orders.delivered} />
       </div>
       {/* Cancelled Orders */}
-      <div className="col-span-12 lg:col-span-4">
+      <div className="col-span-12 lg:col-span-2">
         <InformationCard
           title="Cancelled Orders"
           value={orders.cancelled}
+          className="text-red-500"
+        />
+      </div>
+      {/* Out Of Stock Orders */}
+      <div className="col-span-12 lg:col-span-2">
+        <InformationCard
+          title="Out Of Stock Orders"
+          value={orders.outOfStock}
           className="text-red-500"
         />
       </div>

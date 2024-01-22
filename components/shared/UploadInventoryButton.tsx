@@ -13,12 +13,15 @@ import {
 } from "@/components/custom/auth-dialog";
 import { uploadInventoryExcelAction } from "@/lib/actions";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { useToast } from "@/components/ui/use-toast";
+import moment from "moment";
 
 export default function UploadInventoryButton({
   variant,
 }: {
   variant: "default" | "icon";
 }) {
+  const { toast } = useToast();
   const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File>();
   const [open, setOpen] = useState(false);
@@ -36,7 +39,7 @@ export default function UploadInventoryButton({
       setFormError({ error: false, message: "" });
       const formData = new FormData();
       formData.append("file", file);
-      const { error, data } = await uploadInventoryExcelAction({
+      const { error } = await uploadInventoryExcelAction({
         file: formData,
       });
       if (error) {
@@ -44,10 +47,16 @@ export default function UploadInventoryButton({
         setLoading(false);
         return;
       }
+      toast({
+        title: "Inventory Uploaded Successfully",
+        description: moment().format("MMMM Do YYYY, h:mm:ss a"),
+        duration: 10000,
+      });
       setLoading(false);
       setOpen(false);
     }
   }
+
   return (
     <div className="">
       <Dialog open={open} onOpenChange={setOpen}>

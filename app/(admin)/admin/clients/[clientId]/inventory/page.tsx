@@ -1,7 +1,7 @@
 import { AdminInventoryTable } from "@/app/(admin)/components/tables/data-tables/AdminInventoryTable";
 import {
-  InventoryColumns,
   adminInventoryColumns,
+  InventoryColumns,
 } from "@/app/(admin)/components/tables/inventory/Columns";
 import ClientInventorySection from "@/app/(client)/components/sections/ClientInventorySection";
 import { InventoryResponseType } from "@/types/response";
@@ -22,7 +22,7 @@ export default async function page({
         "Content-Type": "application/json",
         Authorization: `${cookies().get("token")?.value}`,
       },
-    }
+    },
   );
   let inventoryData: InventoryResponseType | null = null;
   let noInventory: boolean = false;
@@ -66,10 +66,10 @@ export default async function page({
             columns={adminInventoryColumns}
             data={tableData ?? []}
           />
-          <p className="text-xs lg:text-sm text-accent font-semibold italic">
+          <p className="text-sm lg:text-base text-accent font-semibold italic">
             {inventoryData.lastUpdated
               ? `Last Updated On: ${moment(inventoryData.lastUpdated).format(
-                  "MMMM Do YYYY, h:mm:ss a"
+                  "MMMM Do YYYY, h:mm:ss a",
                 )}`
               : ""}
           </p>
