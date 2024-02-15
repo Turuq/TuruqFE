@@ -12,20 +12,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TimeField } from "@/app/(admin)/components/inputs/date-time/TimeField";
-import { TimeValue } from "react-aria";
 
 export function DatePicker({
   date,
   setDate,
-  time,
-  setTime,
+  // time,
+  // setTime,
   variant = "orders",
 }: {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
-  time: TimeValue | undefined;
-  setTime: (date: TimeValue | undefined) => void;
+  // time: TimeValue | undefined;
+  // setTime: (date: TimeValue | undefined) => void;
   variant?: "orders" | "courier";
 }) {
   return (
@@ -55,9 +53,9 @@ export function DatePicker({
             date > new Date() || date < new Date("1900-01-01")
           }
         />
-        <div className={"p-2"}>
-          <TimeField value={time} onChange={(value) => setTime(value)} />
-        </div>
+        {/*<div className={"p-2"}>*/}
+        {/*  <TimeField value={time} onChange={(value) => setTime(value)} />*/}
+        {/*</div>*/}
       </PopoverContent>
     </Popover>
   );

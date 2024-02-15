@@ -252,8 +252,8 @@ export default function AdminOrderTabSection({
           <DatePicker
             date={date}
             setDate={setDate}
-            time={time}
-            setTime={setTime}
+            // time={time}
+            // setTime={setTime}
           />
           {!fileReady && !file ? (
             <Button

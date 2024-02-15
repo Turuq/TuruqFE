@@ -95,8 +95,8 @@ export default function CourierFilterExport({
             date={date}
             setDate={setDate}
             variant="courier"
-            time={undefined}
-            setTime={() => {}}
+            // time={undefined}
+            // setTime={() => {}}
           />
           <Select
             value={selectedStatus}
