@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { FileDownIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
+import moment from "moment";
 
 export default function CourierFilterExport({
   courierId,
@@ -45,7 +46,7 @@ export default function CourierFilterExport({
         query += `&brand=${selectedBrand}`;
       }
       if (date) {
-        query += `&date=${date}`;
+        query += `&date=${moment(date).toString()}`;
       }
       const res = await fetch(`/api/courier?courier=${courierId}${query}`);
       setExporting(false);
@@ -90,7 +91,13 @@ export default function CourierFilterExport({
       </div>
       <div className="flex flex-col-reverse gap-3">
         <div className="flex lg:flex-row flex-col items-center gap-3 w-full">
-          <DatePicker date={date} setDate={setDate} variant="courier" />
+          <DatePicker
+            date={date}
+            setDate={setDate}
+            variant="courier"
+            time={undefined}
+            setTime={() => {}}
+          />
           <Select
             value={selectedStatus}
             onValueChange={(value) =>

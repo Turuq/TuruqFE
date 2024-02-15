@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ProgressCircle } from "@tremor/react";
 
 interface ICardProps {
   title: string;
@@ -7,6 +8,7 @@ interface ICardProps {
   description?: string;
   className?: string;
   percent?: number;
+  titleColor?: string;
 }
 
 export default function AdminAnalyticsCard({
@@ -16,6 +18,7 @@ export default function AdminAnalyticsCard({
   description,
   className,
   percent,
+  titleColor,
 }: ICardProps) {
   return (
     <div
@@ -25,15 +28,20 @@ export default function AdminAnalyticsCard({
       )}
     >
       <div className={`flex items-center justify-between gap-5`}>
-        <h3 className="text-inherit text-sm capitalize font-semibold">
+        <h3 className={`text-sm text-slate-500/80 font-semibold capitalize`}>
           {title}
         </h3>
         {percent !== undefined && (
-          <h3
-            className={`${percent > 0 ? "text-green-700" : percent < 0 ? "text-red-500" : "text-accent"} italic font-bold text-xs`}
+          <ProgressCircle
+            value={percent}
+            size="sm"
+            color={"cyan"}
+            showAnimation={true}
           >
-            {percent > 0 ? `+${percent}` : percent}%
-          </h3>
+            <span className="text-[10px] font-medium text-slate-700">
+              {percent}%
+            </span>
+          </ProgressCircle>
         )}
       </div>
       {/*{variant === "compare" && percent !== undefined && (*/}

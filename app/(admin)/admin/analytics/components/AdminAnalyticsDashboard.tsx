@@ -1,36 +1,34 @@
+import { AdminAnalyticsType } from "@/types/response";
 import ClientAnalytics from "@/app/(admin)/admin/analytics/components/ClientAnalytics";
-import { ClientType } from "@/types/client";
-import { getTop5Clients } from "@/utils/analytics-functions";
-import { AdminOrderType, ShopifyOrderType } from "@/types/response";
+import OrderAnalytics from "@/app/(admin)/admin/analytics/components/OrderAnalytics";
+import FinanceAnalytics from "@/app/(admin)/admin/analytics/components/FinanceAnalytics";
 
 interface AdminAnalyticsDashboardProps {
-  clientData: ClientType[];
-  clientPercentage: ClientType[];
   variant: "week" | "month" | "year";
-  allOrders: (AdminOrderType | ShopifyOrderType)[];
+  data: AdminAnalyticsType;
 }
 
 export default async function AdminAnalyticsDashboard({
-  clientData,
-  clientPercentage,
+  data,
   variant,
-  allOrders,
 }: AdminAnalyticsDashboardProps) {
-  const top5Clients = getTop5Clients(allOrders, variant);
-  const top5Labels = top5Clients.map((client) => client.client);
-  const top5Values = top5Clients.map((client) => client.order);
   return (
     <div className="flex flex-col gap-5 bg-white/50 rounded-xl p-5">
-      <h3 className="text-lg italic text-accent font-semibold">
-        Client Analytics
-      </h3>
-      <ClientAnalytics
-        clients={clientData}
-        newClients={clientPercentage}
-        variant={variant}
-        top5Labels={top5Labels}
-        top5Values={top5Values}
-      />
+      <div className={"bg-white p-5 flex flex-col gap-5 rounded-xl"}>
+        <h3 className="text-xl text-accent/50 font-bold uppercase">
+          Client Analytics
+        </h3>
+        <ClientAnalytics data={data.clientAnalytics} />
+      </div>
+      <div className={"bg-white p-5 flex flex-col gap-5 rounded-xl"}>
+        <h3 className="text-xl text-accent/50 font-bold uppercase">
+          Order Analytics
+        </h3>
+        <OrderAnalytics data={data.orderAnalytics} />
+      </div>
+      <div className={"bg-white p-5 flex flex-col gap-5 rounded-xl"}>
+        <FinanceAnalytics data={data.financeAnalytics} />
+      </div>
     </div>
   );
 }

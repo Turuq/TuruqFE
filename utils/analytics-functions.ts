@@ -78,28 +78,33 @@ function getPast12MonthsAndYear(): { month: number; year: number }[] {
 }
 
 export function getPast12Months(): string[] {
-  const monthsLabel = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const months = new Array(12).fill(0);
-  const currentMonth = new Date().getMonth();
-
-  const past12Months = months.map((_, index) => {
-    const month = currentMonth - index;
-    return `${monthsLabel[Math.abs(month)]}`;
-  });
-  return past12Months.slice(1).concat(`${monthsLabel[currentMonth]}`);
+  // const monthsLabel = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  //   "August",
+  //   "September",
+  //   "October",
+  //   "November",
+  //   "December",
+  // ];
+  // const months = new Array(12).fill(0);
+  // const currentMonth = new Date().getMonth();
+  // console.log("this month = ", currentMonth);
+  // const past12Months = months.map((_, index) => {
+  //   const month = currentMonth - index;
+  //   return `${monthsLabel[Math.abs(month)]}`;
+  // });
+  // return past12Months.slice(1).concat(`${monthsLabel[currentMonth]}`);
+  const months = [];
+  for (let i = 0; i < 12; i++) {
+    months.push(moment().subtract(i, "month").format("MMM"));
+  }
+  return months.reverse();
 }
 
 export function revenuePerMonth(data: OrderType[]) {

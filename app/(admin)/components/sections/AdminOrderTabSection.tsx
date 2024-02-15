@@ -36,6 +36,8 @@ import {
 import { adminOrderColumns, OrderColumns } from "../tables/inventory/Columns";
 import { AdminOrderTable } from "../tables/data-tables/AdminOrderTable";
 import { ColumnFiltersState } from "@tanstack/react-table";
+import { TimeValue } from "react-aria";
+import moment from "moment";
 
 export default function AdminOrderTabSection({
   title,
@@ -66,7 +68,7 @@ export default function AdminOrderTabSection({
   >();
   const [selectedCourier, setSelectedCourier] = useState<string | undefined>();
   const [date, setDate] = useState<Date>();
-
+  const [time, setTime] = useState<TimeValue>();
   const [filteredColumns, setFilteredColumns] = useState<ColumnFiltersState>();
 
   async function exportOrdersAsExcel() {
@@ -76,9 +78,17 @@ export default function AdminOrderTabSection({
       variant === "orders" ? "ordersExcel" : "zammitOrdersExcel";
 
     if (date && filteredColumns) {
+      let exportDate = "";
+      if (date && time) {
+        const dateString = moment(date).format("YYYY-MM-DD");
+        exportDate = `${dateString}T${time.toString()}.000Z`;
+        console.log(exportDate);
+      } else if (date && !time) {
+        exportDate = date.toISOString();
+      }
       try {
         const res = await fetch(
-          `/api/file?variant=${excelVariant}&date=${date.toISOString()}`,
+          `/api/file?variant=${excelVariant}&date=${exportDate}`,
           {
             method: "POST",
             headers: {
@@ -239,7 +249,12 @@ export default function AdminOrderTabSection({
       <AdminOrdersSection title={title} variant="orders" orders={orders} />
       <div className="flex flex-col lg:flex-row gap-5 lg:items-center items-start w-full justify-between">
         <div className="flex items-center justify-start w-full rounded-xl flex-grow">
-          <DatePicker date={date} setDate={setDate} />
+          <DatePicker
+            date={date}
+            setDate={setDate}
+            time={time}
+            setTime={setTime}
+          />
           {!fileReady && !file ? (
             <Button
               variant={"outline"}

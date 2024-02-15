@@ -12,14 +12,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { TimeField } from "@/app/(admin)/components/inputs/date-time/TimeField";
+import { TimeValue } from "react-aria";
 
 export function DatePicker({
   date,
   setDate,
+  time,
+  setTime,
   variant = "orders",
 }: {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
+  time: TimeValue | undefined;
+  setTime: (date: TimeValue | undefined) => void;
   variant?: "orders" | "courier";
 }) {
   return (
@@ -32,14 +38,14 @@ export function DatePicker({
             !date && "text-muted-foreground",
             variant === "orders"
               ? "rounded-l-md w-[280px]"
-              : "rounded-xl lg:w-[200px] w-full bg-accent text-white"
+              : "rounded-xl lg:w-[200px] w-full bg-accent text-white",
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0" aria-label={"Date Time Picker"}>
         <Calendar
           mode="single"
           selected={date}
@@ -49,6 +55,9 @@ export function DatePicker({
             date > new Date() || date < new Date("1900-01-01")
           }
         />
+        <div className={"p-2"}>
+          <TimeField value={time} onChange={(value) => setTime(value)} />
+        </div>
       </PopoverContent>
     </Popover>
   );

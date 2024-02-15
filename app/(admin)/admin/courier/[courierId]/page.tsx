@@ -23,7 +23,7 @@ export default async function Page({
         "Content-Type": "application/json",
         Authorization: `${cookies().get("token")?.value}`,
       },
-    }
+    },
   );
   const data = (await res.json()) as {
     orders: AdminOrderType[];
@@ -78,6 +78,16 @@ export default async function Page({
                 </div>
                 <div className="flex flex-col justify-center">
                   <h3 className="uppercase text-accent font-bold text-xs">
+                    Customer
+                  </h3>
+                  <h3 className="uppercase text-accent text-xs">
+                    {order.customer.name ||
+                      // @ts-ignore
+                      `${order.customer.first_name} ${order.customer.last_name}`}
+                  </h3>
+                </div>
+                <div className="flex flex-col justify-center">
+                  <h3 className="uppercase text-accent font-bold text-xs">
                     brand name
                   </h3>
                   <h3 className="uppercase text-accent text-xs">
@@ -106,8 +116,8 @@ export default async function Page({
                           order.status === "collected"
                             ? 100
                             : order.status === "outForDelivery"
-                            ? 50
-                            : 0
+                              ? 50
+                              : 0
                         }
                         className="w-full"
                       />
@@ -117,8 +127,8 @@ export default async function Page({
                           order.status === "collected"
                             ? "lg:left-48 left-24"
                             : order.status === "outForDelivery"
-                            ? "lg:left-24 left-12"
-                            : "left-0"
+                              ? "lg:left-24 left-12"
+                              : "left-0"
                         }`}
                       />
                     </div>
@@ -149,10 +159,10 @@ export default async function Page({
                       order.status === "delivered"
                         ? "text-green-700"
                         : order.status === "outForDelivery"
-                        ? "text-gray-700"
-                        : order.status === "pending"
-                        ? "text-amber-400"
-                        : "text-black"
+                          ? "text-gray-700"
+                          : order.status === "pending"
+                            ? "text-amber-400"
+                            : "text-black"
                     } font-semibold text-xs`}
                   >
                     {order.status}

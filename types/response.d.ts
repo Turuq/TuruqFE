@@ -254,3 +254,106 @@ export type ProductSummaryType = {
   color: string;
   size: string;
 };
+
+export type AdminAnalyticsType = {
+  clientAnalytics: ClientAnalyticsType;
+  orderAnalytics: OrderAnalyticsType;
+  financeAnalytics: FinanceAnalyticsType;
+};
+export type ClientAnalyticsType = {
+  clients: number;
+  newClients: number;
+  clientsPerMonth: GroupCountType[];
+  top5Clients: {
+    all: {
+      _id: string;
+      orders: number;
+      shopify: number;
+      zammit: number;
+      total: number;
+    }[];
+    orders: GroupCountType[];
+    shopifyOrders: GroupCountType[];
+    zammitOrders: GroupCountType[];
+  };
+  clientFinances: {
+    shipping: {
+      _id: string;
+      client: {
+        _id: string;
+        companyName: string;
+      };
+      shipping: number;
+    };
+  };
+};
+
+export type OrderAnalyticsType = {
+  orderStatistics: {
+    _id: OrderStatusType;
+    count: number;
+  }[];
+  shopifyOrderStatistics: {
+    _id: OrderStatusType;
+    count: number;
+  }[];
+  zammitOrderStatistics: {
+    _id: OrderStatusType;
+    count: number;
+  }[];
+  ordersByGovernorate: {
+    _id: string;
+    Orders: number;
+  }[];
+  shopifyOrdersByGovernorate: {
+    _id: string;
+    Orders: number;
+  }[];
+  zammitOrdersByGovernorate: {
+    _id: string;
+    Orders: number;
+  }[];
+};
+
+export type FinanceAnalyticsType = {
+  collectedBalance: {
+    orders: number;
+    shopify: number;
+    zammit: number;
+    perClient: {
+      orders: FinancePerClientType[];
+      shopify: FinancePerClientType[];
+      zammit: FinancePerClientType[];
+    };
+  };
+  accountBalance: {
+    orders: number;
+    shopify: number;
+    zammit: number;
+    perClient: {
+      orders: FinancePerClientType[];
+      shopify: FinancePerClientType[];
+      zammit: FinancePerClientType[];
+    };
+  };
+  shippingTotal: {
+    orders: number;
+    shopify: number;
+    zammit: number;
+    perClient: {
+      orders: FinancePerClientType[];
+      shopify: FinancePerClientType[];
+      zammit: FinancePerClientType[];
+    };
+  };
+};
+
+type GroupCountType = {
+  _id: number;
+  count: number;
+};
+
+type FinancePerClientType = {
+  _id: string;
+  total: number;
+};

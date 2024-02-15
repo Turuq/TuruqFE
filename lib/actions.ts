@@ -105,10 +105,10 @@ export async function loginAction({
         return { error: null, type: "client" };
       } else if (data.admin) {
         cookies().set("token", data.token, {
-          maxAge: 3600,
+          maxAge: process.env.NODE_ENV === "development" ? 24 * 60 * 60 : 3600,
         });
         cookies().set("admin", JSON.stringify(data.admin), {
-          maxAge: 3600,
+          maxAge: process.env.NODE_ENV === "development" ? 24 * 60 * 60 : 3600,
         });
         return { error: null, type: "admin" };
       }
