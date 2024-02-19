@@ -7,6 +7,7 @@ import {LoginResponseType, NewOrderResponseType, ProductDetailsType, ProductSumm
 
 import {revalidatePath} from "next/cache";
 import {cookies} from "next/headers";
+import moment from "moment";
 
 /**
  * getTokenAction(): is a function that returns the token of the client if it exists.
@@ -873,5 +874,64 @@ export async function getClientInventoryAction(): Promise<{
   } catch (e: any) {
     console.log(e.message);
     return { error: e.message, products: null };
+  }
+}
+
+export async function filterAssignedOrdersAction({
+  id,
+  status,
+  date,
+  brand,
+}: {
+  id: string;
+  status: "delivered/collected" | "outForDelivery" | "other" | null;
+  date: Date | null;
+  brand: string | null;
+}) {
+  try {
+    let query = `?courierId=${id}`;
+    let statusFilter = [];
+    if (status) {
+      switch (status) {
+        case "delivered/collected":
+          statusFilter = ["delivered", "collected"];
+          break;
+        case "outForDelivery":
+          statusFilter = ["outForDelivery"];
+          break;
+        case "other":
+          statusFilter = [
+            "pending",
+            "cancelled",
+            "postponed",
+            "returned",
+            "outOfStock",
+            "unreachable",
+          ];
+          break;
+      }
+      query += `&status=${statusFilter.join(",")}`;
+    }
+    if (date) {
+      query += `&date=${moment(date).format("MM/DD/YYYY")}`;
+    }
+    if (brand) {
+      query += `&brand=${brand}`;
+    }
+    const res = await fetch(
+      `${process.env.API_URL}couriers/filterAssignedOrders${query}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    console.log(error);
+    return { error: error.message, data: null };
   }
 }

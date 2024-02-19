@@ -72,6 +72,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { EditOrderDialog } from "../../forms/EditOrderDialog";
+import RecordsPerPage from "@/app/(admin)/components/inputs/RecordsPerPage";
 
 interface AdminOrderTableProps {
   columns: ColumnDef<OrderColumns>[];
@@ -243,6 +244,11 @@ export function AdminOrderTable({
     setOpen(false);
   }
 
+  function changeRowsPerPage(limit: number) {
+    setLimit(limit);
+    table.setPageSize(limit);
+  }
+
   return (
     <div className="rounded-md border">
       {/*<pre>*/}
@@ -254,107 +260,23 @@ export function AdminOrderTable({
             showing {limit < orders.length ? limit : orders.length} out of{" "}
             {data.length} products
           </p>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-xs text-accent/50">
-              Rows per page:{" "}
-              <span className="bg-white p-1 rounded-md">{limit}</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => {
-                  setLimit(10);
-                  table.setPageSize(10);
-                }}
-              >
-                10
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setLimit(15);
-                  table.setPageSize(15);
-                }}
-              >
-                15
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setLimit(20);
-                  table.setPageSize(20);
-                }}
-              >
-                20
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setLimit(25);
-                  table.setPageSize(25);
-                }}
-              >
-                25
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setLimit(30);
-                  table.setPageSize(30);
-                }}
-              >
-                30
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <RecordsPerPage
+            limit={limit}
+            ranges={[10, 15, 20, 25, 30]}
+            label={"Rows"}
+            changeLimit={changeRowsPerPage}
+          />
         </div>
       </div>
       <Table className="overflow-x-scroll bg-white rounded-t-xl">
         <TableCaption className="capitalize">
           <div className="flex items-center justify-end mb-5">
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-xs text-accent/50">
-                Rows per page:{" "}
-                <span className="bg-white p-1 rounded-md">{limit}</span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setLimit(10);
-                    table.setPageSize(10);
-                  }}
-                >
-                  10
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setLimit(15);
-                    table.setPageSize(15);
-                  }}
-                >
-                  15
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setLimit(20);
-                    table.setPageSize(20);
-                  }}
-                >
-                  20
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setLimit(25);
-                    table.setPageSize(25);
-                  }}
-                >
-                  25
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setLimit(30);
-                    table.setPageSize(30);
-                  }}
-                >
-                  30
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <RecordsPerPage
+              limit={limit}
+              ranges={[10, 15, 20, 25, 30]}
+              label={"Rows"}
+              changeLimit={changeRowsPerPage}
+            />
           </div>
           <div className="flex items-center justify-between gap-5">
             <div className="text-accent/50 text-xs">

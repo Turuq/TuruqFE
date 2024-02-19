@@ -1,9 +1,12 @@
 "use client";
+
 import { AdminOrderType } from "@/types/response";
 import { useEffect, useState } from "react";
 import CourierFilterExport from "@/app/(admin)/components/CourierFilterExport";
 import OrderCard from "@/app/(admin)/components/cards/OrderCard";
 import moment from "moment/moment";
+import RecordsPerPage from "@/app/(admin)/components/inputs/RecordsPerPage";
+import { filterAssignedOrdersAction } from "@/lib/actions";
 
 interface CourierAssignedOrdersSectionProps {
   courierId: string;
@@ -18,52 +21,46 @@ export default function CourierAssignedOrdersSection({
   courierName,
   brands,
 }: CourierAssignedOrdersSectionProps) {
-  const [data, setData] = useState<AdminOrderType[]>(orders);
+  const [data, setData] = useState<AdminOrderType[]>(orders.slice(0, 10));
   const [selectedStatus, setSelectedStatus] = useState<
     "delivered/collected" | "outForDelivery" | "other"
   >();
   const [selectedBrand, setSelectedBrand] = useState<string>();
   const [exporting, setExporting] = useState(false);
   const [date, setDate] = useState<Date>();
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
-    //   Filter orders based on selected status, brand and date
-    let filteredOrders = data;
-    if (selectedStatus) {
-      filteredOrders = filteredOrders.filter((order) => {
-        if (selectedStatus === "delivered/collected") {
-          return order.status === "delivered" || order.status === "collected";
-        } else if (selectedStatus === "other") {
-          return (
-            order.status === "pending" ||
-            order.status === "unreachable" ||
-            order.status === "cancelled" ||
-            order.status === "postponed" ||
-            order.status === "returned"
-          );
-        } else {
-          return order.status === selectedStatus;
-        }
+    async function filterAssignedOrders() {
+      return await filterAssignedOrdersAction({
+        id: courierId,
+        status: selectedStatus ?? null,
+        brand: selectedBrand ?? null,
+        date: date ?? null,
       });
     }
-    if (selectedBrand) {
-      filteredOrders = filteredOrders.filter(
-        (order) => order.client.companyName === selectedBrand,
-      );
-    }
-    if (date) {
-      filteredOrders = filteredOrders.filter((order) =>
-        moment(date).isSame(moment(order.createdAt), "date"),
-      );
-    }
-    setData(filteredOrders);
+
+    filterAssignedOrders()
+      .then((res) => {
+        if (res) {
+          setData(res.orders);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, [date, selectedStatus, selectedBrand]);
 
   function resetFilters() {
     setSelectedBrand(undefined);
     setSelectedStatus(undefined);
     setDate(undefined);
-    setData(orders);
+    setData(orders.slice(0, limit));
+  }
+
+  function changeOrdersPerPage(limit: number) {
+    setLimit(limit);
+    setData(data.slice(0, limit));
   }
 
   async function handleOrdersExport() {
@@ -107,6 +104,11 @@ export default function CourierAssignedOrdersSection({
 
   return (
     <div className="col-span-1 lg:col-span-8 flex flex-col gap-5 bg-white rounded-xl h-full p-5">
+      <div className={"flex items-center"}>
+        <h1 className="text-lg lg:text-xl font-bold text-accent/50 uppercase">
+          assigned orders
+        </h1>
+      </div>
       <CourierFilterExport
         brands={brands}
         selectedBrand={selectedBrand}
@@ -119,18 +121,71 @@ export default function CourierAssignedOrdersSection({
         handleOrdersExport={handleOrdersExport}
         resetFilters={resetFilters}
       />
-      {data.map((order, index) => (
-        <OrderCard
-          key={`order-${order._id.toString()}`}
-          _id={order._id.toString()}
-          status={order.status}
-          total={order.total}
-          client={order.client}
-          customer={order.customer}
-          createdAt={order.createdAt}
-          updatedAt={order.updatedAt}
+      <div className={"flex items-center justify-between"}>
+        <p className={"text-xs text-accent font-light capitalize"}>
+          showing {limit > data.length ? data.length : limit} out of{" "}
+          {data.length} orders
+        </p>
+        <RecordsPerPage
+          limit={limit}
+          ranges={[10, 15, 20, 25, 30]}
+          label={"Orders"}
+          indicatorColor={"bg-accent text-white"}
+          changeLimit={changeOrdersPerPage}
         />
-      ))}
+      </div>
+
+      {/*<Pagination>*/}
+      {/*  <PaginationContent>*/}
+      {/*    <PaginationItem>*/}
+      {/*      <PaginationPrevious href="#" />*/}
+      {/*    </PaginationItem>*/}
+
+      {/*    {Array.from({ length: Math.ceil(orders.length / 5) })*/}
+      {/*      .fill(0)*/}
+      {/*      .map((_, index) => (*/}
+      {/*        <PaginationItem key={`page-${index + 1}`}>*/}
+      {/*          <PaginationLink href="#">{index + 1}</PaginationLink>*/}
+      {/*        </PaginationItem>*/}
+      {/*      ))}*/}
+
+      {/*    <PaginationItem>*/}
+      {/*      <PaginationNext href="#" />*/}
+      {/*    </PaginationItem>*/}
+      {/*  </PaginationContent>*/}
+      {/*</Pagination>*/}
+      {data.length === 0 ? (
+        <div
+          className={
+            "flex flex-col items-center justify-center text-accent text-sm"
+          }
+        >
+          No Data Available{" "}
+          <span
+            onClick={resetFilters}
+            className={
+              "underline text-xs text-accent font-semibold cursor-pointer hover:underline-offset-8"
+            }
+          >
+            Clear Filters
+          </span>
+        </div>
+      ) : (
+        <>
+          {data.map((order, index) => (
+            <OrderCard
+              key={`order-${order._id.toString()}`}
+              _id={order._id.toString()}
+              status={order.status}
+              total={order.total}
+              client={order.client}
+              customer={order.customer}
+              createdAt={order.createdAt}
+              updatedAt={order.updatedAt}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 }

@@ -43,9 +43,6 @@ export default function CourierFilterExport({
   return (
     <div className="flex flex-col justify-between gap-3">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg lg:text-xl font-bold text-accent/50 uppercase">
-          recent deliveries
-        </h1>
         <div className="flex items-center justify-end">
           <Button
             variant={"ghost"}
@@ -71,7 +68,7 @@ export default function CourierFilterExport({
             // setTime={() => {}}
           />
           <Select
-            value={selectedStatus}
+            value={selectedStatus === undefined ? "" : selectedStatus}
             onValueChange={(value) =>
               setSelectedStatus(value as typeof selectedStatus)
             }
@@ -91,7 +88,10 @@ export default function CourierFilterExport({
               </SelectItem>
             </SelectContent>
           </Select>
-          <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+          <Select
+            value={selectedBrand === undefined ? "" : selectedBrand}
+            onValueChange={setSelectedBrand}
+          >
             <SelectTrigger className="lg:w-[200px] w-full bg-accent text-white border-none">
               <SelectValue placeholder="By Brand" />
             </SelectTrigger>
