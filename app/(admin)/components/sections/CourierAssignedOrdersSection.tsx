@@ -24,6 +24,7 @@ export default function CourierAssignedOrdersSection({
   brands,
 }: CourierAssignedOrdersSectionProps) {
   const [data, setData] = useState<AdminOrderType[]>(orders);
+  const [filteredData, setFilteredData] = useState<AdminOrderType[]>();
   const [selectedStatus, setSelectedStatus] = useState<
     "delivered/collected" | "outForDelivery" | "other"
   >();
@@ -47,7 +48,9 @@ export default function CourierAssignedOrdersSection({
     filterAssignedOrders()
       .then((res) => {
         if (res) {
-          setData(res.orders);
+          setData(res.orders.slice(0, limit));
+          setFilteredData(res.orders);
+          setTotalPages(Math.ceil(res.orders.length / limit));
         }
       })
       .catch((err) => {
@@ -60,6 +63,7 @@ export default function CourierAssignedOrdersSection({
     setSelectedStatus(undefined);
     setDate(undefined);
     setData(orders.slice(0, limit));
+    setFilteredData(undefined);
   }
 
   function changeOrdersPerPage(newLimit: number) {
@@ -67,21 +71,34 @@ export default function CourierAssignedOrdersSection({
   }
 
   useEffect(() => {
-    setTotalPages(Math.ceil(orders.length / limit));
-    setData(data.slice(0, limit));
+    if (filteredData) {
+      setTotalPages(Math.ceil(filteredData.length / limit));
+      setData(filteredData.slice(0, limit));
+    } else {
+      setTotalPages(Math.ceil(orders.length / limit));
+      setData(orders.slice(0, limit));
+    }
   }, [limit]);
 
   function nextPage() {
     if (page < totalPages) {
       setPage(page + 1);
-      setData(orders.slice(limit * page, limit * (page + 1)));
+      if (filteredData) {
+        setData(filteredData.slice(limit * page, limit * (page + 1)));
+      } else {
+        setData(orders.slice(limit * page, limit * (page + 1)));
+      }
     }
   }
 
   function previousPage() {
     if (page > 1) {
       setPage(page - 1);
-      setData(orders.slice(limit * (page - 2), limit * (page - 1)));
+      if (filteredData) {
+        setData(filteredData.slice(limit * (page - 2), limit * (page - 1)));
+      } else {
+        setData(orders.slice(limit * (page - 2), limit * (page - 1)));
+      }
     }
   }
 
@@ -146,7 +163,7 @@ export default function CourierAssignedOrdersSection({
       <div className={"flex items-center justify-between"}>
         <p className={"text-xs text-accent font-light capitalize"}>
           showing {limit <= data.length ? limit : data.length} out of{" "}
-          {orders.length} orders
+          {filteredData ? filteredData.length : orders.length} orders
         </p>
         <RecordsPerPage
           limit={limit}

@@ -599,7 +599,7 @@ export function AdminShopifyOrderTable({
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>
-                            Are your sure you want to return this product?
+                            Are your sure you want to delete this product?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             By clicking continue, this order will be deleted and
