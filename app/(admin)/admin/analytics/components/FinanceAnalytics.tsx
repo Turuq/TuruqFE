@@ -2,7 +2,7 @@
 
 import { FinanceAnalyticsType } from "@/types/response";
 import AdminAnalyticsCard from "./AdminAnalyticsCard";
-import { BarChart } from "@tremor/react";
+import { AreaChart, BarChart } from "@tremor/react";
 import {
   Select,
   SelectContent,
@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
+import { getPast12Months } from "@/utils/analytics-functions";
 
 interface FinanceAnalyticsProps {
   data: FinanceAnalyticsType;
@@ -31,10 +32,38 @@ type FinanceDataType = {
   totalShippingZammit: number;
 };
 
+const monthsLabels = getPast12Months();
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [availableClients, setAvailableClients] = useState<string[]>([]);
   const [financeData, setFinanceData] = useState<FinanceAnalyticsType>(data);
+  const [selectedClientCollected, setSelectedClientCollected] =
+    useState<
+      { date: string; Orders: number; Shopify: number; Zammit: number }[]
+    >();
+  const [selectedClientAccountBalance, setSelectedClientAccountBalance] =
+    useState<
+      { date: string; Orders: number; Shopify: number; Zammit: number }[]
+    >();
+
+  function getMonthIndex(month: string) {
+    return months.indexOf(month);
+  }
 
   useEffect(() => {
     const clientSet = new Set<string>();
@@ -102,6 +131,64 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
           perClient: data.shippingTotal.perClient,
         },
       };
+      const client = data.clientPerMonth?.collected.find(
+        (client) => client._id === selectedClient,
+      );
+      const clientShopify = data.clientPerMonth?.collectedShopify.find(
+        (client) => client._id === selectedClient,
+      );
+      const clientZammit = data.clientPerMonth?.collectedZammit.find(
+        (client) => client._id === selectedClient,
+      );
+      const clientCollectedPerMonth = monthsLabels.map((month) => {
+        const monthIndex = getMonthIndex(month);
+        return {
+          date: months[monthIndex],
+          Orders: client?.collectedBalancePerMonth
+            ? client.collectedBalancePerMonth[monthIndex + 1] ?? 0
+            : 0,
+          Shopify: clientShopify?.collectedBalancePerMonth
+            ? clientShopify.collectedBalancePerMonth[monthIndex + 1] ?? 0
+            : 0,
+          Zammit: clientZammit?.collectedBalancePerMonth
+            ? clientZammit.collectedBalancePerMonth[monthIndex + 1] ?? 0
+            : 0,
+        };
+      });
+
+      const clientAccountBalance = data.clientPerMonth?.account.find(
+        (client) => client._id === selectedClient,
+      );
+      const clientShopifyAccountBalance =
+        data.clientPerMonth?.accountShopify.find(
+          (client) => client._id === selectedClient,
+        );
+      const clientZammitAccountBalance =
+        data.clientPerMonth?.accountZammit.find(
+          (client) => client._id === selectedClient,
+        );
+      const clientAccountPerMonth = monthsLabels.map((month) => {
+        const monthIndex = getMonthIndex(month);
+        return {
+          date: months[monthIndex],
+          Orders: clientAccountBalance?.accountBalancePerMonth
+            ? clientAccountBalance.accountBalancePerMonth[monthIndex + 1] ?? 0
+            : 0,
+          Shopify: clientShopifyAccountBalance?.accountBalancePerMonth
+            ? clientShopifyAccountBalance.accountBalancePerMonth[
+                monthIndex + 1
+              ] ?? 0
+            : 0,
+          Zammit: clientZammitAccountBalance?.accountBalancePerMonth
+            ? clientZammitAccountBalance.accountBalancePerMonth[
+                monthIndex + 1
+              ] ?? 0
+            : 0,
+        };
+      });
+
+      setSelectedClientCollected(clientCollectedPerMonth);
+      setSelectedClientAccountBalance(clientAccountPerMonth);
       setFinanceData(clientFinances);
     }
   }, [selectedClient]);
@@ -174,7 +261,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        {selectedClient === null && (
+        {selectedClient === null ? (
           <div className={`col-span-12`}>
             <h3 className="text-lg text-accent/50 font-bold uppercase">
               Collected Order Balance Per Client
@@ -191,7 +278,22 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
+            />
+          </div>
+        ) : (
+          <div className={`col-span-12`}>
+            <h3 className="text-lg text-accent/50 font-bold uppercase">
+              {selectedClient} Collected Order Balance
+            </h3>
+            <AreaChart
+              className="h-80"
+              data={selectedClientCollected ?? []}
+              index="date"
+              categories={["Orders", "Shopify", "Zammit"]}
+              colors={["cyan", "rose", "amber"]}
+              valueFormatter={dataFormatter}
+              yAxisWidth={60}
             />
           </div>
         )}
@@ -212,7 +314,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Shopify Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -233,7 +335,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Zammit Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -276,7 +378,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        {selectedClient === null && (
+        {selectedClient === null ? (
           <div className={`col-span-12`}>
             <h3 className="text-lg text-accent/50 font-bold uppercase">
               Order Account Balance Per Client
@@ -293,7 +395,22 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
+            />
+          </div>
+        ) : (
+          <div className={`col-span-12`}>
+            <h3 className="text-lg text-accent/50 font-bold uppercase">
+              {selectedClient} Order Account Balance
+            </h3>
+            <AreaChart
+              className="h-80"
+              data={selectedClientAccountBalance ?? []}
+              index="date"
+              categories={["Orders", "Shopify", "Zammit"]}
+              colors={["cyan", "rose", "amber"]}
+              valueFormatter={dataFormatter}
+              yAxisWidth={60}
             />
           </div>
         )}
@@ -314,7 +431,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Shopify Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -335,7 +452,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Zammit Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -395,7 +512,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -416,7 +533,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Shopify Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}
@@ -437,7 +554,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Zammit Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={80}
+              yAxisWidth={100}
             />
           </div>
         )}

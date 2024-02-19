@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FileDownIcon, Loader2, RotateCcwIcon } from "lucide-react";
+import { FileDownIcon, Loader2, RefreshCwIcon } from "lucide-react";
 
 export default function CourierFilterExport({
   brands,
@@ -43,6 +43,15 @@ export default function CourierFilterExport({
   return (
     <div className="flex flex-col justify-between gap-3">
       <div className="flex items-center justify-between">
+        <div className="flex items-center justify-start">
+          <Button
+            variant={"ghost"}
+            disabled={exporting || (!date && !selectedStatus && !selectedBrand)}
+            onClick={resetFilters}
+          >
+            <RefreshCwIcon className="size-5 text-accent mr-2" /> Reset Filters
+          </Button>
+        </div>
         <div className="flex items-center justify-end">
           <Button
             variant={"ghost"}
@@ -103,14 +112,6 @@ export default function CourierFilterExport({
               ))}
             </SelectContent>
           </Select>
-          <Button
-            size={"icon"}
-            variant={"ghost"}
-            disabled={exporting || (!date && !selectedStatus && !selectedBrand)}
-            onClick={resetFilters}
-          >
-            <RotateCcwIcon className="size-5 text-accent" />
-          </Button>
         </div>
       </div>
     </div>

@@ -107,6 +107,11 @@ export default async function page() {
         </div>
         <TabsContent value="week">
           <AdminAnalyticsDashboard data={analyticsData} variant={"week"} />
+          {/*<pre>*/}
+          {/*  <code>*/}
+          {/*    {JSON.stringify(analyticsData.financeAnalytics, null, 2)}*/}
+          {/*  </code>*/}
+          {/*</pre>*/}
         </TabsContent>
         <TabsContent value="month">
           <AdminAnalyticsDashboard data={analyticsData} variant={"month"} />

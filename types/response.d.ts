@@ -348,6 +348,14 @@ export type FinanceAnalyticsType = {
       zammit: FinancePerClientType[];
     };
   };
+  clientPerMonth?: {
+    collected: CollectedPerMonthType[];
+    account: AccountPerMonthType[];
+    collectedShopify: CollectedPerMonthType[];
+    accountShopify: AccountPerMonthType[];
+    collectedZammit: CollectedPerMonthType[];
+    accountZammit: AccountPerMonthType[];
+  };
 };
 
 type GroupCountType = {
@@ -358,4 +366,18 @@ type GroupCountType = {
 type FinancePerClientType = {
   _id: string;
   total: number;
+};
+
+type CollectedPerMonthType = {
+  _id: string;
+  collectedBalancePerMonth: {
+    [key: string]: number;
+  };
+};
+
+type AccountPerMonthType = {
+  _id: string;
+  accountBalancePerMonth: {
+    [key: string]: number;
+  };
 };

@@ -928,7 +928,6 @@ export async function filterAssignedOrdersAction({
       },
     );
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error: any) {
     console.log(error);

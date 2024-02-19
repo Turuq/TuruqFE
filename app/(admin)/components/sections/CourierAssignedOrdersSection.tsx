@@ -7,6 +7,8 @@ import OrderCard from "@/app/(admin)/components/cards/OrderCard";
 import moment from "moment/moment";
 import RecordsPerPage from "@/app/(admin)/components/inputs/RecordsPerPage";
 import { filterAssignedOrdersAction } from "@/lib/actions";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CourierAssignedOrdersSectionProps {
   courierId: string;
@@ -21,7 +23,7 @@ export default function CourierAssignedOrdersSection({
   courierName,
   brands,
 }: CourierAssignedOrdersSectionProps) {
-  const [data, setData] = useState<AdminOrderType[]>(orders.slice(0, 10));
+  const [data, setData] = useState<AdminOrderType[]>(orders);
   const [selectedStatus, setSelectedStatus] = useState<
     "delivered/collected" | "outForDelivery" | "other"
   >();
@@ -29,6 +31,8 @@ export default function CourierAssignedOrdersSection({
   const [exporting, setExporting] = useState(false);
   const [date, setDate] = useState<Date>();
   const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(Math.ceil(orders.length / 10));
 
   useEffect(() => {
     async function filterAssignedOrders() {
@@ -58,9 +62,27 @@ export default function CourierAssignedOrdersSection({
     setData(orders.slice(0, limit));
   }
 
-  function changeOrdersPerPage(limit: number) {
-    setLimit(limit);
+  function changeOrdersPerPage(newLimit: number) {
+    setLimit(newLimit);
+  }
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(orders.length / limit));
     setData(data.slice(0, limit));
+  }, [limit]);
+
+  function nextPage() {
+    if (page < totalPages) {
+      setPage(page + 1);
+      setData(orders.slice(limit * page, limit * (page + 1)));
+    }
+  }
+
+  function previousPage() {
+    if (page > 1) {
+      setPage(page - 1);
+      setData(orders.slice(limit * (page - 2), limit * (page - 1)));
+    }
   }
 
   async function handleOrdersExport() {
@@ -123,8 +145,8 @@ export default function CourierAssignedOrdersSection({
       />
       <div className={"flex items-center justify-between"}>
         <p className={"text-xs text-accent font-light capitalize"}>
-          showing {limit > data.length ? data.length : limit} out of{" "}
-          {data.length} orders
+          showing {limit <= data.length ? limit : data.length} out of{" "}
+          {orders.length} orders
         </p>
         <RecordsPerPage
           limit={limit}
@@ -135,24 +157,6 @@ export default function CourierAssignedOrdersSection({
         />
       </div>
 
-      {/*<Pagination>*/}
-      {/*  <PaginationContent>*/}
-      {/*    <PaginationItem>*/}
-      {/*      <PaginationPrevious href="#" />*/}
-      {/*    </PaginationItem>*/}
-
-      {/*    {Array.from({ length: Math.ceil(orders.length / 5) })*/}
-      {/*      .fill(0)*/}
-      {/*      .map((_, index) => (*/}
-      {/*        <PaginationItem key={`page-${index + 1}`}>*/}
-      {/*          <PaginationLink href="#">{index + 1}</PaginationLink>*/}
-      {/*        </PaginationItem>*/}
-      {/*      ))}*/}
-
-      {/*    <PaginationItem>*/}
-      {/*      <PaginationNext href="#" />*/}
-      {/*    </PaginationItem>*/}
-      {/*  </PaginationContent>*/}
       {/*</Pagination>*/}
       {data.length === 0 ? (
         <div
@@ -172,7 +176,7 @@ export default function CourierAssignedOrdersSection({
         </div>
       ) : (
         <>
-          {data.map((order, index) => (
+          {data.slice(0, limit).map((order, index) => (
             <OrderCard
               key={`order-${order._id.toString()}`}
               _id={order._id.toString()}
@@ -186,6 +190,34 @@ export default function CourierAssignedOrdersSection({
           ))}
         </>
       )}
+
+      <div className={"flex items-center justify-end gap-5"}>
+        <div className={"flex items-center justify-center"}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            disabled={page === 1}
+            onClick={previousPage}
+          >
+            <ChevronLeft className={"size-5 text-accent"} />
+          </Button>
+        </div>
+        <div className={"flex items-center justify-center"}>
+          <p className={"text-xs text-accent font-light capitalize"}>
+            Page {page} of {totalPages}
+          </p>
+        </div>
+        <div className={"flex items-center justify-center"}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            disabled={page === totalPages}
+            onClick={nextPage}
+          >
+            <ChevronRight className={"size-5 text-accent"} />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
