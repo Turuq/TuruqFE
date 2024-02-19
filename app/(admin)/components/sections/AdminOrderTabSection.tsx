@@ -243,9 +243,9 @@ export default function AdminOrderTabSection({
 
   return (
     <div className="flex flex-col gap-5">
-      {/* <pre>
-        <code>{JSON.stringify(orderData[0], null, 2)}</code>
-      </pre> */}
+      {/*<pre>*/}
+      {/*  <code>{JSON.stringify(markedOrders, null, 2)}</code>*/}
+      {/*</pre>*/}
       <AdminOrdersSection title={title} variant="orders" orders={orders} />
       <div className="flex flex-col lg:flex-row gap-5 lg:items-center items-start w-full justify-between">
         <div className="flex items-center justify-start w-full rounded-xl flex-grow">

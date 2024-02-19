@@ -1,9 +1,8 @@
-import ClientDropDown from "@/components/shared/ClientDropDown";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AdminType } from "@/types/response";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import AdminDropDown from "./AdminDropDown";
 
 export default function AdminNavbar() {
   const admin = JSON.parse(cookies().get("admin")?.value ?? "") as
@@ -24,7 +23,8 @@ export default function AdminNavbar() {
       </Link>
       {admin && (
         <div className="flex items-center justify-end gap-2">
-          <ClientDropDown type="admin" admin={admin} variant="dashboard" />
+          {/*<ClientDropDown type="admin" admin={admin} variant="dashboard" />*/}
+          <AdminDropDown admin={admin} variant={"dashboard"} />
           {/* <Avatar className="size-10">
             <AvatarImage src={admin.picture} />
             <AvatarFallback>{admin.name?.substring(0, 1)}</AvatarFallback>

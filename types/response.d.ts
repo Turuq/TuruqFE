@@ -159,6 +159,8 @@ export type AdminOrderType = {
   _id: string;
   customer: {
     name: string;
+    first_name: string;
+    last_name: string;
     phone: string;
     address: string;
     governorate: string;

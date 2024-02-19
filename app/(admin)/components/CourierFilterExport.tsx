@@ -9,65 +9,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FileDownIcon, Loader2 } from "lucide-react";
-import { useState } from "react";
-import moment from "moment";
+import { FileDownIcon, Loader2, RotateCcwIcon } from "lucide-react";
 
 export default function CourierFilterExport({
-  courierId,
   brands,
-  courierName,
+  selectedStatus,
+  setSelectedStatus,
+  selectedBrand,
+  setSelectedBrand,
+  date,
+  setDate,
+  exporting,
+  handleOrdersExport,
+  resetFilters,
 }: {
-  courierId: string;
-  courierName: string;
   brands: string[];
+  selectedStatus:
+    | "delivered/collected"
+    | "outForDelivery"
+    | "other"
+    | undefined;
+  setSelectedStatus: (
+    value: "delivered/collected" | "outForDelivery" | "other" | undefined,
+  ) => void;
+  selectedBrand: string | undefined;
+  setSelectedBrand: (value: string | undefined) => void;
+  date: Date | undefined;
+  setDate: (value: Date | undefined) => void;
+  exporting: boolean;
+  handleOrdersExport: () => void;
+  resetFilters: () => void;
 }) {
-  const [selectedStatus, setSelectedStatus] = useState<
-    "delivered/collected" | "outForDelivery" | "other"
-  >();
-  const [selectedBrand, setSelectedBrand] = useState<string>();
-  const [exporting, setExporting] = useState(false);
-  const [date, setDate] = useState<Date>();
-
-  async function handleOrdersExport() {
-    setExporting(true);
-    if (selectedStatus || selectedBrand || date) {
-      let status =
-        selectedStatus === "delivered/collected"
-          ? "delivered,collected"
-          : selectedStatus === "other"
-            ? "pending,unreachable,cancelled,postponed,returned"
-            : selectedStatus;
-      let query = "";
-      if (status) {
-        query += `&status=${status}`;
-      }
-      if (selectedBrand) {
-        query += `&brand=${selectedBrand}`;
-      }
-      if (date) {
-        query += `&date=${moment(date).toString()}`;
-      }
-      const res = await fetch(`/api/courier?courier=${courierId}${query}`);
-      setExporting(false);
-      if (res.status === 200) {
-        const fileName = `${courierName.trim()}_orders_${status && status}_${
-          selectedBrand && selectedBrand.trim()
-        }_${new Date().toLocaleDateString()}.xlsx`;
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        window.URL.revokeObjectURL(url);
-        setSelectedBrand(undefined);
-        setSelectedStatus(undefined);
-        setDate(undefined);
-      }
-    }
-  }
-
   return (
     <div className="flex flex-col justify-between gap-3">
       <div className="flex items-center justify-between">
@@ -131,21 +103,15 @@ export default function CourierFilterExport({
               ))}
             </SelectContent>
           </Select>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            disabled={exporting || (!date && !selectedStatus && !selectedBrand)}
+            onClick={resetFilters}
+          >
+            <RotateCcwIcon className="size-5 text-accent" />
+          </Button>
         </div>
-        {/*<div className="hidden lg:flex items-center justify-end">*/}
-        {/*  <Button*/}
-        {/*    variant={"ghost"}*/}
-        {/*    disabled={!selectedStatus && !selectedBrand && !date}*/}
-        {/*    onClick={handleOrdersExport}*/}
-        {/*  >*/}
-        {/*    {exporting ? (*/}
-        {/*      <Loader2 className="text-white size-5 animate-spin" />*/}
-        {/*    ) : (*/}
-        {/*      <FileDownIcon className="size-5 text-accent" />*/}
-        {/*    )}*/}
-        {/*    Export*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
       </div>
     </div>
   );

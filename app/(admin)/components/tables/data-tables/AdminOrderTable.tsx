@@ -194,10 +194,16 @@ export function AdminOrderTable({
 
   useEffect(() => {
     const selectedIds = table
-      .getFilteredSelectedRowModel()
+      .getSelectedRowModel()
       .rows.map((selected) =>
         orders[selected.index]._id.toString(),
       ) as string[];
+    // const selectedIds = table
+    //   .getFilteredSelectedRowModel()
+    //   .rows.map((selected) =>
+    //     orders[selected.index]._id.toString(),
+    //   ) as string[];
+    // console.log(selectedIds);
     changeMarkedOrders(selectedIds);
   }, [rowSelection, changeMarkedOrders, orders, table]);
 
@@ -239,6 +245,9 @@ export function AdminOrderTable({
 
   return (
     <div className="rounded-md border">
+      {/*<pre>*/}
+      {/*  <code>{JSON.stringify(rowSelection, null, 2)}</code>*/}
+      {/*</pre>*/}
       <div className="flex flex-col gap-3">
         <div className="flex items-center w-full justify-between p-2">
           <p className="text-xs text-accent/50 capitalize">

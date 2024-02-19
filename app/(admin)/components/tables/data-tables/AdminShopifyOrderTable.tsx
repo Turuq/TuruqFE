@@ -206,10 +206,15 @@ export function AdminShopifyOrderTable({
 
   useEffect(() => {
     const selectedIds = table
-      .getFilteredSelectedRowModel()
+      .getSelectedRowModel()
       .rows.map((selected) =>
         orders[selected.index]._id.toString(),
       ) as string[];
+    // const selectedIds = table
+    //   .getFilteredSelectedRowModel()
+    //   .rows.map((selected) =>
+    //     orders[selected.index]._id.toString(),
+    //   ) as string[];
     changeMarkedOrders(selectedIds);
   }, [rowSelection, changeMarkedOrders, orders, table]);
 

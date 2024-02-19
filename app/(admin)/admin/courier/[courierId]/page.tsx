@@ -1,14 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PhoneIcon, TruckIcon } from "lucide-react";
+import { PhoneIcon } from "lucide-react";
 import Link from "next/link";
-
-import { Progress } from "@/components/ui/progress";
 import { cookies } from "next/headers";
 import { AdminOrderType, CourierType } from "@/types/response";
 import { OrderStatisticsType } from "@/types/client";
 import InformationCard from "@/app/(client)/components/cards/InformationCard";
-import CourierFilterExport from "@/app/(admin)/components/CourierFilterExport";
-import moment from "moment";
+import CourierAssignedOrdersSection from "@/app/(admin)/components/sections/CourierAssignedOrdersSection";
 
 export default async function Page({
   params,
@@ -56,122 +53,12 @@ export default async function Page({
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <div className="col-span-1 lg:col-span-8 flex flex-col gap-5 bg-white rounded-xl h-full p-5">
-          <CourierFilterExport
-            courierId={params.courierId}
-            courierName={data.courier.name}
-            brands={brands}
-          />
-          {data.orders.map((order, index) => (
-            <div
-              key={`order-${order._id.toString()}`}
-              className="flex flex-col p-5 gap-5 bg-accent/10 rounded-xl"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-                <div className="flex flex-col justify-center">
-                  <h3 className="uppercase text-accent font-bold text-xs">
-                    Order ID
-                  </h3>
-                  <h3 className="uppercase text-accent text-xs">
-                    {order._id.toString()}
-                  </h3>
-                </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="uppercase text-accent font-bold text-xs">
-                    Customer
-                  </h3>
-                  <h3 className="uppercase text-accent text-xs">
-                    {order.customer.name ||
-                      // @ts-ignore
-                      `${order.customer.first_name} ${order.customer.last_name}`}
-                  </h3>
-                </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="uppercase text-accent font-bold text-xs">
-                    brand name
-                  </h3>
-                  <h3 className="uppercase text-accent text-xs">
-                    {order.client.companyName}
-                  </h3>
-                </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="uppercase text-accent font-bold text-xs">
-                    total amount
-                  </h3>
-                  <h3 className="uppercase text-accent text-xs">
-                    {order.total} EGP
-                  </h3>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div className="col-span-1 lg:col-span-2 self-center w-full">
-                  <div className="grid grid-cols-8 gap-5">
-                    <h3 className="text-xs font-semibold flex items-center justify-start col-span-2">
-                      Turuq HQ
-                    </h3>
-                    <div className="relative flex items-center col-span-4">
-                      <Progress
-                        value={
-                          order.status === "delivered" ||
-                          order.status === "collected"
-                            ? 100
-                            : order.status === "outForDelivery"
-                              ? 50
-                              : 0
-                        }
-                        className="w-full"
-                      />
-                      <TruckIcon
-                        className={`size-4 text-accent absolute -top-1 lg:-top-3 ${
-                          order.status === "delivered" ||
-                          order.status === "collected"
-                            ? "lg:left-48 left-24"
-                            : order.status === "outForDelivery"
-                              ? "lg:left-24 left-12"
-                              : "left-0"
-                        }`}
-                      />
-                    </div>
-                    <h3 className="text-xs font-semibold flex items-center justify-end col-span-2">
-                      {order.customer.governorate}
-                    </h3>
-                  </div>
-                  <div className="grid grid-cols-3 gap-5">
-                    <div className="flex items-center justify-start">
-                      <p className="text-xs text-accent font-light italic">
-                        {moment(order.createdAt).format("DD MMM YYYY")}
-                      </p>
-                    </div>
-                    <div></div>
-                    <div className="flex items-center justify-end">
-                      <p className="text-xs text-accent font-light italic">
-                        {moment(order.updatedAt).format("DD MMM YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-1 lg:col-span-1 flex flex-col items-end gap-0">
-                  <h3 className="uppercase text-accent font-bold text-xs">
-                    order status
-                  </h3>
-                  <h3
-                    className={`uppercase ${
-                      order.status === "delivered"
-                        ? "text-green-700"
-                        : order.status === "outForDelivery"
-                          ? "text-gray-700"
-                          : order.status === "pending"
-                            ? "text-amber-400"
-                            : "text-black"
-                    } font-semibold text-xs`}
-                  >
-                    {order.status}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <CourierAssignedOrdersSection
+          courierId={params.courierId}
+          courierName={data.courier.name}
+          brands={brands}
+          orders={data.orders}
+        />
         <div className="col-span-1 lg:col-span-4 flex flex-col gap-5 bg-white rounded-xl h-full p-5">
           <h1 className="text-lg lg:text-xl font-bold text-accent/50 uppercase">
             courier analytics
