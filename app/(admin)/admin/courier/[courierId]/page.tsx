@@ -6,6 +6,7 @@ import { AdminOrderType, CourierType } from "@/types/response";
 import { OrderStatisticsType } from "@/types/client";
 import InformationCard from "@/app/(client)/components/cards/InformationCard";
 import CourierAssignedOrdersSection from "@/app/(admin)/components/sections/CourierAssignedOrdersSection";
+import moment from "moment";
 
 export default async function Page({
   params,
@@ -26,7 +27,12 @@ export default async function Page({
     orders: AdminOrderType[];
     courier: CourierType;
     statistics: OrderStatisticsType;
-    finance: { total: number };
+    finance: {
+      total: number;
+      outForDeliveryTotal: number;
+      postponedTotal: number;
+      totalToday: number;
+    };
   };
 
   const brandSet = new Set();
@@ -102,10 +108,35 @@ export default async function Page({
             </div>
             <div className="col-span-2">
               <InformationCard
+                title="Daily Earnings"
+                value={data.finance.totalToday}
+                className="bg-gray-200 text-accent"
+                description={moment().format("ddd DD, MMM YYYY")}
+                variant="finance"
+              />
+            </div>
+            <div className="col-span-2">
+              <InformationCard
                 title="Total Earnings"
                 value={data.finance.total}
                 className="bg-gray-200 text-accent"
                 description="Total earnings from delivered orders"
+                variant="finance"
+              />
+            </div>
+            <div className="col-span-2">
+              <InformationCard
+                title="Out For Delivery Total"
+                value={data.finance.outForDeliveryTotal}
+                className="bg-gray-200 text-accent"
+                variant="finance"
+              />
+            </div>
+            <div className="col-span-2">
+              <InformationCard
+                title="Postponed Total"
+                value={data.finance.postponedTotal}
+                className="bg-gray-200 text-accent"
                 variant="finance"
               />
             </div>

@@ -69,6 +69,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} bg-gray-200 h-auto`}>
+        {process.env.NODE_ENV === "development" && (
+          <div
+            className={
+              "fixed top-0 left-0 p-2 bg-emerald-700 text-white uppercase font-bold z-30"
+            }
+          >
+            development
+          </div>
+        )}
         <div className="p-5 lg:p-10">
           <ClientNavbar data={data.client} notifications={notificationData} />
         </div>

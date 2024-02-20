@@ -55,7 +55,7 @@ export default function AdminUploadInventoryButton({
     <div className="">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger>
-          <button
+          <div
             className={`bg-white p-2 rounded-xl w-auto text-sm ${
               variant === "icon" ? "text-accent/80" : "text-accent"
             } hover:text-accent flex items-center`}
@@ -66,7 +66,7 @@ export default function AdminUploadInventoryButton({
                 Upload Excel File
               </span>
             )}
-          </button>
+          </div>
         </DialogTrigger>
         <DialogContent className="lg:max-w-xl">
           <DialogHeader>

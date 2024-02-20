@@ -27,6 +27,15 @@ export default function RootLayout({
       <body
         className={`${montserrat.className} bg-gradient-to-b from-primary-950 via-primary-900 to-primary-950 text-white h-auto`}
       >
+        {process.env.NODE_ENV === "development" && (
+          <div
+            className={
+              "absolute top-0 left-0 p-2 bg-emerald-700 text-white uppercase font-bold z-30"
+            }
+          >
+            development
+          </div>
+        )}
         <div className="p-5 lg:p-10">
           <Navbar />
         </div>

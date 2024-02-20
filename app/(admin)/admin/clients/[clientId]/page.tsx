@@ -1,6 +1,7 @@
 import AdminClientFinancesSection from "@/app/(admin)/components/sections/AdminClientFinanceSection";
 import ClientInventorySection from "@/app/(client)/components/sections/ClientInventorySection";
 import ClientOrdersSection from "@/app/(client)/components/sections/ClientOrdersSection";
+
 import { cookies } from "next/headers";
 
 export default async function Page({
@@ -24,6 +25,7 @@ export default async function Page({
       {/*<pre>*/}
       {/*  <code>{JSON.stringify(data.orders, null, 2)}</code>*/}
       {/*</pre>*/}
+
       <div className="col-span-1 lg:col-span-12 flex flex-col gap-10">
         {/* Orders */}
         <ClientOrdersSection

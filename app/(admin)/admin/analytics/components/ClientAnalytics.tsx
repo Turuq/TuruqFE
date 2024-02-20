@@ -174,7 +174,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
             />
           </div>
         </div>
-        <div className={`col-span-12 rounded-xl bg-white p-5`}>
+        <div className={`col-span-12 rounded-xl bg-white lg:p-5`}>
           <h3 className="text-lg text-accent/50 font-bold uppercase">
             New Clients Per Month
           </h3>
@@ -185,7 +185,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
             categories={["Clients"]}
             colors={["cyan"]}
             valueFormatter={dataFormatter}
-            yAxisWidth={60}
+            yAxisWidth={20}
             title={"New Clients Per Month"}
             showAnimation={true}
             showGradient={true}
@@ -206,7 +206,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
             showAnimation={true}
             title={"Top 5 Clients"}
             minValue={0}
-            yAxisWidth={48}
+            yAxisWidth={32}
           />
         </div>
         <div className={`col-span-12 grid grid-cols-12 gap-5`}>
@@ -228,7 +228,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
                 showAnimation={true}
                 title={"Top 5 Clients"}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           )}
@@ -250,7 +250,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
                 showAnimation={true}
                 title={"Top 5 Clients"}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           )}
@@ -272,7 +272,7 @@ export default function ClientAnalytics({ data }: ClientAnalyticsProps) {
                 showAnimation={true}
                 title={"Top 5 Clients"}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           )}

@@ -46,7 +46,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
             {data.orderStatistics.map((stat, index) => (
               <div
                 className={
-                  "col-span-6 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
+                  "col-span-12 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
                 }
                 key={stat._id}
               >
@@ -71,6 +71,9 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
               </div>
             ))}
             <div className={"col-span-12"}>
+              <h3 className="text-lg text-accent/50 font-bold uppercase">
+                Orders By Governorate
+              </h3>
               <BarChart
                 className="mt-6"
                 data={data.ordersByGovernorate}
@@ -81,7 +84,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
                 valueFormatter={dataFormatter}
                 showAnimation={true}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           </div>
@@ -91,7 +94,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
             {data.shopifyOrderStatistics.map((stat, index) => (
               <div
                 className={
-                  "col-span-6 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
+                  "col-span-12 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
                 }
                 key={stat._id}
               >
@@ -117,6 +120,9 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
               </div>
             ))}
             <div className={"col-span-12"}>
+              <h3 className="text-lg text-accent/50 font-bold uppercase">
+                Orders By Governorate
+              </h3>
               <BarChart
                 className="mt-6"
                 data={data.shopifyOrdersByGovernorate}
@@ -127,7 +133,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
                 valueFormatter={dataFormatter}
                 showAnimation={true}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           </div>
@@ -137,7 +143,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
             {data.zammitOrderStatistics.map((stat, index) => (
               <div
                 className={
-                  "col-span-6 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
+                  "col-span-12 lg:first:col-span-6 lg:last:col-span-6 lg:col-span-3"
                 }
                 key={stat._id}
               >
@@ -163,6 +169,9 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
               </div>
             ))}
             <div className={"col-span-12"}>
+              <h3 className="text-lg text-accent/50 font-bold uppercase">
+                Orders By Governorate
+              </h3>
               <BarChart
                 className="mt-6"
                 data={data.zammitOrdersByGovernorate}
@@ -173,7 +182,7 @@ export default function OrderAnalytics({ data }: OrderAnalyticsProps) {
                 valueFormatter={dataFormatter}
                 showAnimation={true}
                 minValue={0}
-                yAxisWidth={48}
+                yAxisWidth={32}
               />
             </div>
           </div>

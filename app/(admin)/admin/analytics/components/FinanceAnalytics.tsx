@@ -237,7 +237,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Orders Collected Balance"}
             value={financeData.collectedBalance.orders}
@@ -245,7 +245,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Shopify Collected Balance"}
             value={financeData.collectedBalance.shopify}
@@ -253,7 +253,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Zammit Collected Balance"}
             value={financeData.collectedBalance.zammit}
@@ -263,8 +263,8 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
         </div>
         {selectedClient === null ? (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Collected Order Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Collected Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -278,13 +278,13 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         ) : (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              {selectedClient} Collected Order Balance
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              {selectedClient} Collected Balance
             </h3>
             <AreaChart
               className="h-80"
@@ -299,8 +299,8 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Collected Shopify Order Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Collected Shopify Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -314,14 +314,14 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Shopify Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Collected Zammit Order Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Collected Zammit Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -335,7 +335,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Collected Zammit Order Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
@@ -354,7 +354,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Orders Account Balance"}
             value={financeData.accountBalance.orders}
@@ -362,7 +362,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Shopify Account Balance"}
             value={financeData.accountBalance.shopify}
@@ -370,7 +370,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Zammit Account Balance"}
             value={financeData.accountBalance.zammit}
@@ -380,8 +380,8 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
         </div>
         {selectedClient === null ? (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Order Account Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Account Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -395,13 +395,13 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         ) : (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              {selectedClient} Order Account Balance
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              {selectedClient} Account Balance
             </h3>
             <AreaChart
               className="h-80"
@@ -416,8 +416,8 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Shopify Order Account Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Shopify Account Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -431,14 +431,14 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Shopify Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Zammit Order Account Balance Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Zammit Account Balance Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -452,7 +452,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Zammit Order Account Balance Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
@@ -471,7 +471,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Orders Shipping Total"}
             value={financeData.shippingTotal.orders}
@@ -479,7 +479,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Shopify Shipping Total"}
             value={financeData.shippingTotal.shopify}
@@ -487,7 +487,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
             variant={"finance"}
           />
         </div>
-        <div className={`col-span-4`}>
+        <div className={`col-span-12 lg:col-span-4`}>
           <AdminAnalyticsCard
             title={"Zammit Shipping Total"}
             value={financeData.shippingTotal.zammit}
@@ -497,8 +497,8 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
         </div>
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Order Shipping Total Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Shipping Total Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -512,14 +512,14 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Shopify Order Shipping Total Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Shopify Shipping Total Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -533,14 +533,14 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Shopify Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}
         {selectedClient === null && (
           <div className={`col-span-12`}>
-            <h3 className="text-lg text-accent/50 font-bold uppercase">
-              Zammit Order Shipping Total Per Client
+            <h3 className="text-base lg:text-lg text-accent/50 font-bold uppercase">
+              Zammit Shipping Total Per Client
             </h3>
             <BarChart
               className="mt-6"
@@ -554,7 +554,7 @@ export default function FinanceAnalytics({ data }: FinanceAnalyticsProps) {
               showAnimation={true}
               title={"Zammit Order Shipping Total Per Client"}
               minValue={0}
-              yAxisWidth={100}
+              yAxisWidth={60}
             />
           </div>
         )}

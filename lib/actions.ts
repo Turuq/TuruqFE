@@ -934,3 +934,34 @@ export async function filterAssignedOrdersAction({
     return { error: error.message, data: null };
   }
 }
+
+export async function activateClientAction({
+  clientId,
+  pathname,
+}: {
+  clientId: string;
+  pathname: string | undefined;
+}) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}client/activate/${clientId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    const data = await res.json();
+    if (data) {
+      if (pathname) {
+        revalidatePath(pathname);
+      }
+    } else {
+      throw new Error("Failed To Activate Client");
+    }
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}

@@ -13,7 +13,7 @@ export default async function AdminAnalyticsDashboard({
   variant,
 }: AdminAnalyticsDashboardProps) {
   return (
-    <div className="flex flex-col gap-5 bg-white/50 rounded-xl p-5">
+    <div className="flex flex-col gap-5 bg-white/50 rounded-xl">
       <div className={"bg-white p-5 flex flex-col gap-5 rounded-xl"}>
         <h3 className="text-xl text-accent/50 font-bold uppercase">
           Client Analytics

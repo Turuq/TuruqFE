@@ -106,7 +106,10 @@ export default async function page() {
           </TabsList>
         </div>
         <TabsContent value="week">
-          <AdminAnalyticsDashboard data={analyticsData} variant={"week"} />
+          {/*<AdminAnalyticsDashboard data={analyticsData} variant={"week"} />*/}
+          <div className={"flex items-center justify-center"}>
+            <h1 className={"text-xl font-bold text-accent"}>COMING SOON!</h1>
+          </div>
           {/*<pre>*/}
           {/*  <code>*/}
           {/*    {JSON.stringify(analyticsData.financeAnalytics, null, 2)}*/}
@@ -117,6 +120,9 @@ export default async function page() {
           <AdminAnalyticsDashboard data={analyticsData} variant={"month"} />
         </TabsContent>
         <TabsContent value="year">
+          <div className={"flex items-center justify-center"}>
+            <h1 className={"text-xl font-bold text-accent"}>COMING SOON!</h1>
+          </div>
           {/*<AdminAnalyticsDashboard*/}
           {/*  clientData={clientData}*/}
           {/*  clientPercentage={clientsThisYear}*/}

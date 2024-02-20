@@ -10,9 +10,10 @@ import {
   PencilIcon,
   PhoneCallIcon,
   PhoneIcon,
+  ShirtIcon,
   Trash2Icon,
   User2,
-  UserRoundSearchIcon,
+  UserRoundCogIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -31,7 +32,11 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { deleteClientAction, editClientAction } from "@/lib/actions";
+import {
+  activateClientAction,
+  deleteClientAction,
+  editClientAction,
+} from "@/lib/actions";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import {
@@ -53,7 +58,7 @@ import { Input } from "@/components/ui/input";
 import { editClientFormSchema } from "@/validations/editClientFormSchema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
@@ -74,10 +79,12 @@ export default function AdminClientCard({
   layout: "grid" | "list";
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [formError, setFormError] = useState({ error: false, message: "" });
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogAlertOpen, setDialogAlertOpen] = useState(false);
+  const [dialogConfigure, setDialogConfigure] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof editClientFormSchema>>({
@@ -129,6 +136,14 @@ export default function AdminClientCard({
     setDropDownOpen(false);
   }
 
+  function handleConfigureClient(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
+    e.preventDefault();
+    setDialogConfigure(true);
+    setDropDownOpen(false);
+  }
+
   async function handleClientDelete() {
     const { error, message } = await deleteClientAction({
       clientId: client._id.toString(),
@@ -147,6 +162,10 @@ export default function AdminClientCard({
       });
       return;
     }
+  }
+
+  async function handleClientActivate() {
+    await activateClientAction({ clientId: client._id, pathname });
   }
 
   return (
@@ -180,27 +199,38 @@ export default function AdminClientCard({
                     href={`/admin/clients/${client._id.toString()}`}
                     className="flex items-center justify-between gap-2 text-accent"
                   >
-                    <UserRoundSearchIcon className="size-4 text-inherit" />
-                    <h3>View Client</h3>
+                    <ShirtIcon className="size-4 text-inherit mr-2" />
+                    <h3 className={"text-center"}>View Client</h3>
                   </Link>
                 </DropdownMenuItem>
+                {!client.active && (
+                  <DropdownMenuItem>
+                    <div
+                      className="flex items-center justify-between gap-2 text-accent cursor-pointer"
+                      onClick={(e) => handleConfigureClient(e)}
+                    >
+                      <UserRoundCogIcon className="size-4 text-inherit mr-2" />
+                      <h3 className={"text-center"}>Configure Client</h3>
+                    </div>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                   <div
-                    className="flex items-center justify-between gap-2 text-accent"
+                    className="flex items-center justify-between gap-2 text-accent cursor-pointer"
                     onClick={(e) => handleEditClient(e)}
                   >
-                    <PencilIcon className="size-4 text-inherit" />
-                    <h3>Edit Client</h3>
+                    <PencilIcon className="size-4 text-inherit mr-2" />
+                    <h3 className={"text-center"}>Edit Client</h3>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <div
-                    className="flex items-center justify-between gap-2 text-red-500"
+                    className="flex items-center justify-between gap-2 text-red-500 cursor-pointer"
                     onClick={(e) => handleDeleteClient(e)}
                   >
-                    <Trash2Icon className="size-4 text-inherit" />
-                    <h3>Delete Client</h3>
+                    <Trash2Icon className="size-4 text-inherit mr-2" />
+                    <h3 className={"text-center"}>Delete Client</h3>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -444,6 +474,44 @@ export default function AdminClientCard({
               onClick={handleClientDelete}
             >
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog open={dialogConfigure} onOpenChange={setDialogConfigure}>
+        <AlertDialogContent className={"rounded-xl"}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              It Looks Like We Are Unfamiliar With{" "}
+              <span
+                className={
+                  "italic underline underline-offset-4 text-secondary-500 hover:text-accent transition-colors ease-in-out duration-150 font-bold"
+                }
+              >
+                {client.companyName}
+              </span>
+              !
+            </AlertDialogTitle>
+            <AlertDialogDescription className={"text-balance"}>
+              This account is currently inactive, waiting for your green light.
+              If something seems fishy, keep them out by clicking the block
+              button below.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              className={
+                "bg-red-600/50 text-white hover:text-white hover:bg-red-600 font-bold"
+              }
+              onClick={handleClientDelete}
+            >
+              Block
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className={"bg-emerald-700/50 hover:bg-emerald-700 font-bold"}
+              onClick={handleClientActivate}
+            >
+              Activate
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
