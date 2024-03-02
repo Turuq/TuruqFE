@@ -1,8 +1,18 @@
+"use client";
+
 import { getProductCodes } from "@/lib/actions";
 import AddItemWarehouse from "@/app/(warehouse)/warehouse/check-in/add-item/AddItemWarehouse";
+import { useEffect, useState } from "react";
+import { CodesType } from "@/types/response";
 
-export default async function Page() {
-  const codes = await getProductCodes();
+export default function Page() {
+  const [codes, setCodes] = useState<CodesType>();
+
+  useEffect(() => {
+    getProductCodes().then((data) => {
+      setCodes(data);
+    });
+  }, []);
 
   return (
     <div className={"flex flex-col gap-5"}>
