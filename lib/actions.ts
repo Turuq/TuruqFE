@@ -1140,3 +1140,35 @@ export async function getProductCodes() {
     throw new Error(e.message);
   }
 }
+
+export async function checkProductExists({ UID }: { UID: string }) {
+  try {
+    const UID_Substring = UID.substring(0, 11);
+    const res = await fetch(
+      `${process.env.API_URL}product/checkProductExists`,
+      {
+        method: "POST",
+        body: JSON.stringify({ UID: UID_Substring }),
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    const data = await res.json();
+    if (data) return data;
+  } catch (e: any) {
+    console.log(e);
+    // throw new Error(e.message);
+  }
+}
+
+// export async function addNewProductAction({
+//   UID,
+//   itemDescription,
+//   category,
+//   size,
+//   color,
+//   quantity,
+//     client
+// });

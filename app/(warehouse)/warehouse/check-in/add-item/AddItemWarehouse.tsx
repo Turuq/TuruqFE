@@ -13,14 +13,17 @@ import { Button } from "@/components/ui/button";
 import { CodesType } from "@/types/response";
 import { useBarcode } from "next-barcode";
 import { useEffect, useState } from "react";
+import { checkProductExists } from "@/lib/actions";
 
 export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
-  const [UID, setUID] = useState("0000000000000");
+  const [UID, setUID] = useState("01");
   const [superlative, setSuperlative] = useState<string>("");
   const [client, setClient] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [size, setSize] = useState<string>("");
   const [color, setColor] = useState<string>("");
+  const [variance, setVariance] = useState("01");
+  const [quantity, setQuantity] = useState<number>();
   const { inputRef } = useBarcode({
     value: UID,
     options: {
@@ -29,11 +32,21 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
   });
 
   useEffect(() => {
-    let generatedUID = `${superlative}${client}${category}${size}${color}`;
+    let generatedUID = `${superlative ? superlative : "10"}${client}${category}${size}${color}${variance}`;
     if (generatedUID.length > 0) {
       setUID(generatedUID);
     }
   }, [superlative, client, category, size, color]);
+
+  useEffect(() => {
+    if (UID.length === 13) {
+      checkProductExists({ UID }).then((data) => {
+        if (data) {
+          setUID(data);
+        }
+      });
+    }
+  }, [UID]);
   return (
     <div className={"glass p-5 rounded-xl"}>
       <div
@@ -139,7 +152,16 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-
+        <div className={"col-span-1 flex flex-col"}>
+          <h2 className={"text-base text-black font-bold"}>Quantity</h2>
+          <Input
+            className={
+              "w-full bg-white rounded-xl border-0 text-black placeholder:text-black/50"
+            }
+            onChange={(e) => setQuantity(parseInt(e.target.value))}
+            type={"number"}
+          />
+        </div>
         <div className={"col-span-4 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Generated ID</h2>
           <Input
