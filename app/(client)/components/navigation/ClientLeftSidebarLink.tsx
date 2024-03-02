@@ -21,18 +21,22 @@ export default function ClientLeftSidebarLink({
   return (
     <Link
       href={href}
-      className={`flex items-center px-3 gap-3 p-2 ${
+      className={`flex items-center px-3 gap-3 p-2 group ${
         variant === "client"
           ? pathname === href
             ? "bg-accent text-white cursor-default"
             : "bg-white text-accent hover:bg-accent/20 cursor-pointer"
           : pathname === href
-          ? "bg-accent text-white cursor-default"
-          : "bg-white text-accent hover:bg-accent/20 cursor-pointer"
-      } rounded-xl text-base`}
+            ? "bg-accent text-white cursor-default"
+            : "bg-white text-accent hover:bg-accent/20 cursor-pointer"
+      } rounded-lg text-base`}
     >
-      {dashboardLinks[icon]}
-      <h3 className="capitalize text-inherit">{label}</h3>
+      <div className={"w-[30%] flex items-center justify-center size-4"}>
+        {dashboardLinks[icon]}
+      </div>
+      <div className={"w-full"}>
+        <h3 className="capitalize text-inherit text-base">{label}</h3>
+      </div>
     </Link>
   );
 }

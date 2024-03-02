@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpFromLineIcon, FileUpIcon, Loader2 } from "lucide-react";
+import { ArrowUpFromLineIcon, Loader2 } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
@@ -56,15 +56,56 @@ export default function AdminUploadInventoryButton({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger>
           <div
-            className={`bg-white p-2 rounded-xl w-auto text-sm ${
-              variant === "icon" ? "text-accent/80" : "text-accent"
-            } hover:text-accent flex items-center`}
+            className={`bg-white hover:bg-accent hover:text-white p-2 rounded-lg w-44 text-sm text-accent group`}
           >
-            <FileUpIcon className="size-4 lg:size-5 text-inherit mr-2" />
             {variant === "default" && (
-              <span className="text-start text-xs lg:text-inherit">
-                Upload Excel File
-              </span>
+              <div className="flex items-center gap-3 w-full">
+                <div className={"w-[10%] group-hover:hidden block"}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="size-5 text-inherit"
+                  >
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                    <path d="M8 13h2" />
+                    <path d="M14 13h2" />
+                    <path d="M8 17h2" />
+                    <path d="M14 17h2" />
+                  </svg>
+                </div>
+                <div className={"w-[10%] group-hover:block hidden"}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="size-5 text-inherit"
+                  >
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                    <path d="M12 12v6" />
+                    <path d="m15 15-3-3-3 3" />
+                  </svg>
+                </div>
+                <div className={"w-full flex items-center justify-center"}>
+                  <span className="text-sm lg:text-inherit text-center">
+                    Upload Inventory
+                  </span>
+                </div>
+              </div>
             )}
           </div>
         </DialogTrigger>

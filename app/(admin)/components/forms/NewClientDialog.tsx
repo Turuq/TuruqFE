@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/custom/auth-dialog";
-import { ListPlusIcon, Loader2Icon } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -65,12 +65,32 @@ export default function NewClientDialog() {
       return;
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <div className="bg-white p-2 rounded-xl w-auto text-sm text-accent flex items-center">
-          <ListPlusIcon className="size-4 lg:size-5 text-inherit mr-2" />
-          <span className="text-xs lg:text-inherit">New Client</span>
+        <div className="bg-white hover:bg-accent hover:text-white p-2 rounded-lg w-40 text-sm text-accent flex items-center">
+          <div className={"w-[10%]"}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              className="size-5 text-inherit"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </div>
+          <div className={"w-full flex items-center justify-center"}>
+            <span className="text-sm lg:text-inherit text-center">
+              New Client
+            </span>
+          </div>
         </div>
       </DialogTrigger>
       <DialogContent className="lg:max-w-3xl">

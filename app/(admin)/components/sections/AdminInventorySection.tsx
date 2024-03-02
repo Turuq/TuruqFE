@@ -1,6 +1,5 @@
 import InformationCard from "@/app/(client)/components/cards/InformationCard";
 import AdminUploadInventoryButton from "@/components/shared/AdminUploadInventoryButton";
-import { ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminInventorySection({
@@ -23,10 +22,53 @@ export default function AdminInventorySection({
           {variant === "dashboard" && (
             <Link
               href={"/admin/inventory"}
-              className="bg-white p-2 rounded-xl w-auto text-sm text-accent flex items-center"
+              className="bg-white hover:bg-accent hover:text-white p-2 rounded-lg w-44 text-sm text-accent group"
             >
-              <ClipboardListIcon className="size-4 lg:size-5 text-inherit mr-2" />
-              <span className="text-xs lg:text-inherit">Inventory Details</span>
+              <div className="flex items-center gap-3 w-full">
+                <div className={"w-[10%] group-hover:hidden block"}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="size-5 text-inherit"
+                  >
+                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                  </svg>
+                </div>
+                <div className={"w-[10%] group-hover:block hidden"}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    className="size-5 text-inherit"
+                  >
+                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                    <path d="M12 11h4" />
+                    <path d="M12 16h4" />
+                    <path d="M8 11h.01" />
+                    <path d="M8 16h.01" />
+                  </svg>
+                </div>
+                <div className={"w-full flex items-center justify-center"}>
+                  <span className="text-sm lg:text-inherit text-center">
+                    Inventory Details
+                  </span>
+                </div>
+              </div>
             </Link>
           )}
           <AdminUploadInventoryButton variant="default" />

@@ -3,7 +3,13 @@
 import {NewOrderParams} from "@/types/actions";
 import {ClientType, FinanceStatisticsType} from "@/types/client";
 import {GovernorateType} from "@/types/governorate";
-import {LoginResponseType, NewOrderResponseType, ProductDetailsType, ProductSummaryType,} from "@/types/response";
+import {
+  CodesType,
+  LoginResponseType,
+  NewOrderResponseType,
+  ProductDetailsType,
+  ProductSummaryType,
+} from "@/types/response";
 
 import {revalidatePath} from "next/cache";
 import {cookies} from "next/headers";
@@ -927,8 +933,7 @@ export async function filterAssignedOrdersAction({
         },
       },
     );
-    const data = await res.json();
-    return data;
+    return await res.json();
   } catch (error: any) {
     console.log(error);
     return { error: error.message, data: null };
@@ -957,9 +962,179 @@ export async function activateClientAction({
       if (pathname) {
         revalidatePath(pathname);
       }
-    } else {
-      throw new Error("Failed To Activate Client");
     }
+    // else {
+    //   throw new Error("Failed To Activate Client");
+    // }
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function getScannedProduct() {
+  console.log("scanning barcode");
+  try {
+    const res = await fetch(`${process.env.API_URL}product/productByBarcode`, {
+      method: "GET",
+      next: { revalidate: 0 },
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+      },
+    });
+    return await res.json();
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function updateProductQuantityAction({
+  UID,
+  quantity,
+}: {
+  UID: string;
+  quantity: number;
+}) {
+  try {
+    const res = await fetch(`${process.env.API_URL}product/updateQuantity`, {
+      method: "POST",
+      body: JSON.stringify({ UID, quantity }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${cookies().get("token")?.value}`,
+      },
+    });
+    return await res.json();
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function getClientProductsAction({
+  clientId,
+}: {
+  clientId: string;
+}) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}productMapping/getClientProducts/${clientId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    return await res.json();
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function getClientCredentials({ clientId }: { clientId: string }) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}productMapping/getClientCredentials/${clientId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    const data = await res.json();
+    return data;
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function getClientShopifyProducts({
+  accessToken,
+  storeName,
+}: {
+  accessToken: string;
+  storeName: string;
+}) {
+  try {
+    const res = await fetch(
+      `https://${storeName}.myshopify.com/admin/api/2024-01/products.json?fields=id,title,variants&limit=250`,
+      {
+        method: "GET",
+        headers: {
+          "X-Shopify-Access-Token": accessToken,
+        },
+      },
+    );
+    const data = await res.json();
+    if (data) return data;
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function mapClientProducts({
+  UID,
+  shopifyID,
+  assignedBy = "Karim Kamal",
+  client,
+}: {
+  UID: string;
+  shopifyID: string;
+  assignedBy: string;
+  client: string;
+}) {
+  try {
+    const res = await fetch(`${process.env.API_URL}productMapping/mapProduct`, {
+      method: "POST",
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ UID, shopifyID, assignedBy, client }),
+    });
+    const data = await res.json();
+    if (data) return { message: "Products Mapped Successfully", status: 200 };
+  } catch (e: any) {
+    console.log(e);
+    return { message: e.message, status: 400 };
+  }
+}
+
+export async function getClientMappings({ clientId }: { clientId: string }) {
+  try {
+    const res = await fetch(
+      `${process.env.API_URL}productMapping/getClientMappings/${clientId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `${cookies().get("token")?.value}`,
+        },
+      },
+    );
+    const data = res.json();
+    if (data) return data;
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+}
+
+export async function getProductCodes() {
+  try {
+    const res = await fetch(`${process.env.API_URL}product/getProductCodes`, {
+      method: "GET",
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+      },
+    });
+    const data = await res.json();
+    if (data) return data as CodesType;
   } catch (e: any) {
     console.log(e);
     throw new Error(e.message);

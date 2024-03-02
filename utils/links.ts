@@ -129,6 +129,34 @@ export const adminSidebarLinks = [
   },
 ];
 
+export const warehouseSidebarLinks = [
+  {
+    label: "dashboard",
+    icon: "dashboard",
+    href: "/warehouse",
+  },
+  {
+    label: "check item details",
+    icon: "details",
+    href: "/warehouse/details",
+  },
+  // {
+  //   label: "inventory check-in",
+  //   icon: "inventory",
+  //   href: "/warehouse/check-in",
+  // },
+  {
+    label: "order fulfillment",
+    icon: "fulfillment",
+    href: "/warehouse/fulfillment",
+  },
+  {
+    label: "product mapping",
+    icon: "mapping",
+    href: "/warehouse/mapping",
+  },
+];
+
 export const clientQuickLinks = [
   {
     id: "orders",

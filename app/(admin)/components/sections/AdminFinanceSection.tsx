@@ -4,7 +4,6 @@ import InformationCard from "@/app/(client)/components/cards/InformationCard";
 import { FinanceStatisticsType } from "@/types/client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ListRestartIcon } from "lucide-react";
 import { socket } from "@/lib/socket.io";
 import moment from "moment";
 
@@ -157,12 +156,30 @@ export default function AdminFinanceSection({
         </h1>
         <Button
           className={
-            "bg-accent hover:bg-accent/80 rounded-xl flex items-center justify-center"
+            "bg-accent hover:bg-accent/80 rounded-lg flex items-center justify-center"
           }
           onClick={handleUpdateFinances}
         >
-          <ListRestartIcon className={"size-5 mr-2 text-inherit"} />
-          <span>Update Finances</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="size-5 text-inherit mr-2"
+          >
+            <ellipse cx="12" cy="5" rx="9" ry="3" />
+            <path d="M3 12a9 3 0 0 0 5 2.69" />
+            <path d="M21 9.3V5" />
+            <path d="M3 5v14a9 3 0 0 0 6.47 2.88" />
+            <path d="M12 12v4h4" />
+            <path d="M13 20a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L12 16" />
+          </svg>
+          <span className={"text-sm"}>Update Finances</span>
         </Button>
       </div>
       {/* Account Balance */}
@@ -175,6 +192,8 @@ export default function AdminFinanceSection({
           title="Account Balance"
           value={finance.balance}
           variant="finance"
+          className={"bg-accent text-white"}
+          first={true}
         />
       </div>
       {/* Prepaid To Client */}

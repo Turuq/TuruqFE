@@ -381,3 +381,61 @@ type AccountPerMonthType = {
     [key: string]: number;
   };
 };
+
+export type ShopifyInventoryResponse = {
+  products: ShopifyInventoryType[];
+};
+
+export type ShopifyInventoryType = {
+  id: string;
+  title: string;
+  variants: VariantType[];
+};
+
+export type VariantType = {
+  id: number;
+  product_id: number;
+  title: string;
+  price: string;
+  sku: string;
+  compare_at_price: string | null;
+  option1: string;
+  option2: string | null;
+  option3: string | null;
+  created_at: string;
+  updated_at: string;
+  inventory_item_id: number;
+  inventory_quantity: number;
+  old_inventory_quantity: number;
+};
+
+export type MappedProductType = {
+  UID: string;
+  shopifyID: string;
+  assignedBy: string;
+  assignedAt: string;
+  createdAt: string;
+};
+
+export type CodesType = {
+  clientCodes: {
+    companyName: string;
+    clientCode: string;
+  }[];
+  productCategories: {
+    category: string;
+    categoryCode: string;
+  }[];
+  sizeChart: {
+    size: string;
+    sizeCode: string;
+  }[];
+  colorCode: {
+    color: string;
+    colorCode: string;
+  }[];
+  superlativeCode: {
+    superlative: string;
+    superlativeCode: string;
+  }[];
+};

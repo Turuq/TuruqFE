@@ -1,4 +1,3 @@
-import { ShirtIcon } from "lucide-react";
 import Link from "next/link";
 
 import NewClientDialog from "../components/forms/NewClientDialog";
@@ -9,6 +8,7 @@ import AdminOrdersSection from "../components/sections/AdminOrdersSection";
 import AdminInventorySection from "../components/sections/AdminInventorySection";
 import { ClientType } from "@/types/client";
 import AdminFinancePage from "@/app/(admin)/admin/finances/page";
+import { dashboardLinks } from "@/utils/dashboard-links";
 
 export default async function Page() {
   const res = await fetch(`${process.env.API_URL}admin/home`, {
@@ -35,16 +35,20 @@ export default async function Page() {
     <div className="grid grid-cols-12 gap-5">
       <div className="col-span-12 flex lg:flex-row flex-col lg:items-center justify-between gap-5">
         <h1 className="text-2xl lg:text-4xl font-bold text-accent/50 uppercase">
-          clients list
+          Clients
         </h1>
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end gap-5">
           <Link
             href={"/admin/clients"}
-            className="bg-white p-2 rounded-xl w-auto text-sm text-accent"
+            className="bg-white hover:bg-accent hover:text-white p-2 rounded-lg w-40 text-sm text-accent"
           >
-            <div className="flex items-center">
-              <ShirtIcon className="size-4 lg:size-5 text-inherit mr-2" />
-              <span className="text-xs lg:text-inherit">Client Details</span>
+            <div className="flex items-center gap-3 w-full">
+              <div className={"w-[10%]"}>{dashboardLinks["clients"]}</div>
+              <div className={"w-full flex items-center justify-center"}>
+                <span className="text-sm lg:text-inherit text-center">
+                  Client Details
+                </span>
+              </div>
             </div>
           </Link>
           <NewClientDialog />

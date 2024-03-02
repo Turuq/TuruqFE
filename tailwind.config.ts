@@ -26,8 +26,11 @@ const config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      // 032486
+      // 011e5c
       colors: {
-        accent: "#03256c",
+        accent: "#032486",
+        secondary_accent: "#38cbfc",
         primary: {
           "50": "#eaf7ff",
           "100": "#cfedff",

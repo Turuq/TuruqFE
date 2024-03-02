@@ -15,5 +15,5 @@ export const newCourierFormSchema = z.object({
     .string()
     .min(2, { message: "Zone must be at least 2 characters long" }),
   picture: z.string(),
-  salary: z.number().min(0, { message: "Salary must be at least 0" }),
+  salary: z.string().min(0, { message: "Salary must be at least 0" }),
 });

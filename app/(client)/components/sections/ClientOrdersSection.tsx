@@ -57,12 +57,12 @@ export default function ClientOrdersSection({
       </div>
       {/* Delivered Orders */}
       <div className="col-span-12 lg:col-span-4">
-        <InformationCard title="Delivered Orders" value={data.delivered} />
+        <InformationCard title="Delivered" value={data.delivered} />
       </div>
       {/* Cancelled Orders */}
       <div className="col-span-12 lg:col-span-2">
         <InformationCard
-          title="Cancelled Orders"
+          title="Cancelled"
           value={data.cancelled}
           className="text-red-500"
         />
@@ -70,7 +70,7 @@ export default function ClientOrdersSection({
       {/* Out Of Stock Orders */}
       <div className="col-span-12 lg:col-span-2">
         <InformationCard
-          title="Out OF Stock Orders"
+          title="Out Of Stock"
           value={data.outOfStock}
           className="text-red-500"
         />
@@ -78,11 +78,11 @@ export default function ClientOrdersSection({
       <div className="col-span-12 grid grid-cols-12 gap-5">
         {/* Collected Orders */}
         <div className="col-span-12 lg:col-span-2">
-          <InformationCard title="Collected Orders" value={data.collected} />
+          <InformationCard title="Collected" value={data.collected} />
         </div>
         {/* Returned Orders */}
         <div className="col-span-12 lg:col-span-2">
-          <InformationCard title="Returned Orders" value={data.returned} />
+          <InformationCard title="Returned" value={data.returned} />
         </div>
         {/* Out For Delivery */}
         <div className="col-span-12 lg:col-span-2">
@@ -93,12 +93,12 @@ export default function ClientOrdersSection({
         </div>
         {/* Pending Orders */}
         <div className="col-span-12 lg:col-span-2">
-          <InformationCard title="Pending Orders" value={data.pending} />
+          <InformationCard title="Pending" value={data.pending} />
         </div>
         {/* Unreachable Orders */}
         <div className="col-span-12 lg:col-span-2">
           <InformationCard
-            title="Unreachable Orders"
+            title="Unreachable"
             value={data.unreachable}
             className="text-red-500"
           />
@@ -106,7 +106,7 @@ export default function ClientOrdersSection({
         {/* Postponed Orders */}
         <div className="col-span-12 lg:col-span-2">
           <InformationCard
-            title="Postponed Orders"
+            title="Postponed"
             value={data.postponed}
             className="text-red-500"
           />
