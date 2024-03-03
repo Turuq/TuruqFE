@@ -1163,6 +1163,39 @@ export async function checkProductExists({ UID }: { UID: string }) {
   }
 }
 
+export async function addNewCourierAction({
+  firstName,
+  lastName,
+  phone,
+  zone,
+  salary,
+  pathname,
+}: {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  zone: string;
+  salary: string;
+  pathname: string | undefined;
+}) {
+  try {
+    const res = await fetch(`${process.env.API_URL}couriers/addNewCourier`, {
+      method: "POST",
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ firstName, lastName, phone, zone, salary }),
+    });
+    const data = (await res.json()) as { message: string };
+    if (pathname) revalidatePath(pathname);
+    if (data.message) return { data: data.message };
+  } catch (e: any) {
+    console.log(e);
+    throw new Error(e);
+  }
+}
+
 // export async function addNewProductAction({
 //   UID,
 //   itemDescription,

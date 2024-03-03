@@ -24,16 +24,29 @@ import {
 import { Input } from "@/components/ui/input";
 import { TruckIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { addNewCourierAction } from "@/lib/actions";
+import { useToast } from "@/components/ui/use-toast";
+import { usePathname } from "next/navigation";
 
 export default function NewCourierDialog() {
+  const { toast } = useToast();
+  const pathname = usePathname();
   const [open, setOpen] = useState<boolean>(false);
   const form = useForm<z.infer<typeof newCourierFormSchema>>({
     resolver: zodResolver(newCourierFormSchema),
   });
 
-  function onSubmit(values: z.infer<typeof newCourierFormSchema>) {
-    setOpen(false);
+  async function onSubmit(values: z.infer<typeof newCourierFormSchema>) {
+    const data = await addNewCourierAction({ ...values, pathname });
+    if (data) {
+      setOpen(false);
+      toast({
+        title: "Courier Added Successfully",
+        description: `${values.firstName} ${values.lastName} has been added as a courier`,
+      });
+    }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
