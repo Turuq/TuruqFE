@@ -1187,12 +1187,13 @@ export async function addNewCourierAction({
       },
       body: JSON.stringify({ firstName, lastName, phone, zone, salary }),
     });
-    const data = (await res.json()) as { message: string };
+    const data = (await res.json()) as { message?: string; error?: string };
     if (pathname) revalidatePath(pathname);
     if (data.message) return { data: data.message };
+    if (data.error) return { error: data.error };
   } catch (e: any) {
     console.log(e);
-    throw new Error(e);
+    return { error: e.message };
   }
 }
 

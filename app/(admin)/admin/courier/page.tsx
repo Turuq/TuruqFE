@@ -14,7 +14,7 @@ import NewCourierDialog from "../../components/forms/NewCourierDialog";
 export default async function page() {
   const res = await fetch(`${process.env.API_URL}couriers`, {
     method: "GET",
-    next: { revalidate: 300 },
+    next: { revalidate: 0 },
     headers: {
       "Content-Type": "application/json",
       Authorization: `${cookies().get("token")?.value}`,

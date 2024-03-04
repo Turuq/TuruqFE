@@ -38,11 +38,19 @@ export default function NewCourierDialog() {
 
   async function onSubmit(values: z.infer<typeof newCourierFormSchema>) {
     const data = await addNewCourierAction({ ...values, pathname });
-    if (data) {
+    if (data?.data) {
       setOpen(false);
+      form.reset();
       toast({
         title: "Courier Added Successfully",
         description: `${values.firstName} ${values.lastName} has been added as a courier`,
+      });
+    }
+    if (data?.error) {
+      toast({
+        title: "Failed to Add Courier",
+        description: data.error,
+        variant: "destructive",
       });
     }
   }
@@ -143,6 +151,8 @@ export default function NewCourierDialog() {
                         className="text-accent placeholder:text-accent/50"
                         placeholder="Courier's Phone Number"
                         type="tel"
+                        minLength={11}
+                        maxLength={11}
                         {...field}
                       />
                     </FormControl>
