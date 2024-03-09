@@ -1197,12 +1197,61 @@ export async function addNewCourierAction({
   }
 }
 
-// export async function addNewProductAction({
-//   UID,
-//   itemDescription,
-//   category,
-//   size,
-//   color,
-//   quantity,
-//     client
-// });
+export async function addNewProductAction({
+  UID,
+  itemDescription,
+  category,
+  size,
+  color,
+  quantity,
+  client,
+}: {
+  UID: string;
+  itemDescription: string;
+  category: string;
+  size: string;
+  color: string;
+  quantity: number;
+  client: string;
+}) {
+  try {
+    const res = await fetch(`${process.env.API_URL}product/addProduct`, {
+      method: "POST",
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        UID,
+        itemDescription,
+        category,
+        size,
+        color,
+        quantity,
+        client,
+      }),
+    });
+    const data = await res.json();
+    if (data.message) return { message: data.message };
+    else return { error: data.error };
+  } catch (e: any) {
+    console.log(e);
+    return { error: e.message };
+  }
+}
+
+export async function getAllOrders() {
+  try {
+    const res = await fetch(`${process.env.API_URL}order/getOrders`, {
+      method: "GET",
+      headers: {
+        Authorization: `${cookies().get("token")?.value}`,
+      },
+    });
+    const data = await res.json();
+    if (data) return data;
+  } catch (e: any) {
+    console.log(e);
+    return { error: e.message };
+  }
+}

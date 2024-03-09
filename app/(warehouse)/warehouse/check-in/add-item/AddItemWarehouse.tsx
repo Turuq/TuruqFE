@@ -12,10 +12,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { CodesType } from "@/types/response";
 import { useBarcode } from "next-barcode";
-import { useEffect, useRef, useState } from "react";
-import { checkProductExists } from "@/lib/actions";
+import { useEffect, useState } from "react";
+import { addNewProductAction, checkProductExists } from "@/lib/actions";
+import { StyleSheet } from "@react-pdf/renderer";
+import jsPDF from "jspdf";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
+  const { toast } = useToast();
   const [UID, setUID] = useState("01");
   const [superlative, setSuperlative] = useState<string>("");
   const [client, setClient] = useState<string>("");
@@ -24,15 +29,29 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
   const [color, setColor] = useState<string>("");
   const [variance, setVariance] = useState("01");
   const [description, setDescription] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>();
-  const { inputRef } = useBarcode({
+  const [quantity, setQuantity] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const { inputRef } = useBarcode<HTMLCanvasElement>({
     value: UID,
     options: {
       background: "#fff",
     },
   });
 
-  const targetRef = useRef();
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "5.5cm",
+      height: "4cm",
+    },
+    // section: {
+    //   margin: 10,
+    //   padding: 10,
+    //   flexGrow: 1,
+    // },
+  });
 
   useEffect(() => {
     let generatedUID = `${superlative ? superlative : "10"}${client}${category}${size}${color}${variance}`;
@@ -51,40 +70,75 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
     }
   }, [UID]);
 
-  // const { toPDF, targetRef } = usePDF({ filename: `barcode-${UID}.pdf` });
+  function DownloadPDF() {
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "cm",
+      format: [5.5, 4],
+    });
+    doc.addImage(
+      inputRef.current.toDataURL("image/jpeg"),
+      "JPEG",
+      0,
+      0,
+      5.5,
+      4,
+    );
+    for (let i = 0; i < quantity - 1; i++) {
+      doc.addPage();
+      doc.addImage(
+        inputRef.current.toDataURL("image/jpeg"),
+        "JPEG",
+        0,
+        0,
+        5.5,
+        4,
+      );
+    }
+    doc.save(`${description}_${UID}.pdf`);
+  }
 
-  // const doc = new jsPDF({
-  //   orientation: "portrait",
-  //   unit: "cm",
-  //   format: [5.5, 4],
-  // });
-  // doc.text(UID, 2, 2);
-  // doc.save("barcode.pdf");
+  async function handleAddProduct() {
+    setLoading(true);
+    const res = await addNewProductAction({
+      UID,
+      category:
+        codes.productCategories.find((code) => code.categoryCode === category)
+          ?.category ?? "",
+      itemDescription: description,
+      quantity,
+      size: codes.sizeChart.find((code) => code.sizeCode === size)?.size ?? "",
+      color:
+        codes.colorCode.find((code) => code.colorCode === color)?.color ?? "",
+      client:
+        codes.clientCodes.find((code) => code.clientCode === client)
+          ?.companyName ?? "",
+    });
+    if (res.message) {
+      toast({ title: "Product Added", description: res.message });
+      DownloadPDF();
+      setLoading(false);
+      resetFields();
+    }
+    if (res.error)
+      toast({
+        title: "Failed to Add Product",
+        description: res.error,
+        variant: "destructive",
+      });
+  }
 
-  // function handlePDF() {
-  //     // 1. Render the component to HTML:
-  //     const html = await inputRef.current.renderToStaticHTML();
-  //
-  //     // 2. Create a new PDF document:
-  //     const pdf = new jsPDF({
-  //         unit: "cm",
-  //         format: [5.5, 4]
-  //     });
-  //
-  //     // 3. Convert HTML to an image:
-  //     try {
-  //         const canvas = await html2canvas(html, {scale: 2}); // Adjust scale for quality
-  //         const imgData = canvas.toDataURL('image/png');
-  //
-  //         // 4. Add image to the PDF:
-  //         pdf.addImage(imgData, 'jpeg', 0, 0, 5.5, 4);
-  //
-  //         // 5. Save the PDF:
-  //         pdf.save('myComponent.pdf');
-  //     } catch (e) {
-  //         console.error(e);
-  //     }
-  // }
+  function resetFields() {
+    setUID("01");
+    setSuperlative("");
+    setClient("");
+    setCategory("");
+    setSize("");
+    setColor("");
+    setVariance("01");
+    setDescription("");
+    setQuantity(0);
+  }
 
   return (
     <div className={"glass p-5 rounded-xl"}>
@@ -192,7 +246,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-1 flex flex-col gap-5"}>
+        <div className={"col-span-1 flex flex-col  gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Quantity</h2>
           <Input
             className={
@@ -203,46 +257,34 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             placeholder={"Enter Available Quantity"}
           />
         </div>
-        <div className={"col-span-4 flex flex-row gap-10"}>
+        <div
+          className={
+            "col-span-4 flex flex-row items-start justify-start gap-10"
+          }
+        >
           <h2 className={"text-base text-black font-bold"}>
             Generated Barcode
           </h2>
-          {/*<Input*/}
-          {/*  value={UID}*/}
-          {/*  disabled={true}*/}
-          {/*  className={*/}
-          {/*    "w-40 bg-white rounded-xl border-0 text-black placeholder:text-black/50 ring-1 ring-secondary_accent"*/}
-          {/*  }*/}
-          {/*/>*/}
-          <div
-            className={"flex flex-col gap-1 items-center justify-center"}
-            // ref={targetRef}
-          >
+          <div className={"flex flex-col gap-1 items-center justify-center"}>
             <canvas ref={inputRef} />
             <p className={"text-base text-black font-bold"}>{description}</p>
           </div>
         </div>
-        <div
-          className={"col-span-4 flex items-center justify-end"}
-          // ref={targetRef}
-        >
+        <div className={"col-span-4 flex items-center justify-end"}>
           <Button
             className={
               "bg-secondary_accent text-black hover:bg-secondary_accent/50 rounded-lg w-60 text-sm"
             }
-            // onClick={() =>
-            //   toPDF({
-            //     canvas: {
-            //       mimeType: "image/jpeg",
-            //     },
-            //     page: {
-            //       orientation: "portrait",
-            //       format: [4, 4],
-            //     },
-            //   })}
-            // onClick={hanldePDF}
+            onClick={handleAddProduct}
+            disabled={loading}
           >
-            Add Item
+            {loading ? (
+              <Loader2
+                className={"size-5 text-white self-center animate-spin"}
+              />
+            ) : (
+              "Add Item"
+            )}
           </Button>
         </div>
       </div>
