@@ -24,7 +24,7 @@ export default async function Page() {
             <div className={"flex flex-col gap-5"}>
               {order.products.map((item, index) => (
                 <div key={index} className={"flex items-center"}>
-                  <h3>{item.name}</h3>
+                  {/*<h3>{item.name}</h3>*/}
                   <p>{item.quantity}</p>
                 </div>
               ))}
