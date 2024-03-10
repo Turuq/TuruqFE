@@ -3,10 +3,11 @@ import { OrderType } from "@/types/response";
 import { Button } from "@/components/ui/button";
 
 export default async function Page() {
-  const data = await getAllOrders();
+  // const data = await getAllOrders();
   return (
     <div className={"flex flex-col gap-2"}>
-      {data.orders.map((order: OrderType) => (
+      <h1>Fulfillment</h1>
+      {/* {data.orders.map((order: OrderType) => (
         <div
           key={order._id.toString()}
           className={"grid grid-cols-12 gap-5 bg-white p-5 rounded-xl"}
@@ -24,14 +25,14 @@ export default async function Page() {
             <div className={"flex flex-col gap-5"}>
               {order.products.map((item, index) => (
                 <div key={index} className={"flex items-center"}>
-                  {/*<h3>{item.name}</h3>*/}
+                  <h3>{item.name}</h3>
                   <p>{item.quantity}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 }
