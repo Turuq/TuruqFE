@@ -890,7 +890,13 @@ export async function filterAssignedOrdersAction({
   brand,
 }: {
   id: string;
-  status: "delivered/collected" | "outForDelivery" | "other" | null;
+  status:
+    | "delivered/collected"
+    | "outForDelivery"
+    | "other"
+    | "postponed"
+    | "processing"
+    | null;
   date: Date | null;
   brand: string | null;
 }) {
@@ -904,6 +910,12 @@ export async function filterAssignedOrdersAction({
           break;
         case "outForDelivery":
           statusFilter = ["outForDelivery"];
+          break;
+        case "postponed":
+          statusFilter = ["postponed"];
+          break;
+        case "processing":
+          statusFilter = ["processing"];
           break;
         case "other":
           statusFilter = [

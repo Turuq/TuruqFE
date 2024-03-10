@@ -92,6 +92,12 @@ export default function CourierFilterExport({
               <SelectItem className="capitalize" value="outForDelivery">
                 Out For Delivery
               </SelectItem>
+              <SelectItem className="capitalize" value="postponed">
+                Postponed
+              </SelectItem>
+              <SelectItem className="capitalize" value="processing">
+                Processing
+              </SelectItem>
               <SelectItem className="capitalize" value="other">
                 Other
               </SelectItem>
