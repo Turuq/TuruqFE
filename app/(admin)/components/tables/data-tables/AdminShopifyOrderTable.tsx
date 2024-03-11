@@ -121,6 +121,7 @@ export function AdminShopifyOrderTable({
     { label: "Out For Delivery", value: "outForDelivery" },
     { label: "Cancelled", value: "cancelled" },
     { label: "Out Of Stock", value: "outOfStock" },
+    { label: "Processing", value: "processing" },
   ]);
 
   const table = useReactTable({

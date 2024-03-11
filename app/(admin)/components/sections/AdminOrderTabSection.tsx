@@ -318,6 +318,9 @@ export default function AdminOrderTabSection({
                 <SelectItem value="postponed" className="capitalize">
                   Postponed
                 </SelectItem>
+                <SelectItem value="processing" className="capitalize">
+                  Processing
+                </SelectItem>
                 <SelectItem value="returned" className="capitalize">
                   Returned
                 </SelectItem>

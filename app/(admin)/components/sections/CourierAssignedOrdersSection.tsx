@@ -109,7 +109,7 @@ export default function CourierAssignedOrdersSection({
         selectedStatus === "delivered/collected"
           ? "delivered,collected"
           : selectedStatus === "other"
-            ? "pending,unreachable,cancelled,postponed,returned"
+            ? "pending,unreachable,cancelled,returned"
             : selectedStatus;
       let query = "";
       if (status) {
