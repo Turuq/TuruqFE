@@ -15,21 +15,21 @@ export default async function Page() {
           <InformationCard
             title={"In Stock"}
             value={0}
-            className={"glass text-black"}
+            className={"bg-white text-black"}
           />
         </div>
         <div className={"col-span-3 lg:col-span-1"}>
           <InformationCard
             title={"Out Of Stock"}
             value={0}
-            className={"glass text-black"}
+            className={"bg-white text-black"}
           />
         </div>
         <div className={"col-span-3 lg:col-span-1"}>
           <InformationCard
             title={"Low In Stock"}
             value={0}
-            className={"glass text-black"}
+            className={"bg-white text-black"}
           />
         </div>
         <div className={"col-span-3"}>

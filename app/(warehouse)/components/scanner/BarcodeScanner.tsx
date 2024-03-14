@@ -3,18 +3,25 @@
 import { BarcodeIcon, InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+
 import { useEffect, useState } from "react";
 import { socket } from "@/lib/socket.io";
-import { useBarcode } from "next-barcode";
 
 interface BarcodeScannerProps {
   setScannedCode: (code: string) => void;
+  scannedCode: string;
   variant: "details" | "update";
 }
 
 export function BarcodeScanner({
   setScannedCode,
+  scannedCode,
   variant,
 }: BarcodeScannerProps) {
   const [scanning, setScanning] = useState(false);
@@ -88,23 +95,23 @@ export function BarcodeScanner({
     }
   }
 
-  const { inputRef } = useBarcode({
-    value: "1003329056001",
-    options: {
-      background: "#fff",
-    },
-  });
+  // const { inputRef } = useBarcode({
+  //   value: "1003329056001",
+  //   options: {
+  //     background: "#fff",
+  //   },
+  // });
 
   return (
     <div className={"flex flex-col p-5 items-center justify-center gap-5"}>
       <BarcodeIcon
         className={`size-40 ${scanning && "animate-pulse text-secondary_accent"}`}
       />
-      <canvas ref={inputRef} />
+      {/*<canvas ref={inputRef} />*/}
       <h1 className={"text-3xl text-black font-bold"}>Scan Barcode</h1>
       <h3 className={"text-sm lg:text-base text-black/50 italic"}>
         {variant === "details"
-          ? "Scan the barcode on the item to verify its details"
+          ? "Scan the barcode of an item to fetch its details"
           : "Scan the barcode on the item to update its quantity"}
       </h3>
       {message?.message && (
@@ -138,17 +145,88 @@ export function BarcodeScanner({
         </Button>
       )}
       {showManualCode && (
-        <Input
-          placeholder={"Enter Barcode"}
-          onBlur={() => setShowManualCode(false)}
-          minLength={13}
-          maxLength={13}
-          onChange={handleManualInput}
-          autoFocus={true}
-          className={
-            "w-60 bg-white rounded-lg border-0 text-black placeholder:text-black/50"
-          }
-        />
+        <>
+          <InputOTP
+            maxLength={13}
+            value={scannedCode}
+            onChange={(value) => setScannedCode(value)}
+            onBlur={() => setShowManualCode(false)}
+            render={({ slots }) => (
+              <>
+                <InputOTPGroup>
+                  {slots.slice(0, 3).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}{" "}
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  {slots.slice(3, 5).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  {slots.slice(5, 7).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  {slots.slice(7, 9).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  {slots.slice(9, 11).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  {slots.slice(11, 13).map((slot, index) => (
+                    <InputOTPSlot
+                      key={index}
+                      {...slot}
+                      className={"border-black"}
+                    />
+                  ))}
+                </InputOTPGroup>
+              </>
+            )}
+          />
+          {/*<Input*/}
+          {/*  placeholder={"Enter Barcode"}*/}
+          {/*  onBlur={() => setShowManualCode(false)}*/}
+          {/*  minLength={13}*/}
+          {/*  maxLength={13}*/}
+          {/*  onChange={handleManualInput}*/}
+          {/*  autoFocus={true}*/}
+          {/*  className={*/}
+          {/*    "w-60 bg-white rounded-lg border-0 text-black placeholder:text-black/50"*/}
+          {/*  }*/}
+          {/*/>*/}
+        </>
       )}
     </div>
   );

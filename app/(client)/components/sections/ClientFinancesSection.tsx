@@ -57,7 +57,7 @@ export default function ClientFinancesSection({ data }: IFinancesProps) {
       {/* <div className="col-span-12 lg:col-span-3">
         <InformationCard
           title="Shipping"
-          value={data.shipping}
+          value={data.packing}
           variant="finance"
         />
       </div> */}

@@ -144,10 +144,10 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
     <div className={"glass p-5 rounded-xl"}>
       <div
         className={
-          "bg-transparent p-5 rounded-xl grid grid-cols-4 gap-2 space-y-3"
+          "bg-transparent p-5 rounded-xl grid grid-cols-12 lg:grid-cols-4 gap-2 space-y-3"
         }
       >
-        <div className={"col-span-4 flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-4 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Item Description</h2>
           <Input
             className={
@@ -158,7 +158,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             type={"text"}
           />
         </div>
-        <div className={"col-span-2  flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-2  flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Superlative</h2>
           <Select onValueChange={(value) => setSuperlative(value)}>
             <SelectTrigger className="w-full bg-white border-none text-black rounded-xl shadow">
@@ -178,7 +178,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-2 flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-2 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Client</h2>
           <Select onValueChange={(value) => setClient(value)}>
             <SelectTrigger className="w-full bg-white border-none text-black rounded-xl shadow">
@@ -195,7 +195,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-1 flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-1 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Item Category</h2>
           <Select onValueChange={(value) => setCategory(value)}>
             <SelectTrigger className="w-full bg-white border-none text-black rounded-xl shadow">
@@ -212,7 +212,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-1 flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-1 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Item Size</h2>
           <Select onValueChange={(value) => setSize(value)}>
             <SelectTrigger className="w-full bg-white border-none text-black rounded-xl shadow">
@@ -229,7 +229,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-1 flex flex-col gap-5"}>
+        <div className={"col-span-12 lg:col-span-1 flex flex-col gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Item Color</h2>
           <Select onValueChange={(value) => setColor(value)}>
             <SelectTrigger className="w-full bg-white border-none text-black rounded-xl shadow">
@@ -246,7 +246,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             </SelectContent>
           </Select>
         </div>
-        <div className={"col-span-1 flex flex-col  gap-5"}>
+        <div className={"col-span-12 lg:col-span-1 flex flex-col  gap-5"}>
           <h2 className={"text-base text-black font-bold"}>Quantity</h2>
           <Input
             className={
@@ -259,7 +259,7 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
         </div>
         <div
           className={
-            "col-span-4 flex flex-row items-start justify-start gap-10"
+            "col-span-12 lg:col-span-4 flex flex-col lg:flex-row items-start justify-start gap-10"
           }
         >
           <h2 className={"text-base text-black font-bold"}>
@@ -270,7 +270,9 @@ export default function AddItemWarehouse({ codes }: { codes: CodesType }) {
             <p className={"text-base text-black font-bold"}>{description}</p>
           </div>
         </div>
-        <div className={"col-span-4 flex items-center justify-end"}>
+        <div
+          className={"col-span-12 lg:col-span-4 flex items-center justify-end"}
+        >
           <Button
             className={
               "bg-secondary_accent text-black hover:bg-secondary_accent/50 rounded-lg w-60 text-sm"

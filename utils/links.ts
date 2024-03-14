@@ -145,11 +145,11 @@ export const warehouseSidebarLinks = [
   //   icon: "inventory",
   //   href: "/warehouse/check-in",
   // },
-  {
-    label: "order fulfillment",
-    icon: "fulfillment",
-    href: "/warehouse/fulfillment",
-  },
+  // {
+  //   label: "order fulfillment",
+  //   icon: "fulfillment",
+  //   href: "/warehouse/fulfillment",
+  // },
   {
     label: "product mapping",
     icon: "mapping",

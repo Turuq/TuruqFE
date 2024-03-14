@@ -43,7 +43,7 @@ export default function AdminFinanceSection({
   //     prepaid: 0,
   //     packaging: 0,
   //     balance: 0,
-  //     shipping: 0,
+  //     packing: 0,
   //   };
   //   for (let c in clients) {
   //     promises.push(

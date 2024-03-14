@@ -73,7 +73,11 @@ export default function Page() {
           "glass rounded-2xl flex flex-col p-5 items-center justify-center gap-5"
         }
       >
-        <BarcodeScanner setScannedCode={setScannedCode} variant={"update"} />
+        <BarcodeScanner
+          setScannedCode={setScannedCode}
+          scannedCode={scannedCode ?? ""}
+          variant={"update"}
+        />
         {scannedCode && (
           <div
             ref={barcodeContainer}
@@ -128,17 +132,23 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <div className={"flex items-center gap-1 bg-white p-5 rounded-xl"}>
-              <h3 className={"text-black text-sm font-bold"}>{"Quantity: "}</h3>
-              <Input
-                placeholder={"Enter Quantity"}
-                onChange={handleQuantityChange}
-                type={"number"}
-                className={
-                  "w-60 bg-white ring-secondary_accent/20 rounded-lg border-0 text-black placeholder:text-black/50"
-                }
-              />
-            </div>
+            {scannedProduct && (
+              <div
+                className={"flex items-center gap-1 bg-white p-5 rounded-xl"}
+              >
+                <h3 className={"text-black text-sm font-bold"}>
+                  {"Quantity: "}
+                </h3>
+                <Input
+                  placeholder={"Enter Quantity"}
+                  onChange={handleQuantityChange}
+                  type={"number"}
+                  className={
+                    "w-60 bg-white ring-secondary_accent/20 rounded-lg border-0 text-black placeholder:text-black/50"
+                  }
+                />
+              </div>
+            )}
             <div className={"flex items-center justify-end"}>
               <Button
                 className={

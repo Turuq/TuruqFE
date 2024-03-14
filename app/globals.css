@@ -77,5 +77,9 @@ body {
 }
 
 .glass {
-    @apply bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-100 drop-shadow-xl ring-0 ring-secondary_accent/10
+    @apply bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 drop-shadow-xl ring-0 ring-secondary_accent/10
+}
+
+.dark-glass {
+    @apply bg-black bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-5 drop-shadow-xl ring-0 ring-secondary_accent/10
 }

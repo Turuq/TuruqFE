@@ -47,7 +47,7 @@ export default function InformationCard({
             {description}
           </CardFooter>
         )}
-        {first && <div className={"dot-background"}></div>}
+        {first && <div className={"dot-background hidden lg:block"}></div>}
       </Card>
 
       {/*<div*/}
