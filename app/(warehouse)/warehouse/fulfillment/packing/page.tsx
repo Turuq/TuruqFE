@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -10,9 +12,30 @@ import { ArrowLeft } from "lucide-react";
 import { getAllOrders } from "@/lib/actions";
 import { AdminOrderType } from "@/types/response";
 import FulfillmentOrderCard from "@/app/(warehouse)/components/card/WarehouseOrderCard";
+import { useEffect, useState } from "react";
 
-export default async function Page() {
-  const data = await getAllOrders();
+export default function Page() {
+  const [data, setData] = useState<{
+    data?: {
+      orders: AdminOrderType[];
+    };
+    error?: string;
+  }>();
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedData: {
+        data?: {
+          orders: AdminOrderType[];
+        };
+        error?: string;
+      } = await getAllOrders();
+      return fetchedData;
+    }
+
+    fetchData().then((res) => {
+      setData(res);
+    });
+  }, []);
   return (
     <div className={"flex flex-col gap-0"}>
       <div
@@ -74,7 +97,7 @@ export default async function Page() {
         <div className={"col-span-4 bg-white rounded-2xl p-5"}>
           <h1 className={"text-xl font-bold"}>Recent Orders</h1>
           <div className={"flex flex-col gap-5"}>
-            {data.orders.map((order: AdminOrderType) => (
+            {data?.data?.orders?.map((order: AdminOrderType) => (
               <FulfillmentOrderCard
                 key={order._id.toString()}
                 status={order.status}
