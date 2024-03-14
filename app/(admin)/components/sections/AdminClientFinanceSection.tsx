@@ -39,7 +39,7 @@ export default function AdminClientFinancesSection({
 
   async function handleUpdateFinances() {
     setUpdating(true);
-    // TODO: send shipping balance when implemented
+    // TODO: send packing balance when implemented
     // @ts-ignore
     const newFinances: FinanceStatisticsType = {
       ...data,

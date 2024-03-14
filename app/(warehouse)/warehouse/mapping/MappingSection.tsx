@@ -13,6 +13,7 @@ import {
 import {
   ClientInventoryType,
   MappedProductType,
+  PopulatedMappedProductType,
   ShopifyInventoryType,
 } from "@/types/response";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { PencilIcon, TrashIcon } from "lucide-react";
 
 export default function MappingSection({ clients }: { clients: ClientType[] }) {
   const { toast } = useToast();
@@ -36,7 +38,9 @@ export default function MappingSection({ clients }: { clients: ClientType[] }) {
     useState<{ category: string; items: ClientInventoryType[] }[]>();
   const [shopifyProducts, setShopifyProducts] =
     useState<ShopifyInventoryType[]>();
-  const [mappedProducts, setMappedProducts] = useState<MappedProductType[]>([]);
+  const [mappedProducts, setMappedProducts] = useState<
+    PopulatedMappedProductType[]
+  >([]);
 
   useEffect(() => {
     if (value.length !== 0) {
@@ -208,7 +212,7 @@ export default function MappingSection({ clients }: { clients: ClientType[] }) {
                       {group.items.map((product) => (
                         <>
                           {!mappedProducts.find(
-                            (p) => p.UID === product.UID,
+                            (p) => p.UID.UID === product.UID,
                           ) && (
                             <div
                               className={`flex gap-5 rounded-lg items-center p-2 ${selectedProduct.length > 0 && selectedProduct !== product.UID ? "bg-gray-100" : "bg-white"}`}
@@ -420,13 +424,43 @@ export default function MappingSection({ clients }: { clients: ClientType[] }) {
           </div>
         )}
       </div>
-      <div className={"bg-gray-50 rounded-xl p-5 flex flex-col gap-5"}>
+      <div className={"dark-glass rounded-xl p-5 flex flex-col gap-5"}>
         <h1 className={"uppercase text-secondary_accent/50 font-bold text-lg"}>
           mapped products
         </h1>
-        <pre>
-          <code>{JSON.stringify(mappedProducts, null, 2)}</code>
-        </pre>
+        {mappedProducts.map((product) => (
+          <div
+            key={product.UID.UID}
+            className={`flex justify-between gap-5 rounded-lg items-center p-2 bg-white`}
+          >
+            <div className={"flex flex-col gap-1 w-[50%]"}>
+              <p className={"font-light text-xs text-black/80"}>Product Name</p>
+              <h3 className={"font-bold text-xs text-black text-balance"}>
+                {product.UID.itemDescription}
+              </h3>
+            </div>
+            <div className={"flex flex-col gap-1 w-[25%]"}>
+              <p className={"font-light text-xs text-black/80"}>Color</p>
+              <h3 className={"font-bold text-xs text-black text-balance"}>
+                {product.UID.color}
+              </h3>
+            </div>
+            <div className={"flex flex-col gap-1 w-[25%]"}>
+              <p className={"font-light text-xs text-black/80"}>Size</p>
+              <h3 className={"font-bold text-xs text-black text-balance"}>
+                {product.UID.size}
+              </h3>
+            </div>
+            <div className={"flex items-center justify-center gap-5"}>
+              <Button size={"icon"} variant={"ghost"}>
+                <TrashIcon className={"size-4 text-red-500"} />
+              </Button>
+              <Button size={"icon"} variant={"ghost"}>
+                <PencilIcon className={"size-4 text-secondary_accent"} />
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -26,12 +26,12 @@ export default function HeroSection() {
           <div className="flex flex-col gap-2">
             <p className="text-pretty text-white text-sm lg:text-base">
               {
-                "Welcome to Turuq, your premier destination for all your shipping, storage, and packaging needs. With our comprehensive range of services, unwavering commitment to customer satisfaction, and innovative solutions, we are proud to be at the forefront of the industry."
+                "Welcome to Turuq, your premier destination for all your packing, storage, and packaging needs. With our comprehensive range of services, unwavering commitment to customer satisfaction, and innovative solutions, we are proud to be at the forefront of the industry."
               }
             </p>
             <p className="text-pretty text-white text-sm lg:text-base">
               {
-                "At Turuq, we understand the importance of a seamless and efficient logistics process for businesses and individuals alike. Whether you are shipping products to customers, storing valuable goods, or seeking reliable packaging solutions, we have got you covered."
+                "At Turuq, we understand the importance of a seamless and efficient logistics process for businesses and individuals alike. Whether you are packing products to customers, storing valuable goods, or seeking reliable packaging solutions, we have got you covered."
               }
             </p>
             <p className="text-pretty text-white text-sm lg:text-base">

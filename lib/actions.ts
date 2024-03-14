@@ -1261,7 +1261,8 @@ export async function getAllOrders() {
       },
     });
     const data = await res.json();
-    if (data) return data;
+    if (data) return { data };
+    else return { data: { orders: [] } };
   } catch (e: any) {
     console.log(e);
     return { error: e.message };

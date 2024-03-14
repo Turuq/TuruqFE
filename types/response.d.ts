@@ -417,6 +417,14 @@ export type MappedProductType = {
   createdAt: string;
 };
 
+export type PopulatedMappedProductType = {
+  UID: ProductDetailsType;
+  shopifyID: string;
+  assignedBy: string;
+  assignedAt: string;
+  createdAt: string;
+};
+
 export type CodesType = {
   clientCodes: {
     companyName: string;

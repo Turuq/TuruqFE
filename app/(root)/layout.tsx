@@ -14,7 +14,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Turuq | Home",
   description:
-    "Welcome to Turuq, your premier destination for all your shipping, storage, and packaging needs. With our comprehensive range of services, unwavering commitment to customer satisfaction, and innovative solutions, we are proud to be at the forefront of the industry.",
+    "Welcome to Turuq, your premier destination for all your packing, storage, and packaging needs. With our comprehensive range of services, unwavering commitment to customer satisfaction, and innovative solutions, we are proud to be at the forefront of the industry.",
 };
 
 export default function RootLayout({
