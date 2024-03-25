@@ -12,7 +12,7 @@ export default function ClientLeftSidebarStatistics({
 }) {
   const [quickLink, setQuickLink] = useState(0);
   return (
-    <div className="bg-accent rounded-xl h-full flex flex-col gap-3 p-2 w-full">
+    <div className="bg-accent rounded-xl h-full flex shadow-xl flex-col gap-3 p-2 w-full">
       <div className="flex items-center justify-between">
         <h3 className="text-balance text-base text-white">Statistics</h3>
         <p className="text-sm text-white">
@@ -43,10 +43,10 @@ export default function ClientLeftSidebarStatistics({
             {quickLink === 0
               ? data.orders.total
               : quickLink === 1
-              ? data.inventory.totalInStock
-              : quickLink === 2
-              ? `${data.finance.balance} EGP`
-              : 0}
+                ? data.inventory.totalInStock
+                : quickLink === 2
+                  ? `${data.finance.balance} EGP`
+                  : 0}
           </h3>
         </div>
       </div>

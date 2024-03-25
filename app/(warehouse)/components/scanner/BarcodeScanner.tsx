@@ -154,7 +154,7 @@ export function BarcodeScanner({
             render={({ slots }) => (
               <>
                 <InputOTPGroup>
-                  {slots.slice(0, 3).map((slot, index) => (
+                  {slots.slice(0, 2).map((slot, index) => (
                     <InputOTPSlot
                       key={index}
                       {...slot}
@@ -164,7 +164,7 @@ export function BarcodeScanner({
                 </InputOTPGroup>
                 <InputOTPSeparator />
                 <InputOTPGroup>
-                  {slots.slice(3, 5).map((slot, index) => (
+                  {slots.slice(2, 5).map((slot, index) => (
                     <InputOTPSlot
                       key={index}
                       {...slot}

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileUpIcon, Loader2 } from "lucide-react";
+import { ArrowUpFromLineIcon, Loader2 } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import {
@@ -61,18 +61,59 @@ export default function UploadInventoryButton({
     <div className="">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger>
-          <button
-            className={`bg-white p-2 rounded-xl w-auto text-sm ${
-              variant === "icon" ? "text-accent/80" : "text-accent"
-            } hover:text-accent flex items-center`}
+          <div
+            className={`bg-white p-2 rounded-lg ${variant === "default" ? "w-44 hover:bg-accent hover:text-white" : "w-auto"} text-sm text-accent group`}
           >
-            <FileUpIcon className="size-4 lg:size-5 text-inherit mr-2" />
-            {variant === "default" && (
-              <span className="text-start text-xs lg:text-inherit">
-                Upload Excel File
-              </span>
-            )}
-          </button>
+            <div className="flex items-center gap-3 w-full">
+              <div className={"w-[10%] group-hover:hidden block"}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-5 text-inherit"
+                >
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M8 13h2" />
+                  <path d="M14 13h2" />
+                  <path d="M8 17h2" />
+                  <path d="M14 17h2" />
+                </svg>
+              </div>
+              <div className={"w-[10%] group-hover:block hidden"}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-5 text-inherit"
+                >
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M12 12v6" />
+                  <path d="m15 15-3-3-3 3" />
+                </svg>
+              </div>
+              {variant === "default" && (
+                <div className={"w-full flex items-center justify-center"}>
+                  <span className="text-sm lg:text-inherit text-center">
+                    Upload Inventory
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
         </DialogTrigger>
         <DialogContent className="lg:max-w-xl">
           <DialogHeader>
@@ -91,25 +132,32 @@ export default function UploadInventoryButton({
             </DialogDescription>
             <div
               {...getRootProps()}
-              className="w-full border border-dashed border-accent p-5 bg-gray-200"
+              className="w-full flex items-center justify-center h-40 border border-dashed border-accent p-5 bg-gray-200"
             >
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p>Drop the files here ...</p>
               ) : (
-                <p>
-                  {"Drag 'n' drop some files here,"}{" "}
-                  <span className="text-accent underline cursor-pointer">
-                    or click to select files
-                  </span>
+                <div className="flex flex-col gap-1 items-center justify-center w-full h-full">
+                  <ArrowUpFromLineIcon className="size-5 text-accent" />
+                  <p className="cursor-default">{"Drag and Drop Here"}</p>
+                  <p className="cursor-default">or</p>
+                  <p className="text-accent font-semibold cursor-pointer hover:underline">
+                    Browse Files
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className={"flex items-center justify-between gap-5"}>
+              <p className="text-xs text-accent font-semibold italic">
+                {"Accepted File Types: .xlsx only"}
+              </p>
+              {file && (
+                <p className="text-xs text-accent font-semibold">
+                  {file.name} - {file.size} bytes
                 </p>
               )}
             </div>
-            {file && (
-              <p>
-                {file.name} - {file.size} bytes
-              </p>
-            )}
             <div className="flex items-center justify-end">
               <button
                 className="rounded-xl bg-accent p-2 text-white disabled:bg-gray-500"

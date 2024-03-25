@@ -22,7 +22,7 @@ export default function ClientDashboard({ data }: IDashboardProps) {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
       <div className="col-span-1 lg:col-span-12 flex flex-col gap-10">
         {/* Orders */}
-        <ClientOrdersSection data={data.orders} />
+        <ClientOrdersSection data={data.orders} variant={"dashboard"} />
         {/* Inventory */}
         <ClientInventorySection data={data.inventory} />
         {/* Finances */}

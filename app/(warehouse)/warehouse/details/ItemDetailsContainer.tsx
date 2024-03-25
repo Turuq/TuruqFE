@@ -5,7 +5,7 @@ import { ProductDetailsType } from "@/types/response";
 import { getProductByIdAction } from "@/lib/actions";
 import { BarcodeScanner } from "@/app/(warehouse)/components/scanner/BarcodeScanner";
 import { BarcodeIcon } from "lucide-react";
-import { useBarcode } from "next-barcode";
+// import { useBarcode } from "next-barcode";
 
 export default function ItemDetailsContainer() {
   const barcodeContainer = useRef<HTMLDivElement>(null);
@@ -36,12 +36,12 @@ export default function ItemDetailsContainer() {
     }
   }, [scannedCode]);
 
-  const { inputRef } = useBarcode<HTMLCanvasElement>({
-    value: scannedCode.length > 0 ? scannedCode : "0",
-    options: {
-      background: "#fff",
-    },
-  });
+  // const { inputRef } = useBarcode<HTMLCanvasElement>({
+  //   value: scannedCode.length > 0 ? scannedCode : "0",
+  //   options: {
+  //     background: "#fff",
+  //   },
+  // });
 
   return (
     <div className={"flex flex-col gap-5"}>
@@ -76,7 +76,7 @@ export default function ItemDetailsContainer() {
             </h3>
           </div>
         )}
-        <canvas ref={inputRef} />
+        {/*<canvas ref={inputRef} />*/}
         {scannedCode !== "" && scannedProduct && (
           <div className={"grid grid-cols-6 gap-10 bg-white p-5 rounded-xl"}>
             <div className={"col-span-3 flex flex-col gap-1"}>

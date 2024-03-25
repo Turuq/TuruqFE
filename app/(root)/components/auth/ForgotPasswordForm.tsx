@@ -9,30 +9,30 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import {
   passwordVerificationCodeAction,
   resetPasswordAction,
   verifyCodeAction,
 } from "@/lib/actions";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function ForgotPasswordForm({
   changeView,
 }: {
   changeView: (value: "login" | "register" | "forgot") => void;
 }) {
-  const [codeSent, setCodeSent] = useState<boolean>(true);
-  const [reset, setReset] = useState<boolean>(true);
+  const [codeSent, setCodeSent] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
   const [formError, setFormError] = useState({ error: false, message: "" });
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  const [digit1, setDigit1] = useState<number>();
-  const [digit2, setDigit2] = useState<number>();
-  const [digit3, setDigit3] = useState<number>();
-  const [digit4, setDigit4] = useState<number>();
-  const [digit5, setDigit5] = useState<number>();
-  const [digit6, setDigit6] = useState<number>();
+  const [verificationCode, setVerificationCode] = useState<string>("");
 
   async function handleSendCode() {
     const { error, message } = await passwordVerificationCodeAction({ email });
@@ -44,28 +44,10 @@ export default function ForgotPasswordForm({
     }
   }
 
-  function handleFirstFieldPaste(e: React.ClipboardEvent<HTMLInputElement>) {
-    const pastedData = e.clipboardData.getData("text");
-    const digits = pastedData.split("");
-    const d1 = digits[0];
-    const d2 = digits[1];
-    const d3 = digits[2];
-    const d4 = digits[3];
-    const d5 = digits[4];
-    const d6 = digits[5];
-    setDigit1(parseInt(d1));
-    setDigit2(parseInt(d2));
-    setDigit3(parseInt(d3));
-    setDigit4(parseInt(d4));
-    setDigit5(parseInt(d5));
-    setDigit6(parseInt(d6));
-  }
-
   async function handleCodeVerification() {
-    const code = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}`;
     const { error, message } = await verifyCodeAction({
       email,
-      code: parseInt(code),
+      code: parseInt(verificationCode),
     });
     if (error) {
       setFormError({ error: true, message: message ?? "" });
@@ -76,11 +58,10 @@ export default function ForgotPasswordForm({
   }
 
   async function handlePasswordReset() {
-    const code = `${digit1}${digit2}${digit3}${digit4}${digit5}${digit6}`;
     const { error, message } = await resetPasswordAction({
       email,
       password,
-      code: parseInt(code),
+      code: parseInt(verificationCode),
     });
     if (error) {
       setFormError({ error: true, message: message ?? "" });
@@ -110,7 +91,9 @@ export default function ForgotPasswordForm({
         <DialogDescription>
           {formError.error && (
             <Alert className="bg-red-500 text-white border-red-500">
-              <AlertTitle className="capitalize">Unable to sign in</AlertTitle>
+              <AlertTitle className="capitalize">
+                Unable to Reset Password
+              </AlertTitle>
               <AlertDescription>{formError.message}</AlertDescription>
             </Alert>
           )}
@@ -151,78 +134,27 @@ export default function ForgotPasswordForm({
             Please check your email for the verification code
           </h3>
           <div className="flex items-center gap-5">
-            <Input
-              type="number"
-              id="digit1"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit1}
-              onPaste={handleFirstFieldPaste}
-              onChange={(e) => setDigit1(parseInt(e.target.value))}
-            />
-            <Input
-              type="number"
-              id="digit2"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit2}
-              onChange={(e) => setDigit2(parseInt(e.target.value))}
-            />
-            <Input
-              type="number"
-              id="digit3"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit3}
-              onChange={(e) => setDigit3(parseInt(e.target.value))}
-            />
-            <Input
-              type="number"
-              id="digit4"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit4}
-              onChange={(e) => setDigit4(parseInt(e.target.value))}
-            />
-            <Input
-              type="number"
-              id="digit5"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit5}
-              onChange={(e) => setDigit5(parseInt(e.target.value))}
-            />
-            <Input
-              type="number"
-              id="digit6"
-              placeholder=""
-              className="text-accent placeholder:text-accent/50 number-field"
-              min={0}
-              max={9}
-              minLength={1}
-              maxLength={1}
-              value={digit6}
-              onChange={(e) => setDigit6(parseInt(e.target.value))}
+            <InputOTP
+              maxLength={6}
+              value={verificationCode}
+              onChange={(value) => setVerificationCode(value)}
+              render={({ slots }) => (
+                <div className={"flex gap-1 items-center"}>
+                  {slots.map((slot, index) => (
+                    <div key={index} className={"flex items-center gap-1"}>
+                      <InputOTPGroup>
+                        <InputOTPSlot
+                          {...slot}
+                          className={"border-accent text-accent"}
+                        />
+                      </InputOTPGroup>
+                      {index !== 5 && (
+                        <InputOTPSeparator className={"text-accent"} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             />
           </div>
           <div className="flex items-center">

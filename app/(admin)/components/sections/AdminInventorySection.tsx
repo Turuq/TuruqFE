@@ -33,9 +33,9 @@ export default function AdminInventorySection({
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="size-5 text-inherit"
                   >
                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
@@ -50,9 +50,9 @@ export default function AdminInventorySection({
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="size-5 text-inherit"
                   >
                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />

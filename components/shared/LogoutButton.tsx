@@ -3,7 +3,11 @@
 import { logoutAction } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 
-export default function LogoutButton({ type }: { type: "client" | "admin" }) {
+export default function LogoutButton({
+  type,
+}: {
+  type: "client" | "admin" | "warehouse" | "courier";
+}) {
   const router = useRouter();
 
   async function handleLogout() {

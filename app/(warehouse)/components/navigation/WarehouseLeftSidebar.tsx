@@ -28,13 +28,13 @@ export default function WarehouseLeftSidebar() {
         <Link
           key={link.label}
           href={link.href}
-          className={`flex items-center w-48 px-3 gap-3 p-2 group ${
+          className={`flex items-center w-52 px-3 gap-3 p-2 group ${
             pathname === link.href
               ? "bg-secondary_accent text-black cursor-default"
               : "bg-transparent text-black hover:bg-secondary_accent/20 cursor-pointer"
           } rounded-lg text-sm`}
         >
-          <div className={"w-[30%] flex items-center justify-center size-4"}>
+          <div className={"w-[20%] flex items-center justify-center size-4"}>
             {dashboardLinks[link.icon]}
           </div>
           <div className={"w-full text-center"}>
@@ -45,9 +45,9 @@ export default function WarehouseLeftSidebar() {
       <Collapsible>
         <CollapsibleTrigger>
           <div
-            className={`flex items-center bg-transparent text-black hover:bg-secondary_accent/20 w-48 px-3 gap-3 p-2 group rounded-lg text-sm`}
+            className={`flex items-center bg-transparent text-black hover:bg-secondary_accent/20 w-52 px-3 gap-3 p-2 group rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
+            <div className={"w-[20%] flex items-center justify-center size-4"}>
               {dashboardLinks["fulfillment"]}
             </div>
             <div className={"w-full"}>
@@ -60,14 +60,14 @@ export default function WarehouseLeftSidebar() {
         <CollapsibleContent className={"ml-5"}>
           <Link
             href={"/warehouse/fulfillment/packing"}
-            className={`flex items-center w-48 px-3 gap-3 p-2 group my-5 ${
-              pathname === "/warehouse/check-in/add-item"
+            className={`flex items-center w-52 px-3 gap-3 p-2 group my-5 ${
+              pathname === "/warehouse/fulfillment/packing"
                 ? "bg-secondary_accent text-black cursor-default"
                 : "bg-transparent text-black hover:bg-secondary_accent/20 cursor-pointer"
             } rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
-              <TruckIcon className={"size-5 text-inherit"} />
+            <div className={"w-[20%] flex items-center justify-center size-4"}>
+              <TruckIcon className={"size-4 text-inherit"} />
             </div>
             <div className={"w-full text-center"}>
               <h3 className="capitalize text-inherit text-sm">
@@ -77,14 +77,14 @@ export default function WarehouseLeftSidebar() {
           </Link>
           <Link
             href={"/warehouse/fulfillment/pick-up"}
-            className={`flex items-center w-48 px-3 gap-3 p-2 group ${
-              pathname === "/warehouse/check-in/update-item"
+            className={`flex items-center w-52 px-3 gap-3 p-2 group ${
+              pathname === "/warehouse/fulfillment/pick-up"
                 ? "bg-secondary_accent text-black cursor-default"
                 : "bg-transparent text-black hover:bg-secondary_accent/20 cursor-pointer"
             } rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
-              <ShoppingBagIcon className={"size-5 text-inherit"} />
+            <div className={"w-[20%] flex items-center justify-center"}>
+              <ShoppingBagIcon className={"size-4 text-inherit"} />
             </div>
             <div className={"w-full text-center"}>
               <h3 className="capitalize text-inherit text-sm">
@@ -97,9 +97,9 @@ export default function WarehouseLeftSidebar() {
       <Collapsible>
         <CollapsibleTrigger>
           <div
-            className={`flex items-center bg-transparent text-black hover:bg-secondary_accent/20 w-48 px-3 gap-3 p-2 group rounded-lg text-sm`}
+            className={`flex items-center bg-transparent text-black hover:bg-secondary_accent/20 w-52 px-3 gap-3 p-2 group rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
+            <div className={"w-[20%] flex items-center justify-center"}>
               {dashboardLinks["inventory"]}
             </div>
             <div className={"w-full"}>
@@ -112,14 +112,14 @@ export default function WarehouseLeftSidebar() {
         <CollapsibleContent className={"ml-5"}>
           <Link
             href={"/warehouse/check-in/add-item"}
-            className={`flex items-center w-48 px-3 gap-3 p-2 group my-5 ${
+            className={`flex items-center w-52 px-3 gap-3 p-2 group my-5 ${
               pathname === "/warehouse/check-in/add-item"
                 ? "bg-secondary_accent text-black cursor-default"
                 : "bg-transparent text-black hover:bg-secondary_accent/20 cursor-pointer"
             } rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
-              <PlusCircleIcon className={"size-5 text-inherit"} />
+            <div className={"w-[20%] flex items-center justify-center"}>
+              <PlusCircleIcon className={"size-4 text-inherit"} />
             </div>
             <div className={"w-full text-center"}>
               <h3 className="capitalize text-inherit text-sm">Add New Item</h3>
@@ -127,14 +127,14 @@ export default function WarehouseLeftSidebar() {
           </Link>
           <Link
             href={"/warehouse/check-in/update-item"}
-            className={`flex items-center w-48 px-3 gap-3 p-2 group ${
+            className={`flex items-center w-52 px-3 gap-3 p-2 group ${
               pathname === "/warehouse/check-in/update-item"
                 ? "bg-secondary_accent text-black cursor-default"
                 : "bg-transparent text-black hover:bg-secondary_accent/20 cursor-pointer"
             } rounded-lg text-sm`}
           >
-            <div className={"w-[30%] flex items-center justify-center size-4"}>
-              <PackagePlus className={"size-5 text-inherit"} />
+            <div className={"w-[20%] flex items-center justify-center"}>
+              <PackagePlus className={"size-4 text-inherit"} />
             </div>
             <div className={"w-full text-center"}>
               <h3 className="capitalize text-inherit text-sm">restock Item</h3>

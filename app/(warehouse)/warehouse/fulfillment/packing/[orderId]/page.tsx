@@ -1,6 +1,16 @@
-import { ArrowLeft } from "lucide-react";
+import { AlertTriangle, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import dynamic from "next/dynamic";
+
+const OrderPacking = dynamic(
+  () =>
+    import(
+      "@/app/(warehouse)/warehouse/fulfillment/packing/[orderId]/OrderPacking"
+    ),
+  { ssr: false },
+);
 
 export default async function Page({
   params,
@@ -30,7 +40,7 @@ export default async function Page({
     );
   return (
     <div>
-      <div className={"flex items-center justify-start"}>
+      <div className={"flex items-center justify-start ml-5"}>
         <Link
           href={"/warehouse/fulfillment/packing"}
           className={
@@ -50,9 +60,10 @@ export default async function Page({
           <div className={"grid grid-cols-3 gap-5"}>
             <div className={"flex flex-col gap-2"}>
               <h1 className={"font-bold text-xs text-black/50"}>Customer</h1>
-              <h1 className={"text-base"}>
-                {data.order.customer?.name ??
-                  `${data.order.customer?.first_name} ${data.order.customer?.last_name}`}
+              <h1 className={"text-base capitalize"}>
+                {data.type === "turuq"
+                  ? data.order.customer?.name
+                  : `${data.order.customer?.first_name} ${data.order.customer?.last_name}`}
               </h1>
             </div>
             <div className={"flex flex-col gap-2"}>
@@ -66,49 +77,24 @@ export default async function Page({
               </h1>
             </div>
           </div>
+          {!data.order.mapped && (
+            <Alert className={"border-amber-400 bg-amber-400/30"}>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Heads up!</AlertTitle>
+              <AlertDescription>
+                {
+                  "Products in this order are not mapped, barcode scanner functionality is unavailable."
+                }
+              </AlertDescription>
+            </Alert>
+          )}
           <h1 className={"font-bold space-x-2"}>Order Products</h1>
-          <div
-            className={
-              "flex flex-col bg-secondary_accent/10 rounded-2xl p-5 gap-5"
-            }
-          >
-            {data.products?.map((product: any) => (
-              <div
-                key={product?.UID}
-                className={"grid grid-cols-3 items-center gap-5"}
-              >
-                <div className={"col-span-1 flex flex-col gap-2"}>
-                  <h1 className={"font-bold text-xs text-black/50"}>UID</h1>
-                  <h1 className={"text-base"}>{product?.UID}</h1>
-                </div>
-                <div className={"col-span-2 flex flex-col gap-2"}>
-                  <h1 className={"font-bold text-xs text-black/50"}>
-                    Item Description
-                  </h1>
-                  <h1 className={"text-base"}>{product?.itemDescription}</h1>
-                </div>
-                <div className={"flex flex-col gap-2"}>
-                  <h1 className={"font-bold text-xs text-black/50"}>Size</h1>
-                  <h1 className={"text-base"}>{product?.size}</h1>
-                </div>
-                <div className={"flex flex-col gap-2"}>
-                  <h1 className={"font-bold text-xs text-black/50"}>Color</h1>
-                  <h1 className={"text-base"}>{product?.color}</h1>
-                </div>
-                <div className={"flex flex-col gap-2"}>
-                  <h1 className={"font-bold text-xs text-black/50"}>
-                    Quantity
-                  </h1>
-                  <h1 className={"text-base"}>{product?.quantity}</h1>
-                </div>
-              </div>
-            ))}
-          </div>
+          <OrderPacking data={data} />
         </div>
       )}
-      <pre>
-        <code>{JSON.stringify(data, null, 2)}</code>
-      </pre>
+      {/*<pre>*/}
+      {/*  <code>{JSON.stringify(data, null, 2)}</code>*/}
+      {/*</pre>*/}
     </div>
   );
 }

@@ -63,39 +63,8 @@ export default function Page() {
           "grid grid-cols-4 bg-white/30 w-full h-full rounded-b-2xl p-5 gap-5"
         }
       >
-        {/*<div className={"col-span-1 flex items-start"}>*/}
-        {/*  <Timeline*/}
-        {/*    sx={{*/}
-        {/*      [`& .${timelineItemClasses.root}:before`]: {*/}
-        {/*        flex: 0,*/}
-        {/*        padding: 0,*/}
-        {/*      },*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <TimelineItem>*/}
-        {/*      <TimelineSeparator>*/}
-        {/*        <TimelineDot sx={{ backgroundColor: "#38cbfc" }} />*/}
-        {/*        <TimelineConnector />*/}
-        {/*      </TimelineSeparator>*/}
-        {/*      <TimelineContent>Select Order</TimelineContent>*/}
-        {/*    </TimelineItem>*/}
-        {/*    <TimelineItem>*/}
-        {/*      <TimelineSeparator>*/}
-        {/*        <TimelineDot sx={{ backgroundColor: "#38cbfc" }} />*/}
-        {/*        <TimelineConnector />*/}
-        {/*      </TimelineSeparator>*/}
-        {/*      <TimelineContent>Start Packing</TimelineContent>*/}
-        {/*    </TimelineItem>*/}
-        {/*    <TimelineItem>*/}
-        {/*      <TimelineSeparator>*/}
-        {/*        <TimelineDot sx={{ backgroundColor: "#38cbfc" }} />*/}
-        {/*      </TimelineSeparator>*/}
-        {/*      <TimelineContent>Assign Courier</TimelineContent>*/}
-        {/*    </TimelineItem>*/}
-        {/*  </Timeline>*/}
-        {/*</div>*/}
-        <div className={"col-span-4 bg-white rounded-2xl p-5"}>
-          <h1 className={"text-xl font-bold"}>Recent Orders</h1>
+        <div className={"col-span-4 bg-transparent rounded-2xl"}>
+          <h1 className={"text-xl font-bold mb-5"}>Recent Orders</h1>
           <div className={"flex flex-col gap-5"}>
             {data?.data?.orders?.map((order: AdminOrderType) => (
               <FulfillmentOrderCard

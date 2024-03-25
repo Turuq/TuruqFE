@@ -13,7 +13,7 @@ import LogoutButton from "@/components/shared/LogoutButton";
 import { adminSidebarLinks } from "@/utils/links";
 import { dashboardLinks } from "@/utils/dashboard-links";
 
-export default function ClientDropDown({
+export default function AdminDropDown({
   admin,
   variant = "home",
 }: {

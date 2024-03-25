@@ -34,11 +34,11 @@ export default function RootLayout({
         )}
         <main className="p-5 lg:p-10">
           <WarehouseNavbar />
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 w-full">
-            <div className={"col-span-2 hidden lg:flex"}>
+          <div className="grid grid-cols-5 gap-10 w-full">
+            <div className={"col-span-1 hidden lg:flex"}>
               <WarehouseLeftSidebar />
             </div>
-            <div className="col-span-1 lg:col-span-10">{children}</div>
+            <div className="col-span-5 lg:col-span-4 w-full">{children}</div>
           </div>
         </main>
         <Toaster />

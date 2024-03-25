@@ -1,32 +1,23 @@
-import { ClientType } from "@/types/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import {
-  BoxesIcon,
-  DatabaseIcon,
-  LayoutDashboardIcon,
-  WarehouseIcon,
-} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import LogoutButton from "./LogoutButton";
-import { ChartBarIcon } from "@heroicons/react/16/solid";
-import { AdminType } from "@/types/response";
+import LogoutButton from "@/components/shared/LogoutButton";
+import { clientSidebarLinks } from "@/utils/links";
+import { dashboardLinks } from "@/utils/dashboard-links";
+import { ClientType } from "@/types/client";
 
-export default function ClientDropDown({
+export default function AdminDropDown({
   client,
-  admin,
-  type,
   variant = "home",
 }: {
-  client?: ClientType | null;
-  admin?: AdminType | null;
-  type: "client" | "admin";
+  client: ClientType | null;
   variant?: "dashboard" | "home";
 }) {
   return (
@@ -41,11 +32,7 @@ export default function ClientDropDown({
                   : "bg-white text-accent"
               }`}
             >
-              {client
-                ? client?.companyName.substring(0, 1)
-                : admin
-                  ? admin?.name?.substring(0, 1)
-                  : ""}
+              {client?.name?.substring(0, 1)}
             </AvatarFallback>
           </Avatar>
 
@@ -55,96 +42,51 @@ export default function ClientDropDown({
                 variant === "home" ? "text-white" : "text-accent"
               } capitalize`}
             >
-              {client ? client?.name : admin ? admin?.name : ""}
+              {client?.name}
             </h1>
             <h3
               className={`text-xs ${
                 variant === "home" ? "text-white" : "text-accent"
               } font-bold uppercase`}
             >
-              {client ? client?.companyName : "Welcome Admin!"}
+              {client?.companyName}
             </h3>
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem
-          className={`${
-            variant === "dashboard" &&
-            "bg-white text-accent hover:bg-accent hover:text-white mb-1"
-          } rounded-md`}
-        >
-          <Link
-            href={client ? "/client" : admin ? "/admin" : "/"}
-            className={`flex items-center `}
-          >
-            <LayoutDashboardIcon className="mr-2 size-4 text-inherit" />
-            Dashboard
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={`${
-            variant === "dashboard" &&
-            "bg-white text-accent hover:bg-accent hover:text-white mb-1"
-          } rounded-md`}
-        >
-          <Link
-            href={client ? "/client/orders" : admin ? "/admin/orders" : "/"}
-            className={`flex items-center `}
-          >
-            <BoxesIcon className="mr-2 size-4 text-inherit" />
-            Orders
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={`${
-            variant === "dashboard" &&
-            "bg-white text-accent hover:bg-accent hover:text-white mb-1"
-          } rounded-md`}
-        >
-          <Link
-            href={
-              client ? "/client/inventory" : admin ? "/admin/inventory" : "/"
-            }
-            className={`flex items-center `}
-          >
-            <WarehouseIcon className="mr-2 size-4 text-inherit" />
-            Inventory
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={`${
-            variant === "dashboard" &&
-            "bg-white text-accent hover:bg-accent hover:text-white mb-1"
-          } rounded-md`}
-        >
-          <Link
-            href={client ? "/client/finances" : admin ? "/admin/finances" : "/"}
-            className={`flex items-center `}
-          >
-            <DatabaseIcon className="mr-2 size-4 text-inherit" />
-            Finances
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={`${
-            variant === "dashboard" &&
-            "bg-white text-accent hover:bg-accent hover:text-white mb-1"
-          } rounded-md`}
-        >
-          <Link
-            href={
-              client ? "/client/analytics" : admin ? "/admin/analytics" : "/"
-            }
-            className={`flex items-center `}
-          >
-            <ChartBarIcon className="mr-2 size-4 text-inherit" />
-            Analytics
-          </Link>
-        </DropdownMenuItem>
+      <DropdownMenuContent className={"w-auto rounded-2xl p-2"}>
+        <DropdownMenuLabel>
+          <div className={"flex flex-col gap-1 justify-center"}>
+            <h1 className={"text-xs text-accent font-bold"}>{client?.name}</h1>
+            <h3 className={"text-xs text-accent font-light"}>
+              {client?.email}
+            </h3>
+          </div>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className={"rounded-md"}>
-          <LogoutButton type={type} />
+        {clientSidebarLinks.map((link) => (
+          <DropdownMenuItem
+            key={link.label}
+            className={`rounded-lg w-full focus:bg-accent focus:text-white bg-white text-accent`}
+          >
+            <Link
+              href={link.href}
+              className={`flex items-center px-3 my-1 gap-3`}
+            >
+              <div className={"w-[30%] flex items-center justify-center"}>
+                {dashboardLinks[link.icon]}
+              </div>
+              <div className={"flex items-center justify-center w-full"}>
+                <h3 className="capitalize text-inherit text-sm text-center">
+                  {link.label}
+                </h3>
+              </div>
+            </Link>
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className={"rounded-lg bg-red-500 focus:bg-red-700"}>
+          <LogoutButton type={"client"} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

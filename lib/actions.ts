@@ -104,10 +104,10 @@ export async function loginAction({
       }
       if (data.client) {
         cookies().set("token", data.token, {
-          maxAge: 3600,
+          maxAge: process.env.NODE_ENV === "development" ? 24 * 60 * 60 : 3600,
         });
         cookies().set("client", JSON.stringify(data.client), {
-          maxAge: 3600,
+          maxAge: process.env.NODE_ENV === "development" ? 24 * 60 * 60 : 3600,
         });
         return { error: null, type: "client" };
       } else if (data.admin) {
@@ -189,7 +189,7 @@ export async function registerAction({
 export async function logoutAction({
   type,
 }: {
-  type: "client" | "admin";
+  type: "client" | "admin" | "warehouse" | "courier";
 }): Promise<void> {
   if (type === "client") {
     cookies().delete("client");
@@ -204,11 +204,46 @@ export async function addNewOrderAction({
   customer,
   products,
   notes,
+  type,
+  refundAmount,
+  priceDifference,
+  handledBy,
 }: NewOrderParams): Promise<NewOrderResponseType> {
   const client = JSON.parse(cookies().get("client")?.value ?? "") as ClientType;
   const token = cookies().get("token")?.value;
   try {
-    const body = { customer, products, notes, client: client._id };
+    let body: {
+      customer: typeof customer;
+      products: typeof products;
+      notes: string;
+      type?: "NORMAL" | "REFUND" | "EXCHANGE" | "PROMOTIONAL";
+      client: string;
+      refundedAmount?: number;
+      priceDifference?: number;
+      handlesShipping?: "brand" | "customer";
+    } = {
+      customer,
+      products,
+      notes,
+      client: client._id,
+      refundedAmount: refundAmount,
+      priceDifference,
+      handlesShipping: handledBy,
+    };
+    switch (type) {
+      case "exchange":
+        body = { ...body, type: "EXCHANGE" };
+        break;
+      case "refund":
+        body = { ...body, type: "REFUND" };
+        break;
+      case "promotional":
+        body = { ...body, type: "PROMOTIONAL" };
+        break;
+      default:
+        body = { ...body, type: "NORMAL" };
+        break;
+    }
     const res = await fetch(`${process.env.API_URL}order/add`, {
       method: "POST",
       headers: {
@@ -219,13 +254,13 @@ export async function addNewOrderAction({
     });
     const data = await res.json();
 
-    if (data.message) {
-      return { error: data.message, order: null };
+    if (data.error) {
+      return { error: data.error, order: null };
     }
 
     revalidatePath("/client");
 
-    return { error: null, order: data.order };
+    return { error: null, order: data.message };
   } catch (error: any) {
     return { error: error.message, order: null };
   }
@@ -299,7 +334,7 @@ export async function passwordVerificationCodeAction({
       return { error: null, message: "Verification Code Sent" };
     } else {
       const data = await res.json();
-      return { error: data.message, message: null };
+      return { error: "Failed to Send Verification Code", message: null };
     }
   } catch (error: any) {
     console.log(error);
@@ -315,7 +350,7 @@ export async function verifyCodeAction({
   code: number;
 }): Promise<{ error: string | null; message: string | null }> {
   try {
-    const res = await fetch(`${process.env.API_URL}auth/verifyCode`, {
+    const res = await fetch(`${process.env.API_URL}auth/checkVerification`, {
       method: "POST",
       body: JSON.stringify({ email, verificationCode: code }),
       headers: {

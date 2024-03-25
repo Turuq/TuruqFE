@@ -257,6 +257,8 @@ export type ProductSummaryType = {
   size: string;
 };
 
+export type PackingOrderType = ProductSummaryType & ProductType;
+
 export type AdminAnalyticsType = {
   clientAnalytics: ClientAnalyticsType;
   orderAnalytics: OrderAnalyticsType;
@@ -446,4 +448,14 @@ export type CodesType = {
     superlative: string;
     superlativeCode: string;
   }[];
+};
+
+export type WarehouseStaffType = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  accessLevel: "Operator" | "Manager";
+  SSN: string;
+  scannedSSN?: string;
 };
