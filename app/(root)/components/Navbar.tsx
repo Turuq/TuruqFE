@@ -45,7 +45,7 @@ export default async function Navbar({}: NavbarProps) {
           {type === "admin" ? (
             <Link href={"/admin"}>Welcome Admin!</Link>
           ) : type === "client" ? (
-            <ClientDropDown client={client} type={type} />
+            <ClientDropDown client={client} />
           ) : (
             <NavbarModal />
           )}
@@ -56,7 +56,7 @@ export default async function Navbar({}: NavbarProps) {
           {type === "admin" ? (
             <Link href={"/admin"}>Welcome Admin!</Link>
           ) : type === "client" ? (
-            <ClientDropDown client={client} type={type} />
+            <ClientDropDown client={client} />
           ) : (
             <NavbarModal />
           )}

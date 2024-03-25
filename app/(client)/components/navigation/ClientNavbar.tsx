@@ -28,7 +28,7 @@ export default async function ClientNavbar({
       </Link>
       {/* LoggedIn Client */}
       <div className="flex items-center justify-end gap-10">
-        <ClientDropDown client={data} type="client" variant="dashboard" />
+        <ClientDropDown client={data} variant="dashboard" />
         <ClientNotificationCard notifications={notifications} />
       </div>
     </nav>
