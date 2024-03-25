@@ -2,6 +2,7 @@ import InformationCard from "../cards/InformationCard";
 import Link from "next/link";
 import { NewOrderDialog } from "../forms/NewOrderDialog";
 import { OrderStatisticsType } from "@/types/client";
+import { BookIcon } from "lucide-react";
 
 interface IOrdersProps {
   title?: string;
@@ -69,6 +70,23 @@ export default function ClientOrdersSection({
               <div className={"w-full flex items-center justify-center"}>
                 <span className="text-sm lg:text-inherit text-center">
                   Order Details
+                </span>
+              </div>
+            </div>
+          </Link>
+        )}
+        {variant === "shopify" && (
+          <Link
+            href={"/client/guide"}
+            className="bg-white hover:bg-[#95bf47] hover:text-white p-2 rounded-lg w-40 text-sm text-black self-end drop-shadow-sm"
+          >
+            <div className="flex items-center gap-3 w-full">
+              <div className={"w-[10%]"}>
+                <BookIcon className={"size-5 text-inherit"} />
+              </div>
+              <div className={"w-full flex items-center justify-center"}>
+                <span className="text-sm lg:text-inherit text-center">
+                  Shopify Guide
                 </span>
               </div>
             </div>

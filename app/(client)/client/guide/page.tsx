@@ -31,9 +31,6 @@ export default function Page() {
 
   return (
     <div className="grid grid-cols-3 gap-5">
-      {/*<h1 className="text-2xl lg:text-4xl font-bold text-accent/50 uppercase">*/}
-      {/*  Shopify guide*/}
-      {/*</h1>*/}
       <div className={"col-span-2 flex flex-col"}>
         <Breadcrumb className={"mb-5"}>
           <BreadcrumbList>
@@ -201,7 +198,7 @@ export default function Page() {
           </button>
         </div>
       </div>
-      <div className={"col-span-1 flex flex-col gap-5"}>
+      <div className={"col-span-1 flex flex-col gap-5 ml-10 sticky right-0"}>
         <div className={"flex flex-col gap-5 p-1 mr-10"}>
           <h1 className={"text-sm font-bold text-black"}>On This Page</h1>
           <Link
@@ -224,97 +221,6 @@ export default function Page() {
           </Link>
         </div>
       </div>
-      {/* STEP 1 */}
-      {/*<Step*/}
-      {/*  number={1}*/}
-      {/*  title="Open the Admin Panel of your Shopify Store and click on Settings."*/}
-      {/*  alt="Shopify Guide 1"*/}
-      {/*  image={"/assets/images/Shopify Guide 1.png"}*/}
-      {/*/>*/}
-      {/*/!* STEP 2 *!/*/}
-      {/*<Step*/}
-      {/*  number={2}*/}
-      {/*  title="Scroll down and click on Notifications."*/}
-      {/*  alt="Shopify Guide 2"*/}
-      {/*  image={"/assets/images/Shopify Guide 2.png"}*/}
-      {/*/>*/}
-      {/*/!* STEP 3 *!/*/}
-      {/*<Step*/}
-      {/*  number={3}*/}
-      {/*  title={`Scroll to the bottom of the page and click on "Create Webhook".`}*/}
-      {/*  alt="Shopify Guide 3"*/}
-      {/*  image={"/assets/images/Shopify Guide 3.png"}*/}
-      {/*/>*/}
-      {/*/!* STEP 4 *!/*/}
-      {/*<Step*/}
-      {/*  number={4}*/}
-      {/*  title={`Make sure to choose "Order Creation" in the "Event" field, and the "Webhook API Version" should be the one with "(latest)" in it.`}*/}
-      {/*  alt="Shopify Guide 4"*/}
-      {/*  image={"/assets/images/Shopify Guide 4.png"}*/}
-      {/*>*/}
-      {/*  <ul className="flex flex-col list-disc pl-5 text-xs lg:text-sm">*/}
-      {/*    <li>*/}
-      {/*      <div className="flex flex-col gap-1">*/}
-      {/*        <span>{`In the URL field paste Turuq's webhook URL and make sure to copy it without any spaces or extra characters.`}</span>*/}
-      {/*        <div className="bg-white/20 p-1">*/}
-      {/*          <code className="rounded-xl flex items-center justify-between">*/}
-      {/*            <span className="overflow-x-scroll lg:overflow-x-hidden max-w-[80%]">*/}
-      {/*              {`https://api.turuq.co/webhooks/shopify/add/65930c14344347410b7c643a`}*/}
-      {/*            </span>*/}
-      {/*            <button*/}
-      {/*              onClick={() =>*/}
-      {/*                copy(*/}
-      {/*                  "https://api.turuq.co/webhooks/shopify/add/65930c14344347410b7c643a",*/}
-      {/*                )*/}
-      {/*              }*/}
-      {/*            >*/}
-      {/*              {text ? (*/}
-      {/*                <CopyCheckIcon className="size-4 text-accent" />*/}
-      {/*              ) : (*/}
-      {/*                <CopyIcon className="size-4 text-accent" />*/}
-      {/*              )}*/}
-      {/*            </button>*/}
-      {/*          </code>*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    </li>*/}
-      {/*    <li>*/}
-      {/*      <div className="flex flex-col gap-1">*/}
-      {/*        <span>*/}
-      {/*          {" "}*/}
-      {/*          {`Repeat this step one more time but choosing "Order Cancellation" instead of "Order Creation" and use this as the url for it`}*/}
-      {/*        </span>*/}
-      {/*        <div className="bg-white/20 p-1">*/}
-      {/*          <code className="rounded-xl flex items-center justify-between">*/}
-      {/*            <span className="overflow-x-scroll lg:overflow-x-hidden max-w-[80%]">*/}
-      {/*              {`https://api.turuq.co/webhooks/shopify/cancel/65930c14344347410b7c643a`}*/}
-      {/*            </span>*/}
-      {/*            <button*/}
-      {/*              onClick={() =>*/}
-      {/*                copy2(*/}
-      {/*                  "https://api.turuq.co/webhooks/shopify/cancel/65930c14344347410b7c643a",*/}
-      {/*                )*/}
-      {/*              }*/}
-      {/*            >*/}
-      {/*              {text2 ? (*/}
-      {/*                <CopyCheckIcon className="size-4 text-accent" />*/}
-      {/*              ) : (*/}
-      {/*                <CopyIcon className="size-4 text-accent" />*/}
-      {/*              )}*/}
-      {/*            </button>*/}
-      {/*          </code>*/}
-      {/*        </div>*/}
-      {/*      </div>*/}
-      {/*    </li>*/}
-      {/*  </ul>*/}
-      {/*</Step>*/}
-      {/*/!* STEP 5 *!/*/}
-      {/*<Step*/}
-      {/*  number={5}*/}
-      {/*  title={`Finally, you should see the webhook like the one in the image below. Now copy the code marked in red in this image and paste it in the text field at the end of this page and click "Submit".`}*/}
-      {/*  alt="Shopify Guide 5"*/}
-      {/*  image={"/assets/images/Shopify Guide 5.png"}*/}
-      {/*/>*/}
     </div>
   );
 }
