@@ -72,7 +72,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep1.png"}
+            src={"/assets/images/Shopify/AccessTokenStep1.png"}
             alt={"Access Token Step 1"}
             width={400}
             height={400}
@@ -80,7 +80,7 @@ export default function Page() {
           />
           <h3 className={"text-sm"}>{"Click on `Develop apps`."}</h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep2.png"}
+            src={"/assets/images/Shopify/AccessTokenStep2.png"}
             alt={"Access Token Step 2"}
             width={400}
             height={400}
@@ -92,7 +92,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep3.png"}
+            src={"/assets/images/Shopify/AccessTokenStep3.png"}
             alt={"Access Token Step 3"}
             width={400}
             height={400}
@@ -104,7 +104,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep4.png"}
+            src={"/assets/images/Shopify/AccessTokenStep4.png"}
             alt={"Access Token Step 4"}
             width={400}
             height={400}
@@ -116,7 +116,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep5.png"}
+            src={"/assets/images/Shopify/AccessTokenStep5.png"}
             alt={"Access Token Step 5"}
             width={400}
             height={400}
@@ -126,7 +126,7 @@ export default function Page() {
             {"In the App name field type `Turuq` and click `Create app`."}
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep6.png"}
+            src={"/assets/images/Shopify/AccessTokenStep6.png"}
             alt={"Access Token Step 6"}
             width={400}
             height={400}
@@ -142,7 +142,7 @@ export default function Page() {
           </h3>
           <h3 className={"text-sm"}>{"Click on `configuration`."}</h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep7.png"}
+            src={"/assets/images/Shopify/AccessTokenStep7.png"}
             alt={"Access Token Step 7"}
             width={400}
             height={400}
@@ -152,7 +152,7 @@ export default function Page() {
             {"Click on `configure` in the `Admin API integration` card."}
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep7-1.png"}
+            src={"/assets/images/Shopify/AccessTokenStep7-1.png"}
             alt={"Access Token Step 7"}
             width={400}
             height={400}
@@ -164,7 +164,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep8.png"}
+            src={"/assets/images/Shopify/AccessTokenStep8.png"}
             alt={"Access Token Step 8"}
             width={400}
             height={400}
@@ -177,14 +177,14 @@ export default function Page() {
             {"Navigate to API credentials and Install the app."}
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep9.png"}
+            src={"/assets/images/Shopify/AccessTokenStep9.png"}
             alt={"Access Token Step 9"}
             width={400}
             height={400}
             className="w-full h-auto rounded-xl"
           />
           <img
-            src={"/assets/images/shopify/AccessTokenStep10.png"}
+            src={"/assets/images/Shopify/AccessTokenStep10.png"}
             alt={"Access Token Step 10"}
             width={400}
             height={400}
@@ -194,7 +194,7 @@ export default function Page() {
             {"When prompted with the following window, click `install`."}
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep11.png"}
+            src={"/assets/images/Shopify/AccessTokenStep11.png"}
             alt={"Access Token Step 11"}
             width={400}
             height={400}
@@ -209,7 +209,7 @@ export default function Page() {
             }
           </h3>
           <img
-            src={"/assets/images/shopify/AccessTokenStep12.png"}
+            src={"/assets/images/Shopify/AccessTokenStep12.png"}
             alt={"Access Token Step 12"}
             width={400}
             height={400}
